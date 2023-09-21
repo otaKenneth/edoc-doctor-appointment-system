@@ -51,7 +51,7 @@
     $stmt->bind_param("s",$useremail);
     $stmt->execute();
     $result = $stmt->get_result();
-    $userfetch=$userrow->fetch_assoc();
+    $userfetch=$result->fetch_assoc();
     $userid= $userfetch["pid"];
     $username=$userfetch["pname"];
 
@@ -277,7 +277,6 @@
             
            
             $dob=$row["pdob"];
-            $nic=$row['pnic'];
             $tele=$row['ptel'];
             echo '
             <div id="popup1" class="overlay">
@@ -318,16 +317,6 @@
                             <tr>
                                 <td class="label-td" colspan="2">
                                 '.$email.'<br><br>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="label-td" colspan="2">
-                                    <label for="nic" class="form-label">NIC: </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="label-td" colspan="2">
-                                '.$nic.'<br><br>
                                 </td>
                             </tr>
                             <tr>
@@ -386,13 +375,10 @@
             $stmt->execute();
             $result = $stmt->get_result();
             $row=$result->fetch_assoc();
+            
             $name=$row["pname"];
             $email=$row["pemail"];
-           
-            
-            
             $address=$row["paddress"];
-            $nic=$row['pnic'];
             $tele=$row['ptel'];
 
             $error_1=$_GET["error"];
@@ -454,22 +440,12 @@
                                     
                                     <tr>
                                         <td class="label-td" colspan="2">
-                                            <label for="nic" class="form-label">NIC: </label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label-td" colspan="2">
-                                            <input type="text" name="nic" class="input-text" placeholder="NIC Number" value="'.$nic.'" required><br>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label-td" colspan="2">
                                             <label for="Tele" class="form-label">Telephone: </label>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="label-td" colspan="2">
-                                            <input type="tel" name="Tele" class="input-text" placeholder="Telephone Number" value="'.$tele.'" required><br>
+                                            <input type="tel" name="Tele" class="input-text" placeholder="Telephone Number" value="'.$tele.'" pattern="^09\d{9}$" required><br>
                                         </td>
                                     </tr>
                                     <tr>
