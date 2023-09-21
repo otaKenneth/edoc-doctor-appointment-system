@@ -35,8 +35,8 @@ $_SESSION["date"]=$date;
 
 //import database
 include("connection.php");
-require_once("app/models/patients.php");
-require_once("app/models/webuser.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/patients.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/webuser.php");
 
 if($_POST){
 

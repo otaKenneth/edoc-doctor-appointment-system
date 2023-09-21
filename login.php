@@ -33,7 +33,7 @@
 
     //import database
     include("connection.php");
-    require_once("app/Controllers/AuthController.php");
+    include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/AuthController.php");
 
 
     if($_POST){
