@@ -60,13 +60,13 @@ if($_POST){
             <tr>
                 <td colspan="2">
                     <p class="header-text">Let's Get Started</p>
-                    <p class="sub-text">Add Your Personal Details to Continue</p>
+                    <p class="sub-text">Add Your Details to Continue</p>
                 </td>
             </tr>
             <tr>
                 <form action="" method="POST" >
                 <td class="label-td" colspan="2">
-                    <label for="name" class="form-label">Name: </label>
+                    <label for="name" class="form-label">Name:<span class="required">*</span> </label>
                 </td>
             </tr>
             <tr>
@@ -79,7 +79,7 @@ if($_POST){
             </tr>
             <tr>
                 <td class="label-td" colspan="2">
-                    <label for="address" class="form-label">Address: </label>
+                    <label for="address" class="form-label">Address:<span class="required">*</span> </label>
                 </td>
             </tr>
             <tr>
@@ -89,7 +89,7 @@ if($_POST){
             </tr>
             <tr>
                 <td class="label-td" colspan="2">
-                    <label for="dob" class="form-label">Date of Birth: </label>
+                    <label for="dob" class="form-label">Date of Birth:<span class="required">*</span> </label>
                 </td>
             </tr>
             <tr>
@@ -115,7 +115,7 @@ if($_POST){
                 <td colspan="2">
                     <br>
                     <label for="" class="sub-text" style="font-weight: 280;">Already have an account&#63; </label>
-                    <a href="login.php" class="hover-link1 non-style-link">Login</a>
+                    <a href="login.php" class="hover-link1 non-style-link">Log-in</a>
                     <br><br><br>
                 </td>
             </tr>

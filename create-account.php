@@ -35,12 +35,15 @@ $_SESSION["date"]=$date;
 
 //import database
 include("connection.php");
-
-
-
-
+require_once("app/models/patients.php");
+require_once("app/models/webuser.php");
 
 if($_POST){
+
+    header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline';");
+
+    $patientSeed = new PatientModel;
+    $webuserSeed = new WebuserModel;
 
     $result= $database->query("select * from webuser");
 
@@ -48,12 +51,13 @@ if($_POST){
     $lname=$_SESSION['personal']['lname'];
     $name=$fname." ".$lname;
     $address=$_SESSION['personal']['address'];
-    $nic=$_SESSION['personal']['nic'];
     $dob=$_SESSION['personal']['dob'];
     $email=$_POST['newemail'];
     $tele=$_POST['tele'];
     $newpassword=$_POST['newpassword'];
     $cpassword=$_POST['cpassword'];
+    $chfcomplaint=htmlspecialchars($_POST['chfcomplaint'], ENT_QUOTES, 'UTF-8');
+    $paps=$_POST['paps'];
     
     if ($newpassword==$cpassword){
         $sqlmain= "select * from webuser where email=?;";
@@ -61,26 +65,41 @@ if($_POST){
         $stmt->bind_param("s",$email);
         $stmt->execute();
         $result = $stmt->get_result();
+
         if($result->num_rows==1){
             $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Already have an account for this Email address.</label>';
         }else{
-            //TODO
-            $database->query("insert into patient(pemail,pname,ppassword, paddress, pnic,pdob,ptel) values('$email','$name','$newpassword','$address','$nic','$dob','$tele');");
-            $database->query("insert into webuser values('$email','p')");
+            if (
+                $patientSeed->create($database, [
+                    $email, $name, $newpassword, $address, $dob, $tele, $chfcomplaint, $paps
+                ])
+            ) {
+                if (
+                    $webuserSeed->create($database, [
+                        $email, 'p'
+                    ])
+                )
+                $_SESSION["user"]=$email;
+                $_SESSION["usertype"]="p";
+                $_SESSION["username"]=$fname;
+    
+                header('Location: patient/index.php');
+                $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;"></label>';
+            } else {
+                $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">User not created.</label>';
+            }
 
-            //print_r("insert into patient values($pid,'$email','$fname','$lname','$newpassword','$address','$nic','$dob','$tele');");
-            $_SESSION["user"]=$email;
-            $_SESSION["usertype"]="p";
-            $_SESSION["username"]=$fname;
-
-            header('Location: patient/index.php');
-            $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;"></label>';
         }
         
     }else{
         $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Password Conformation Error! Reconform Password</label>';
     }
 
+
+
+
+    
+    
 
 
     
@@ -98,13 +117,13 @@ if($_POST){
             <tr>
                 <td colspan="2">
                     <p class="header-text">Let's Get Started</p>
-                    <p class="sub-text">It's Okey, Now Create User Account.</p>
+                    <p class="sub-text">Now Create Your Account.</p>
                 </td>
             </tr>
             <tr>
                 <form action="" method="POST" >
                 <td class="label-td" colspan="2">
-                    <label for="newemail" class="form-label">Email: </label>
+                    <label for="newemail" class="form-label">Email:<span class="required">*</span> </label>
                 </td>
             </tr>
             <tr>
@@ -115,17 +134,17 @@ if($_POST){
             </tr>
             <tr>
                 <td class="label-td" colspan="2">
-                    <label for="tele" class="form-label">Mobile Number: </label>
+                    <label for="tele" class="form-label">Mobile Number:<span class="required">*</span> </label>
                 </td>
             </tr>
             <tr>
                 <td class="label-td" colspan="2">
-                    <input type="tel" name="tele" class="input-text"  placeholder="ex: 09171234567" pattern="[0]{9}[0-9]{11}" >
+                    <input type="tel" name="tele" class="input-text"  placeholder="ex: 09171234567" pattern="^09\d{9}$" >
                 </td>
             </tr>
             <tr>
                 <td class="label-td" colspan="2">
-                    <label for="newpassword" class="form-label">Create New Password: </label>
+                    <label for="newpassword" class="form-label">Create New Password:<span class="required">*</span> </label>
                 </td>
             </tr>
             <tr>
@@ -135,15 +154,35 @@ if($_POST){
             </tr>
             <tr>
                 <td class="label-td" colspan="2">
-                    <label for="cpassword" class="form-label">Conform Password: </label>
+                    <label for="cpassword" class="form-label">Confirm Password:<span class="required">*</span> </label>
                 </td>
             </tr>
             <tr>
                 <td class="label-td" colspan="2">
-                    <input type="password" name="cpassword" class="input-text" placeholder="Conform Password" required>
+                    <input type="password" name="cpassword" class="input-text" placeholder="Confirm Password" required>
                 </td>
             </tr>
-     
+            <tr>
+                <td class="label-td" colspan="2">
+                    <label for="cpassword" class="form-label">Chief Complaint:<span class="required">*</span> </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="label-td" colspan="2">
+                    <textarea class="input-text" name="chfcomplaint" rows="5" cols="" placeholder="Aa..." required></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="label-td" colspan="2">
+                    <label for="paps" class="form-label">Interested in our programs and packages? Add them here: </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="label-td" colspan="2">
+                    <input type="text" name="paps" class="input-text" placeholder="Aa...">
+                </td>
+            </tr>
+
             <tr>
                 
                 <td colspan="2">
