@@ -35,15 +35,13 @@ $_SESSION["date"]=$date;
 
 //import database
 include("connection.php");
-include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/patients.php");
-include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/webuser.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/AuthController.php");
 
 if($_POST){
 
     header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline';");
 
-    $patientSeed = new PatientModel;
-    $webuserSeed = new WebuserModel;
+    $auth = new AuthController;
 
     $result= $database->query("select * from webuser");
 
@@ -69,40 +67,26 @@ if($_POST){
         if($result->num_rows==1){
             $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Already have an account for this Email address.</label>';
         }else{
-            if (
-                $patientSeed->create($database, [
-                    $email, $name, $newpassword, $address, $dob, $tele, $chfcomplaint, $paps
-                ])
-            ) {
-                if (
-                    $webuserSeed->create($database, [
-                        $email, 'p'
-                    ])
-                )
-                $_SESSION["user"]=$email;
+            $authResult = $auth->processSignup($database, [
+                $email, $fname, $name, $newpassword, $address, $dob, $tele, $chfcomplaint, $paps
+            ]);
+
+            if ($authResult['success']) {
+                $_SESSION["user"]=$args[0];
                 $_SESSION["usertype"]="p";
-                $_SESSION["username"]=$fname;
+                $_SESSION["username"]=$args[1];
     
                 header('Location: patient/index.php');
                 $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;"></label>';
             } else {
-                $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">User not created.</label>';
+                $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">'.$authResult['message'].'</label>';
             }
-
         }
         
     }else{
-        $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Password Conformation Error! Reconform Password</label>';
+        $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Password Confirmation Error! Reconform Password</label>';
     }
 
-
-
-
-    
-    
-
-
-    
 }else{
     //header('location: signup.php');
     $error='<label for="promter" class="form-label"></label>';

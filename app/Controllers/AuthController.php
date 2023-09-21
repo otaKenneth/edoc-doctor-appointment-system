@@ -54,4 +54,30 @@ class AuthController {
 
         return $response;
     }
+
+    public function processSignup ($database, $args = []) {
+        $pId = $this->patientSeed->create($database, [
+            $args[0], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7], $args[8]
+        ]);
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        if (is_numeric($pId)) {
+            $wId = $this->webuserSeed->create($database, [
+                $args[0], 'p'
+            ]);
+            if (is_numeric($wId)) {
+                $response = [
+                    'success' => true,
+                    'message' => "Successful signup."
+                ];
+            }
+        } else {
+            $response['message'] = $pId;
+        }
+
+        return $response;
+    }
 }

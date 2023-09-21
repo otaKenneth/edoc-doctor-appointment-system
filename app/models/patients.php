@@ -6,7 +6,7 @@ class PatientModel {
             $newPatientQuery = "INSERT INTO patient (pemail,pname,ppassword, paddress, pdob,ptel,chief_complaint_c,paps) VALUES (?,?,?,?,?,?,?,?);";
             $stmt = $database->prepare($newPatientQuery);
             // Define the data types for each parameter
-            $types = "sssssss"; // Adjust these data types based on your actual data types
+            $types = "ssssssss"; // Adjust these data types based on your actual data types
 
             $stmt->bind_param($types, ...$args);
             $stmt->execute();
