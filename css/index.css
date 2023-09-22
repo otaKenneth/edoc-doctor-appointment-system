@@ -3,7 +3,8 @@ body{
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    background-position-y: -20cqb;
+    background-position-y: center;
+    background-position-x: center;
     height: 100%;
 }
 
@@ -90,4 +91,27 @@ table{
     left: 45%;
     font-size: 13px;
     animation: transitionIn-Y-over 0.5s;
+}
+
+.container-auth {
+    width: 30%;
+}
+
+.mobile-container-auth {
+    position: relative;
+}
+
+.menu {
+    position: absolute;
+    top: 20px;
+    right: 0;
+    display: block;
+    background-color: darkgray;
+    border-radius: 10px;
+    padding-left: 15px; padding-right: 15px;
+    box-shadow: #585858 3px 6px 10px 0;
+}
+
+.hidden {
+    display: none;
 }

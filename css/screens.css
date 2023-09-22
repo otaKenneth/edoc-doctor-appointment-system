@@ -1,0 +1,122 @@
+/* Extra Small (xs) */
+@media screen and (max-width: 575.98px) {
+    /* Your CSS styles for extra small screens go here */
+    .container {
+        width: 100%;
+    }
+    .container .form-container {
+        width: 90%;
+    }
+
+    .xs-hidden {
+        display: none;
+    }
+
+    .xs-shown {
+        display: inline-block;
+    }
+
+    .container-eluvo-logo {
+        width: 95%;
+    }
+
+    .heading-text{
+        color: white;
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 43px;
+        margin-top: 7%;
+        text-align: center;
+        margin-bottom: 0;
+    }
+}
+
+/* Small (sm) */
+@media screen and (min-width: 576px) and (max-width: 767.98px) {
+    .container {
+        width: 100%;
+    }
+    .container .form-container {
+        width: 80%;
+    }
+
+    .xs-shown, .sm-shown {
+        display: inline-block;
+    }
+
+    .xs-hidden, .sm-hidden {
+        display: none;
+    }
+
+    .container-eluvo-logo {
+        width: 95%;
+    }
+
+    .container-auth {
+        width: 5%;
+    }
+    /* Your CSS styles for small screens go here */
+}
+
+/* Medium (md) */
+@media screen and (min-width: 768px) and (max-width: 991.98px) {
+    /* Your CSS styles for medium screens go here */
+    .container {
+        width: 80%;
+    }
+    .container .form-container {
+        width: 80%;
+    }
+
+    .xs-hidden, .sm-hidden, .md-hidden {
+        display: none;
+    }
+
+    .xs-shown, .sm-shown, .md-shown {
+        display: inline-block;
+    }
+
+    .container-eluvo-logo {
+        width: 80%;
+    }
+}
+
+/* Large (lg) */
+@media screen and (min-width: 992px) and (max-width: 1199.98px) {
+    /* Your CSS styles for large screens go here */
+    .xs-hidden, .sm-hidden, .md-hidden, .lg-hidden {
+        display: none;
+    }
+
+    .xs-shown, .sm-shown, .md-shown, .lg-shown {
+        display: inline-block;
+    }
+
+    .container-eluvo-logo {
+        width: 85%;
+    }
+
+    .container-auth {
+        width: 15%;
+    }
+}
+
+/* Extra Large (xl) */
+@media screen and (min-width: 1200px) {
+    /* Your CSS styles for extra large screens go here */
+    .xs-hidden, .sm-hidden, .md-hidden, .lg-hidden, .xl-hidden {
+        display: none;
+    }
+
+    .xs-shown, .sm-shown, .md-shown, .lg-shown, .xl-shown {
+        display: inline-block;
+    }
+
+    .container-eluvo-logo {
+        width: 85%;
+    }
+
+    .container-auth {
+        width: 15%;
+    }
+}

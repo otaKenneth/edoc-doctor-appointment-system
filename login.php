@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="css/animations.css">  
     <link rel="stylesheet" href="css/main.css">  
     <link rel="stylesheet" href="css/login.css">
-        
+    <link rel="stylesheet" href="css/screens.css">
+    <link rel="icon" href="https://eluvohealth.com/wp-content/uploads/2023/07/favicon-150x150.png" sizes="32x32">
     <title>Login</title>
 
     
@@ -87,7 +88,7 @@
 
     <center>
     <div class="container">
-        <table border="0" style="margin: 0;padding: 0;width: 60%;">
+        <table class="form-container" border="0">
             <tr>
                 <td>
                     <p class="header-text">Welcome Back!</p>

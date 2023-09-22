@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="css/animations.css">  
     <link rel="stylesheet" href="css/main.css">  
     <link rel="stylesheet" href="css/signup.css">
+    <link rel="stylesheet" href="css/screens.css">
+    <link rel="icon" href="https://eluvohealth.com/wp-content/uploads/2023/07/favicon-150x150.png" sizes="32x32">
         
     <title>Create Account</title>
     <style>
@@ -42,49 +44,28 @@ if($_POST){
     header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline';");
 
     $auth = new AuthController;
+    $signupResult = $auth->processSignup($database, [
+        'fname' => $_SESSION['personal']['fname'],
+        'lname' => $_SESSION['personal']['lname'],
+        'address' => $_SESSION['personal']['address'],
+        'dob' => $_SESSION['personal']['dob'],
+        'email' => $_POST['newemail'],
+        'tele' => $_POST['tele'],
+        'newpassword' => $_POST['newpassword'],
+        'cpassword' => $_POST['cpassword'],
+        'chfcomplaint' => htmlspecialchars($_POST['chfcomplaint'], ENT_QUOTES, 'UTF-8'),
+        'paps'=> $_POST['paps'],
+    ]);
 
-    $result= $database->query("select * from webuser");
+    if ($signupResult['success']) {
+        $_SESSION["user"]=$args[0];
+        $_SESSION["usertype"]="p";
+        $_SESSION["username"]=$args[1];
 
-    $fname=$_SESSION['personal']['fname'];
-    $lname=$_SESSION['personal']['lname'];
-    $name=$fname." ".$lname;
-    $address=$_SESSION['personal']['address'];
-    $dob=$_SESSION['personal']['dob'];
-    $email=$_POST['newemail'];
-    $tele=$_POST['tele'];
-    $newpassword=$_POST['newpassword'];
-    $cpassword=$_POST['cpassword'];
-    $chfcomplaint=htmlspecialchars($_POST['chfcomplaint'], ENT_QUOTES, 'UTF-8');
-    $paps=$_POST['paps'];
-    
-    if ($newpassword==$cpassword){
-        $sqlmain= "select * from webuser where email=?;";
-        $stmt = $database->prepare($sqlmain);
-        $stmt->bind_param("s",$email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if($result->num_rows==1){
-            $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Already have an account for this Email address.</label>';
-        }else{
-            $authResult = $auth->processSignup($database, [
-                $email, $fname, $name, $newpassword, $address, $dob, $tele, $chfcomplaint, $paps
-            ]);
-
-            if ($authResult['success']) {
-                $_SESSION["user"]=$args[0];
-                $_SESSION["usertype"]="p";
-                $_SESSION["username"]=$args[1];
-    
-                header('Location: patient/index.php');
-                $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;"></label>';
-            } else {
-                $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">'.$authResult['message'].'</label>';
-            }
-        }
-        
-    }else{
-        $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Password Confirmation Error! Reconform Password</label>';
+        header('Location: patient/index.php');
+        $error='<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;"></label>';
+    } else {
+        $error='<label for="promter" class="form-label error-label">'.$signupResult['message'].'</label>';
     }
 
 }else{
@@ -97,7 +78,7 @@ if($_POST){
 
     <center>
     <div class="container">
-        <table border="0" style="width: 69%;">
+        <table class="form-container" border="0">
             <tr>
                 <td colspan="2">
                     <p class="header-text">Let's Get Started</p>

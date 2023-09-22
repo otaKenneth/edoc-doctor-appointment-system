@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="css/animations.css">  
     <link rel="stylesheet" href="css/main.css">  
     <link rel="stylesheet" href="css/index.css">
-    <title>eDoc</title>
+    <link rel="stylesheet" href="css/screens.css">
+    <title>Eluvo Health Consultations</title>
     <style>
         table{
             animation: transitionIn-Y-bottom 0.5s;
@@ -20,54 +21,64 @@
     
     <div class="full-height">
         <center>
-        <table border="0">
-            <tr>
-                <td width="80%">
-                    <div class="container-edoc-logo">
+            <div>
+                <div class="header" style="width: 100%; display: flex; padding-top: 10px;">
+                    <div class="container-eluvo-logo" style="display: flex; align-items: center;">
                         <img class="edoc-logo" src="img/1693912852648.png" />
                         <font class="edoc-logo-sub">| Appointment System</font>
                     </div>
-                </td>
-                <td width="10%">
-                   <a href="login.php"  class="non-style-link"><p class="nav-item">LOGIN</p></a>
-                </td>
-                <td  width="10%">
-                    <a href="signup.php" class="non-style-link"><p class="nav-item" style="padding-right: 10px;">REGISTER</p></a>
-                </td>
-            </tr>
-            
-            <tr>
-                <td  colspan="3">
-                    <p class="heading-text">Your partner in evolving women's healthcare.</p>
+                    <div class="container-auth" style="display: flex; justify-content: space-around; align-items: center;">
+                        <a href="login.php" class="sm-shown xs-hidden non-style-link"><p class="nav-item">LOG-IN</p></a>
+                        <a href="signup.php" class="sm-shown xs-hidden non-style-link"><p class="nav-item" style="padding-right: 10px;">REGISTER</p></a>
+                        <div class="md-hidden mobile-container-auth" style="width: 30px;">
+                            <a id="menu-icon" href="#"><img src="img/icons/elipsis-vertical.svg"/></a>
+                            <div class="menu hidden">
+                                <a href="login.php" class="non-style-link"><p class="nav-item">LOG-IN</p></a>
+                                <a href="signup.php" class="non-style-link"><p class="nav-item" style="padding-right: 10px;">REGISTER</p></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                </td>
-            </tr>
-            <tr>
-                <td  colspan="3">
-                    <p class="sub-text2">Eluvo Health revolutionizes the women's health care<br>system in the Philippines through its 360-approach to sexual and reproductive healthcare.<br>We serve as a reliable partner for women, giuding them through every life-stage both inside and out of the clinic, 
-                        <br>thus empowering and enabling patients in making better, <br>and well informed choices about their health and body.</p>
-                </td>
-            </tr>
-            <tr>
-                
-                <td colspan="3">
-                    <center>
+            <div>
+                <p class="heading-text">Your partner in evolving women's healthcare.</p>
+                <p class="sub-text2">Eluvo Health revolutionizes the women's health care<br>system in the Philippines through its 360-approach to sexual and reproductive healthcare.<br>We serve as a reliable partner for women, giuding them through every life-stage both inside and out of the clinic, 
+                    <br>thus empowering and enabling patients in making better, <br>and well informed choices about their health and body.</p>
+            </div>
+
+            <div>
+                <center>
                     <a href="login.php" >
                         <input type="button" value="Book a Consultation" class="login-btn btn-primary btn" style="padding-left: 25px;padding-right: 25px;padding-top: 10px;padding-bottom: 10px;">
                     </a>
                 </center>
-                </td>
-                
-            </tr>
-            <tr>
-                <td colspan="3">
-                   
-                </td>
-            </tr>
-        </table>
-        <p class="sub-text2 footer-hashen">A Web Solution by Hashen.</p>
-    </center>
-    
+            </div>
+        </center>
     </div>
+    <script>
+        // Get a reference to the <a> element by its id
+        const menuIcon = document.getElementById("menu-icon");
+
+        // Add an onclick event listener to the <a> element
+        menuIcon.addEventListener("click", function(ev) {
+
+            const mobileContainerAuth = event.target.closest('.mobile-container-auth');
+
+            if (mobileContainerAuth) {
+                // Find a child element with class "menu" within the "mobile-container-auth" div
+                const menuElement = mobileContainerAuth.querySelector('.menu');
+
+                if (menuElement) {
+                    menuElement.classList.toggle('hidden')
+                } else {
+                    console.log('No element with class "menu" found within the "mobile-container-auth" div.');
+                }
+            } else {
+                console.log('No ancestor with class "mobile-container-auth" found.');
+            }
+        });
+
+    </script>
 </body>
 </html>

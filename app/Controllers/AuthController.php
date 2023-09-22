@@ -56,26 +56,42 @@ class AuthController {
     }
 
     public function processSignup ($database, $args = []) {
-        $pId = $this->patientSeed->create($database, [
-            $args[0], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7], $args[8]
-        ]);
+        extract($args);
+        $name = $fname." ".$lname;
         $response = [
             'success' => false,
             'message' => ""
         ];
+        
+        if ($newpassword !== $cpassword) {
+            $response['message'] = "Passwords didn't match.";
+            return $response;
+        }
 
-        if (is_numeric($pId)) {
-            $wId = $this->webuserSeed->create($database, [
-                $args[0], 'p'
-            ]);
-            if (is_numeric($wId)) {
-                $response = [
-                    'success' => true,
-                    'message' => "Successful signup."
-                ];
+        $user = $this->webuserSeed->getWebuserByEmail($database, [$email]);
+
+        if (is_object($user)) {
+            if ($user->num_rows == 1) {
+                $response['message'] = "Already have an account for this Email address.";
+            } else {
+                $pId = $this->patientSeed->create($database, [
+                    $email, $name, $newpassword, $address, $dob, $tele, $chfcomplaint, $paps
+                ]);
+        
+                if (is_numeric($pId)) {
+                    $wId = $this->webuserSeed->create($database, [
+                        $args[0], 'p'
+                    ]);
+                    if (is_numeric($wId)) {
+                        $response = [
+                            'success' => true,
+                            'message' => "Successful signup."
+                        ];
+                    }
+                } else {
+                    $response['message'] = $pId;
+                }
             }
-        } else {
-            $response['message'] = $pId;
         }
 
         return $response;
