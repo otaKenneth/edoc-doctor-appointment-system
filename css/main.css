@@ -440,7 +440,20 @@ input[type=search]:focus {
 }
 
 
+.main-breadcrumb {
+  background-position: 18px 50%;
+  background-repeat: no-repeat;
+  transition: 0.5s;
+  padding-top:11px;
+  padding-bottom:11px;
+  margin-left:20px;
+  width:100%;
+  text-align: center;
+}
 
+.bc-icon-doctor {
+  background-image: url('../img/icons/doctors.svg');
+}
 
 
 .btn-icon-back{
