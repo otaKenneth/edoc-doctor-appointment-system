@@ -2,7 +2,7 @@
 
 class DoctorModel extends Model {
 
-    function getDoctorByEmail($db, $args = []) {
+    public function getDoctorByEmail($db, $args = []) {
         try {
             $query = "SELECT * FROM doctor where docemail = ?";
 
