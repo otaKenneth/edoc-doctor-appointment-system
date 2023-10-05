@@ -1,6 +1,6 @@
 <?php
 
-class PatientModel {
+class PatientModel extends Model{
     public function create ($database, $args = []) {
         try {
             $newPatientQuery = "INSERT INTO patient (pemail,pname,ppassword, paddress, pdob,ptel,chief_complaint_c,paps) VALUES (?,?,?,?,?,?,?,?);";
@@ -30,6 +30,22 @@ class PatientModel {
             } else {
                 return $stmt->error;
             }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
+    public function getPatientById($db, $args = []) {
+        try {
+            $query = "SELECT * FROM patient WHERE pid = ?";
+
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+
         } catch (\Throwable $th) {
             return $th->getMessage();
         }

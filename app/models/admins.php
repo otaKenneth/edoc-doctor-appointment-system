@@ -1,6 +1,6 @@
 <?php
 
-class AdminModel {
+class AdminModel extends Model{
 
 
     public function getAdminByEmailPass ($db, $args = []) {

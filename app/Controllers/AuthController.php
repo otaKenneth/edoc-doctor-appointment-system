@@ -1,5 +1,6 @@
 <?php
 
+include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/Model.php");
 include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/patients.php");
 include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/webuser.php");
 include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/admins.php");

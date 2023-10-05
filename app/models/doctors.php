@@ -1,21 +1,31 @@
 <?php
 
-class DoctorModel {
+class DoctorModel extends Model {
 
+    function getDoctorByEmail($db, $args = []) {
+        try {
+            $query = "SELECT * FROM doctor where docemail = ?";
+
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }    
+    }
 
     public function getDoctorByEmailPass ($db, $args = []) {
         try {
             $query = "SELECT * FROM `doctor` WHERE docemail = ? AND docpassword = ?";
         
-            $stmt = $db->prepare($query);
-            // Define the data types for each parameter
-            $types = "ss"; // Adjust these data types based on your actual data types
-
-            $stmt->bind_param($types, ...$args);
-            if ($stmt->execute()) {
-                return $stmt->get_result();
+            $result = $this->run($db, $query, $args);
+            if ($result->execute()) {
+                return $result->get_result();
             } else {
-                return $stmt->error;
+                return $result->error;
             }
         } catch (\Throwable $th) {
             return $th->getMessage();

@@ -1,6 +1,6 @@
 <?php
 
-class WebuserModel {
+class WebuserModel extends Model {
     public function create ($database, $args) {
         try {
             $query = "INSERT INTO webuser VALUES (?, ?)";

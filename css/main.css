@@ -236,6 +236,10 @@ body{
     margin-top: 0;
     color: #333;
   }
+  .popup-header {
+    display: flex;
+    justify-content: space-between;
+  }
   .popup .close {
     position: absolute;
     top: 20px;
