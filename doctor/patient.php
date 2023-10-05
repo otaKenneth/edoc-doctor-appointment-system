@@ -22,7 +22,10 @@
         .sub-table{
             animation: transitionIn-Y-bottom 0.5s;
         }
-</style>
+        .add-doc-form-container .label-td.value-td {
+            padding-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
     <?php
@@ -56,9 +59,23 @@
     } else {
         header("location: ../login.php");
     }
+    
+    if (isset($_POST['patient-diagnosis-form-submit'])) {
+        $consultation_result = $c_doctors->saveConsultation($database, [
+            'pid' => $_POST['pid'],
+            'diagnosis' => $_POST['diagnosis'],
+            'diagnostic_request' => $_POST['diagnostic_request'],
+            'prescription' => $_POST['prescription'],
+            'recommendation' => $_POST['recommendation'],
+        ]);
+        
+        if ($consultation_result['success']) {
+            header('Location: patient.php');
+        }
+    }
     ?>
     <div class="container">
-    <div class="menu">
+        <div class="menu">
             <table class="menu-container" border="0">
                 <tr>
                     <td style="padding:10px" colspan="2">
@@ -112,6 +129,9 @@
         <?php       
             $selecttype="My";
             $current="My patients Only";
+
+            $sqlmain= "select * from appointment inner join patient on patient.pid=appointment.pid inner join schedule on schedule.scheduleid=appointment.scheduleid where schedule.docid=$userid;";
+
             if($_POST){
 
                 if(isset($_POST["search"])){
@@ -132,9 +152,6 @@
                         $current="My patients Only";
                     }
                 }
-            }else{
-                $sqlmain= "select * from appointment inner join patient on patient.pid=appointment.pid inner join schedule on schedule.scheduleid=appointment.scheduleid where schedule.docid=$userid;";
-                $selecttype="My";
             }
         ?>
         <div class="dash-body">

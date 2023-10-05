@@ -3,11 +3,13 @@
 include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/Model.php");
 include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/patients.php");
 include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/doctors.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/consultations.php");
 
 class DoctorController {
     public function __construct() {
         $this->patientSeed = new PatientModel;
         $this->doctorSeed = new DoctorModel;
+        $this->consultationSeed = new ConsultationsModel;
     }
 
     function getDoctor($db, $args = []) {
@@ -49,6 +51,27 @@ class DoctorController {
             $response['data'] = $patient->fetch_assoc();
         } else {
             $response['message'] = $patient;
+        }
+
+        return $response;
+    }
+
+    public function saveConsultation($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        $consultation = $this->consultationSeed->createConsultation($db, [
+            $pid, $diagnosis, $diagnostic_request, $prescription, $recommendation
+        ]);
+
+        if (is_numeric($consultation)) {
+            $response['success'] = true;
+            $response['message'] = "Consultation saved successfully.";
+        } else {
+            $response['message'] = $consultation;
         }
 
         return $response;
