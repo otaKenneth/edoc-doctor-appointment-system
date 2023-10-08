@@ -221,6 +221,10 @@ body{
     opacity: 1;
     
   }
+
+  .popup-closed {
+    display: none;
+  }
   
   .popup {
     margin: 70px auto;
@@ -491,6 +495,7 @@ input[type=search]:focus {
   background-image: url('../img/icons/delete-iceblue.svg');
 }
 .btn-delete:hover{
+  background-color: #d30e00;
   background-image: url('../img/icons/delete-white.svg');
 }
 

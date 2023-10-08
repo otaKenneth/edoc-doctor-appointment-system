@@ -1,10 +1,4 @@
 <?php
-
-include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/Model.php");
-include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/patients.php");
-include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/webuser.php");
-include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/admins.php");
-include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/doctors.php");
 class AuthController {
 
     public function __construct() {
@@ -12,6 +6,8 @@ class AuthController {
         $this->webuserSeed = new WebuserModel;
         $this->adminSeed = new AdminModel;
         $this->doctorSeed = new DoctorModel;
+
+        session_start();
     }
     public function processLogin ($database, $args = []) {
         $result = $this->webuserSeed->getWebuserByEmail($database, [$args[0]]);
@@ -93,6 +89,40 @@ class AuthController {
                     $response['message'] = $pId;
                 }
             }
+        }
+
+        return $response;
+    }
+
+    public function getCurrentDoctorUser($db) {        
+        $useremail = "";
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        if(isset($_SESSION["user"])){
+            if(($_SESSION["user"])=="" or $_SESSION['usertype']!='d'){
+                $response['message'] = "Unauthorized.";
+            }else{
+                $useremail=$_SESSION["user"];
+            }
+            
+        }else{
+            $response['message'] = "Unauthorized.";
+        }
+        
+        $doctor = $this->doctorSeed->getDoctorByEmail($db, [
+            $useremail
+        ]);
+        
+        if (is_object($doctor)) {
+            $response['success'] = true;
+            $response['message'] = "Doctor Found.";
+            $response['data'] = $doctor->fetch_assoc();
+            $response['data']['useremail'] = $useremail;
+        } else {
+            $response['message'] = $doctor;
         }
 
         return $response;

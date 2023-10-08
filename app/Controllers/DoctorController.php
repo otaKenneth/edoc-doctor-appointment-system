@@ -1,15 +1,11 @@
 <?php
 
-include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/Model.php");
-include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/patients.php");
-include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/doctors.php");
-include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/consultations.php");
-
 class DoctorController {
     public function __construct() {
         $this->patientSeed = new PatientModel;
         $this->doctorSeed = new DoctorModel;
         $this->consultationSeed = new ConsultationsModel;
+        $this->scheduleSeed = new ScheduleModel;
     }
 
     function getDoctor($db, $args = []) {
@@ -72,6 +68,36 @@ class DoctorController {
             $response['message'] = "Consultation saved successfully.";
         } else {
             $response['message'] = $consultation;
+        }
+
+        return $response;
+    }
+
+    public function getDoctorAppointments ($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        $filter = [];
+
+        if (isset($scheduledate)) {
+            $filter = [
+                'schedule.scheduledate'=> $scheduledate
+            ];
+        }
+
+        $schedule = $this->scheduleSeed->getSchedules($db, [
+            $userid
+        ], $filter);
+
+        if (is_object($schedule)) {
+            $response['success'] = true;
+            $response['message'] = "Schedule Found.";
+            $response['data'] = $schedule;
+        } else {
+            $response['message'] = $schedule;
         }
 
         return $response;
