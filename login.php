@@ -20,7 +20,10 @@
     //learn from w3schools.com
     //Unset all the server side variables
 
-    session_start();
+    //import database
+    include("connection.php");
+    include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/Model.php");
+    include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/AuthController.php");
 
     $_SESSION["user"]="";
     $_SESSION["usertype"]="";
@@ -30,11 +33,6 @@
     $date = date('Y-m-d');
 
     $_SESSION["date"]=$date;
-    
-
-    //import database
-    include("connection.php");
-    include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/AuthController.php");
 
 
     if($_POST){

@@ -226,6 +226,10 @@ body{
     display: none;
   }
   
+  .popup-open {
+    display: block;
+  }
+  
   .popup {
     margin: 70px auto;
     padding: 20px;

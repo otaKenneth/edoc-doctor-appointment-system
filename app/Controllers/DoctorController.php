@@ -6,6 +6,7 @@ class DoctorController {
         $this->doctorSeed = new DoctorModel;
         $this->consultationSeed = new ConsultationsModel;
         $this->scheduleSeed = new ScheduleModel;
+        $this->appointmentSeed = new AppointmentModel;
     }
 
     function getDoctor($db, $args = []) {
@@ -101,5 +102,63 @@ class DoctorController {
         }
 
         return $response;
+    }
+
+    public function addSession($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        $schedule = $this->scheduleSeed->create($db, [
+            $docid, $title, $date, $time, $nop
+        ]);
+
+        if (is_numeric($schedule)) {
+            $response['success'] = true;
+            $response['message'] = "Schedule saved successfully.";
+        } else {
+            $response['message'] = $schedule;
+        }
+
+        echo json_encode($response);
+    }
+
+    public function getAppointmentData ($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        $appo = $this->appointmentSeed->getAppointmentDataById($db, [
+            $id
+        ]);
+
+        if (is_object($appo)) {
+            $response['success'] = true;
+            $response['message'] = "Appointment successfully retrieved.";
+
+            if ($appo->num_rows > 0) {
+                $response['data'] = $appo->fetch_assoc();
+            } else {
+                $response['success'] = false;
+                $response['message'] = "No Appointment Matched.";
+            }
+        } else {
+            $response['message'] = $appo;
+        }
+
+        echo json_encode($response);
+    }
+
+    public function getSpecialities($db, $args = []) {
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        echo json_encode($response);
     }
 }

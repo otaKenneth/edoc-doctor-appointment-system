@@ -1,56 +1,52 @@
-<tr>
-                    <td colspan="4" style="padding-top:10px;width: 100%;" >
-                    
-                        <p class="heading-main12" style="margin-left: 45px;font-size:18px;color:rgb(49, 49, 49)">My Sessions (<?php echo $list110->num_rows; ?>) </p>
-                    </td>
-                    
-                </tr>
-                
+<?php 
+
+date_default_timezone_set('Asia/Kolkata');
+
+$today = date('Y-m-d');
+
+$list110 = $database->query("select  * from  schedule where docid=" . $user['docid']);
+
+?>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 40px;">
+    <p class="heading-main12" style="margin-left: 45px;font-size:18px;color:rgb(49, 49, 49)">My Sessions (<?php echo $list110->num_rows; ?>) </p>
+    <div style="width: 500px; align-items: center;">
+        <center>
+            <table class="filter-container" style="margin: unset;" border="0" >
                 <tr>
-                    <td colspan="4" style="padding-top:0px;width: 100%;" >
-                        <center>
-                        <table class="filter-container" border="0" >
-                        <tr>
-                           <td width="10%">
-
-                           </td> 
-                        <td width="5%" style="text-align: center;">
-                        Date:
-                        </td>
-                        <td width="30%">
+                    <td width="5%" style="text-align: center;">Date:</td>
+                    <td width="30%">
                         <form action="" method="post">
-                            
                             <input type="date" name="sheduledate" id="date" class="input-text filter-container-items" style="margin: 0;width: 95%;">
-
-                        </td>
-                        
+                    </td>
                     <td width="12%">
-                        <input type="submit"  name="filter" value=" Filter" class=" btn-primary-soft btn button-icon btn-filter"  style="padding: 15px; margin :0;width:100%">
+                            <input type="submit"  name="filter" value=" Filter" class=" btn-primary-soft btn button-icon btn-filter"  style="padding: 15px; margin :0;width:100%">
                         </form>
                     </td>
-
-                    </tr>
-                            </table>
-
-                        </center>
-                    </td>
-                    
                 </tr>
-                
-                <?php
+            </table>
+        </center>
+    </div>
+    <div>
+        <a href="#" class="non-style-link popup-btn" popupdata-id="popup1">
+            <button  class="login-btn btn-primary btn button-icon"  style="margin-left:25px;background-image: url('../img/icons/add.svg');">Add a Session</font></button>
+        </a>
+    </div>
+</div>
+        <?php
 
-                $sqlmain= "select schedule.scheduleid,schedule.title,doctor.docname,schedule.scheduledate,schedule.scheduletime,schedule.nop from schedule inner join doctor on schedule.docid=doctor.docid where doctor.docid=$userid ";
-                    if($_POST){
-                        //print_r($_POST);
-                        $sqlpt1="";
-                        if(!empty($_POST["sheduledate"])){
-                            $sheduledate=$_POST["sheduledate"];
-                            $sqlmain.=" and schedule.scheduledate='$sheduledate' ";
-                        }
+        $sqlmain= "select schedule.scheduleid,schedule.title,doctor.docname,schedule.scheduledate,schedule.scheduletime,schedule.nop from schedule inner join doctor on schedule.docid=doctor.docid where doctor.docid=".$user['docid'];
+            if($_POST){
+                //print_r($_POST);
+                $sqlpt1="";
+                if(!empty($_POST["sheduledate"])){
+                    $sheduledate=$_POST["sheduledate"];
+                    $sqlmain.=" and schedule.scheduledate='$sheduledate' ";
+                }
 
-                    }
+            }
 
-                ?>
+        ?>
                   
                 <tr>
                    <td colspan="4">

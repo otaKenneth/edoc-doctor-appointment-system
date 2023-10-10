@@ -29,6 +29,8 @@
             animation: transitionIn-Y-bottom 0.5s;
         }
     </style>
+
+    <script src="../js/jquery-3.7.1.js"></script>
 </head>
 
 <body>
@@ -57,36 +59,36 @@
                     </td>
                 </tr>
                 <tr class="menu-row" >
-                    <td class="menu-btn menu-icon-dashbord menu-active menu-icon-dashbord-active" >
-                        <a href="index.php" class="non-style-link-menu non-style-link-menu-active"><div><p class="menu-text">Dashboard</p></a></div></a>
+                    <td class="menu-btn menu-icon-dashbord" link-name="Dashboard">
+                        <a href="index.php" class="non-style-link-menu"><div><p class="menu-text">Dashboard</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row">
-                    <td class="menu-btn menu-icon-appoinment">
-                        <a href="appointment.php" class="non-style-link-menu"><div><p class="menu-text">My Appointments</p></a></div>
+                    <td class="menu-btn menu-icon-appoinment" link-name="Appointments">
+                        <a href="appointment.php" class="non-style-link-menu"><div><p class="menu-text">My Appointments</p></div></a>
                     </td>
                 </tr>
                 
                 <tr class="menu-row" >
-                    <td class="menu-btn menu-icon-session">
+                    <td class="menu-btn menu-icon-session" link-name="Sessions">
                         <a href="schedule.php" class="non-style-link-menu"><div><p class="menu-text">My Sessions</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row" >
-                    <td class="menu-btn menu-icon-patient">
-                        <a href="patient.php" class="non-style-link-menu"><div><p class="menu-text">My Patients</p></a></div>
+                    <td class="menu-btn menu-icon-patient" link-name="Patients">
+                        <a href="patient.php" class="non-style-link-menu"><div><p class="menu-text">My Patients</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row" >
-                    <td class="menu-btn menu-icon-settings">
-                        <a href="settings.php" class="non-style-link-menu"><div><p class="menu-text">Settings</p></a></div>
+                    <td class="menu-btn menu-icon-settings" link-name="Settings">
+                        <a href="settings.php" class="non-style-link-menu"><div><p class="menu-text">Settings</p></div></a>
                     </td>
                 </tr>
             </table>
         </div>
         <div class="dash-body">
             <div id="dash-body-header" style="display: flex; justify-content: space-between; margin-top: 15px; padding-right: 30px;">
-                <div><p style="font-size: 23px;padding-left:12px;font-weight: 600;margin-left:20px;">     Dashboard</p></div>
+                <div><p style="font-size: 23px;padding-left:12px;font-weight: 600;margin-left:20px;"><?=$active_uri[$clean_uri]['bc']?></p></div>
                 <div class="search-bar" style="display: flex; align-items: center; width: 50%;">
                     <form action="" method="post" class="header-search">
                         <input type="search" name="search" class="input-text header-searchbar"
@@ -133,5 +135,28 @@
         <div class="footer"></div>
     </div>
 </body>
-
+<script src="../js/utilities.js"></script>
+<script>
+    var active_uri = "<?=$active_uri[$clean_uri]['bc']?>"
+    var active_icon_classes = {
+        "Dashboard": "menu-active menu-icon-dashbord-active",
+        "Appointments": "menu-active menu-icon-appoinment-active",
+        "Sessions": "menu-active menu-icon-session-active",
+        "Patients": "menu-active menu-icon-patient-active"
+    };
+    
+    $(document).ready(function () {
+        $('.menu-row').each( (k, el) => {
+            var targetEl = $(el).children()[0];
+            // set active links
+            if ($(targetEl).attr('link-name') === active_uri) {
+                $(targetEl).addClass(active_icon_classes[active_uri])
+                $($(targetEl).children()[0]).addClass('non-style-link-menu-active')
+            } else {
+                $(targetEl).removeClass(active_icon_classes[$(targetEl).attr('link-name')])
+                $($(targetEl).children()[0]).removeClass('non-style-link-menu-active')
+            }
+        })
+    })
+</script>
 </html>

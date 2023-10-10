@@ -19,13 +19,6 @@ if ($result['success']) {
 }
 
 ?>
-
-<div style="display: flex; justify-content: end; margin: 15px 40px;">
-    <div class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49);margin-top: 5px;">Schedule a Session</div>
-    <a href="?action=add-session&id=none&error=0" class="non-style-link">
-        <button  class="login-btn btn-primary btn button-icon"  style="margin-left:25px;background-image: url('../img/icons/add.svg');">Add a Session</font></button>
-    </a>
-</div>
 <center>
     <div class="abc scroll">
         <table width="93%" class="sub-table scrolldown" border="0">
@@ -66,6 +59,7 @@ if ($result['success']) {
                 } else {
                     for ($x = 0; $x < $schedules->num_rows; $x++) {
                         $row = $schedules->fetch_assoc();
+                        $docid = $row["docid"];
                         $appoid = $row["appoid"];
                         $scheduleid = $row["scheduleid"];
                         $title = $row["title"];
@@ -93,18 +87,31 @@ if ($result['success']) {
                         <td>
                             <div style="display:flex;justify-content: space-between;">
                             
-                                <a href="?action=view&id=<?=$appoid?>" class="non-style-link">
+                                <a href="#" class="non-style-link table-btn popup-btn" 
+                                  popupdata-id="popup4"
+                                  data='<?=json_encode([
+                                    'id' => $appoid,
+                                    'docid' => $docid,
+                                    'action' => 'view'
+                                  ])?>'>
                                     <button  
                                       class="btn-primary-soft btn button-icon btn-view"  
                                       style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;">
                                         <font class="tn-in-text">View</font>
                                     </button>
                                 </a>
-                                <a href="?action=drop&id=<?=$appoid?>&name=<?=$pname?>&session=<?$title?>&apponum=<?$apponum?>" 
-                                class="non-style-link">
+                                <a href="#" class="non-style-link table-btn popup-btn"
+                                  popupdata-id="popup3"
+                                  data='<?=json_encode([
+                                    'id' => $appoid,
+                                    'nameget' => $pname,
+                                    'session' => $title,
+                                    'apponum' => $apponum,
+                                    'action' => 'drop'
+                                  ])?>'>
                                     <button 
-                                    class="btn-primary-soft btn button-icon btn-delete"  
-                                    style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;">
+                                      class="btn-primary-soft btn button-icon btn-delete"  
+                                      style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;">
                                         <font class="tn-in-text">Cancel</font>
                                     </button>
                                 </a>
@@ -113,8 +120,8 @@ if ($result['success']) {
                     </tr>
                 <?php
                     
-                    }
-                }
+                    } // end foreach
+                } // end else
 
                 ?>
 
@@ -125,162 +132,63 @@ if ($result['success']) {
 </center>
 <?php
 
-include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components/appointment-add-session.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components/appointment-popup.php");
 if ($_GET) {
     $id = $_GET["id"];
     $action = $_GET["action"];
     if ($action == 'add-session') {
     } elseif ($action == 'session-added') {
         $titleget = $_GET["title"];
-        echo '
-            <div id="popup1" class="overlay">
-                    <div class="popup">
-                    <center>
-                    <br><br>
-                        <h2>Session Placed.</h2>
-                        <a class="close" href="schedule.php">&times;</a>
-                        <div class="content">
-                        ' . substr($titleget, 0, 40) . ' was scheduled.<br><br>
-                            
-                        </div>
-                        <div style="display: flex;justify-content: center;">
-                        
-                        <a href="schedule.php" class="non-style-link"><button  class="btn-primary btn"  style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;"><font class="tn-in-text">&nbsp;&nbsp;OK&nbsp;&nbsp;</font></button></a>
-                        <br><br><br><br>
-                        </div>
-                    </center>
-            </div>
-            </div>
-            ';
-    } elseif ($action == 'drop') {
-        $nameget = $_GET["name"];
-        $session = $_GET["session"];
-        $apponum = $_GET["apponum"];
-        echo '
-            <div id="popup1" class="overlay">
-                    <div class="popup">
-                    <center>
-                        <h2>Are you sure?</h2>
-                        <a class="close" href="appointment.php">&times;</a>
-                        <div class="content">
-                            You want to delete this record<br><br>
-                            Patient Name: &nbsp;<b>' . substr($nameget, 0, 40) . '</b><br>
-                            Appointment number &nbsp; : <b>' . substr($apponum, 0, 40) . '</b><br><br>
-                            
-                        </div>
-                        <div style="display: flex;justify-content: center;">
-                        <a href="delete-appointment.php?id=' . $id . '" class="non-style-link"><button  class="btn-primary btn"  style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;"<font class="tn-in-text">&nbsp;Yes&nbsp;</font></button></a>&nbsp;&nbsp;&nbsp;
-                        <a href="appointment.php" class="non-style-link"><button  class="btn-primary btn"  style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;"><font class="tn-in-text">&nbsp;&nbsp;No&nbsp;&nbsp;</font></button></a>
-
-                        </div>
-                    </center>
-            </div>
-            </div>
-            ';
-    } elseif ($action == 'view') {
-        $sqlmain = "select * from doctor where docid='$id'";
-        $result = $database->query($sqlmain);
-        $row = $result->fetch_assoc();
-        $name = $row["docname"];
-        $email = $row["docemail"];
-        $spe = $row["specialties"];
-
-        $spcil_res = $database->query("select sname from specialties where id='$spe'");
-        $spcil_array = $spcil_res->fetch_assoc();
-        $spcil_name = $spcil_array["sname"];
-        $nic = $row['docnic'];
-        $tele = $row['doctel'];
-        echo '
-            <div id="popup1" class="overlay">
-                    <div class="popup">
-                    <center>
-                        <h2></h2>
-                        <a class="close" href="doctors.php">&times;</a>
-                        <div class="content">
-                            eDoc Web App<br>
-                            
-                        </div>
-                        <div style="display: flex;justify-content: center;">
-                        <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
-                        
-                            <tr>
-                                <td>
-                                    <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">View Details.</p><br><br>
-                                </td>
-                            </tr>
-                            
-                            <tr>
-                                
-                                <td class="label-td" colspan="2">
-                                    <label for="name" class="form-label">Name: </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="label-td" colspan="2">
-                                    ' . $name . '<br><br>
-                                </td>
-                                
-                            </tr>
-                            <tr>
-                                <td class="label-td" colspan="2">
-                                    <label for="Email" class="form-label">Email: </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="label-td" colspan="2">
-                                ' . $email . '<br><br>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="label-td" colspan="2">
-                                    <label for="nic" class="form-label">NIC: </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="label-td" colspan="2">
-                                ' . $nic . '<br><br>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="label-td" colspan="2">
-                                    <label for="Tele" class="form-label">Telephone: </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="label-td" colspan="2">
-                                ' . $tele . '<br><br>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="label-td" colspan="2">
-                                    <label for="spec" class="form-label">Specialties: </label>
-                                    
-                                </td>
-                            </tr>
-                            <tr>
-                            <td class="label-td" colspan="2">
-                            ' . $spcil_name . '<br><br>
-                            </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <a href="doctors.php"><input type="button" value="OK" class="login-btn btn-primary-soft btn" ></a>
-                                
-                                    
-                                </td>
-                
-                            </tr>
-                           
-
-                        </table>
-                        </div>
-                    </center>
-                    <br><br>
-            </div>
-            </div>
-            ';
     }
 }
 
 ?>
-</div>
+<script>
+    $(document).ready(function () {
+        $('.popup-btn').click((ev) => {
+            var dialog = $(ev.currentTarget).attr('popupdata-id');
+            
+            if ($(ev.currentTarget).attr('data')) {
+                processDialogData($(ev.currentTarget).attr('data'), dialog);
+            } else {
+                $(`#${dialog}`).removeClass('popup-closed');
+                $(`#${dialog}`).addClass('popup-open');
+            }
+        })
+    })
+
+    function processDialogData (dialogData, dialogId) {
+        var dData = JSON.parse(dialogData);
+
+        if (dData.action === 'view') {
+            $.ajax({
+                url: "apis/index.php/getAppointmentData",
+                method: "GET",
+                data: JSON.parse(dialogData),
+                contentType: "application/json",
+                success: (response) => {
+                    if (response.success) {
+                        var data = response.data;
+                        $(`#${dialogId} [data-value]`).each( (k, el) => {
+                            $(el).text(data[$(el).attr('data-value')]);
+                        })
+                        
+                        $(`#${dialogId}`).removeClass('popup-closed');
+                        $(`#${dialogId}`).addClass('popup-open');
+                    }
+                }
+            })
+        } else if (dData.action == 'drop') {
+            $(`#${dialogId} [data-value]`).each( (k, el) => {
+                console.log(dData[$(el).attr('data-value')]);
+                $(el).text(dData[$(el).attr('data-value')]);
+            })
+
+            $(`#${dialogId}`).attr("data-id", dData['id']);
+
+            $(`#${dialogId}`).removeClass('popup-closed');
+            $(`#${dialogId}`).addClass('popup-open');
+        }
+
+    }
+</script>

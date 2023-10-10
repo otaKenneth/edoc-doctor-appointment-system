@@ -1,8 +1,28 @@
 <?php
 class ScheduleModel extends Model {
+
+    public function create($db, $args = []) {
+        try {
+            $query = "INSERT INTO
+                schedule (docid,title,scheduledate,scheduletime,nop) 
+                VALUES (?,?,?,?,?)
+            ";
+
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $db->insert_id;
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
     public function getSchedules($db, $args = [], $filter = []) {
         try {
             $query = "SELECT 
+                    schedule.docid,
                     appointment.appoid,
                     schedule.scheduleid,
                     schedule.title,doctor.docname,
