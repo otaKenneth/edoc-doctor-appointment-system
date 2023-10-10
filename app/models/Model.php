@@ -28,4 +28,13 @@ class Model {
     }
 }
 
+
+include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/patients.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/webuser.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/admins.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/doctors.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/consultations.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/schedules.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/appointments.php");
+
 ?>

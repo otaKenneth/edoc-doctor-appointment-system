@@ -4,6 +4,7 @@
   --primarycolorhover: #006dd3;
   --btnice:#D8EBFA;
   --btnnicetext:#1b62b3;
+  --secondarycolor: #973db8;
 }
 
 body{
@@ -138,6 +139,23 @@ body{
     box-shadow: 0 3px 5px 0 rgba(57,108,240,0.3);
 }
 
+.btn-secondary-soft{
+  background-color: #c466e6 ;
+  /*border: 1px solid rgba(57,108,240,0.1) ;*/    color: #f0f8ff;
+  font-weight: 500;
+  font-size: 16px;
+  border: none;
+  /*box-shadow: 0 3px 5px 0 rgba(57,108,240,0.3)*/
+}
+
+
+.btn-secondary-soft:hover{
+  background-color: var(--secondarycolor) ;
+  /*border: 1px solid rgba(57,108,240,0.1) ;*/
+  color: #fff ;
+  box-shadow: 0 3px 5px 0 rgba(57,108,240,0.3);
+}
+
 
 .btn-in-text{
     font-size: 15px;
@@ -220,6 +238,14 @@ body{
     visibility: visible;
     opacity: 1;
     
+  }
+
+  .popup-closed {
+    display: none;
+  }
+  
+  .popup-open {
+    display: block;
   }
   
   .popup {
@@ -491,6 +517,7 @@ input[type=search]:focus {
   background-image: url('../img/icons/delete-iceblue.svg');
 }
 .btn-delete:hover{
+  background-color: #d30e00;
   background-image: url('../img/icons/delete-white.svg');
 }
 
@@ -617,4 +644,28 @@ input[type=search]:focus {
 
 span.required {
   color: red;
+}
+
+.drop-content {
+  height: 0px;
+  max-height: 0px;
+  transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+  padding: 0px;
+}
+
+.drop-content.drop-content-close {
+  overflow: hidden;
+}
+
+.drop-content.drop-content-open {
+  height: max-content;
+  max-height: 400px;
+  padding: 10px;
+  border: solid #ebebeb 0.5px;
+  border-radius: 10px;
+}
+
+.drop-content .scrollable {
+  max-height: 400px; 
+  overflow-y: scroll;
 }

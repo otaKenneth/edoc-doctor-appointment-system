@@ -16,4 +16,19 @@ class ConsultationsModel extends Model {
             return $th->getMessage();
         }    
     }
+
+    public function getConsultationsOfPatient($db, $args = []) {
+        try {
+            $query = "SELECT * FROM `consultations` WHERE patient_id = ?";
+
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }   
+    }
 }

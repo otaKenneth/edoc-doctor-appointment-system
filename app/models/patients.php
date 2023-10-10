@@ -50,4 +50,22 @@ class PatientModel extends Model{
             return $th->getMessage();
         }
     }
+
+    public function getPatientsByDoctorId ($db, $args = [], $filter = []) {
+        try {
+            $query = "SELECT * FROM appointment 
+                INNER JOIN patient on patient.pid=appointment.pid 
+                INNER JOIN schedule on schedule.scheduleid=appointment.scheduleid 
+                where schedule.docid = ?";
+            
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
 }
