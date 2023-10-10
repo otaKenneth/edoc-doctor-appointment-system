@@ -34,4 +34,25 @@ class AppointmentModel extends Model {
             return $th->getMessage();
         }
     }
+
+    public function getAppointments ($db, $args = [], $filter = []) {
+        try {
+            $query = "SELECT * FROM appointment 
+                INNER JOIN patient 
+                    ON patient.pid=appointment.pid 
+                INNER JOIN schedule 
+                    ON schedule.scheduleid=appointment.scheduleid 
+                WHERE schedule.docid=?";
+            
+            $result = $this->run($db, $query, $args);
+            if ($result->execute()) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+            // $userid
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
 }

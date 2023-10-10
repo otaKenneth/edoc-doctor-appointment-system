@@ -144,19 +144,6 @@ if ($_GET) {
 
 ?>
 <script>
-    $(document).ready(function () {
-        $('.popup-btn').click((ev) => {
-            var dialog = $(ev.currentTarget).attr('popupdata-id');
-            
-            if ($(ev.currentTarget).attr('data')) {
-                processDialogData($(ev.currentTarget).attr('data'), dialog);
-            } else {
-                $(`#${dialog}`).removeClass('popup-closed');
-                $(`#${dialog}`).addClass('popup-open');
-            }
-        })
-    })
-
     function processDialogData (dialogData, dialogId) {
         var dData = JSON.parse(dialogData);
 
@@ -176,6 +163,12 @@ if ($_GET) {
                         $(`#${dialogId}`).removeClass('popup-closed');
                         $(`#${dialogId}`).addClass('popup-open');
                     }
+                },
+                error: (xhr, textStatus, th) => {
+                    // Handle error response
+                    console.error('Status code: ' + xhr.status);
+                    console.error('Error message: ' + xhr.statusText);
+                    console.error('Response: ' + xhr.responseText);
                 }
             })
         } else if (dData.action == 'drop') {

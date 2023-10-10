@@ -234,14 +234,6 @@
 
 <script>
     $(document).ready(function () {
-        // Close popup
-        $('.popup-closer').click((ev) => {
-            var dialog = $(ev.currentTarget).closest('.overlay');
-            
-            $(dialog).removeClass('popup-open');
-            $(dialog).addClass('popup-closed');
-        })
-
         // Add Session
         $('form#add-session').on("submit", function (el) {
             el.preventDefault();
@@ -253,12 +245,17 @@
                 data: form_data,
                 contentType: "application/json",
                 success: (response) => {
-                    console.log(response);
                     if (response.success) {
                         var dialog = $(this).closest('.overlay')
                         $(dialog).removeClass('popup-open');
                         $(dialog).addClass('popup-closed');
                     }
+                },
+                error: (xhr, textStatus, th) => {
+                    // Handle error response
+                    console.error('Status code: ' + xhr.status);
+                    console.error('Error message: ' + xhr.statusText);
+                    console.error('Response: ' + xhr.responseText);
                 }
             });
         })

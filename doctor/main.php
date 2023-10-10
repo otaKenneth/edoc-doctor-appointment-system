@@ -96,7 +96,7 @@
     
                             <datalist id="doctors">
                         <?php
-                        $list11 = $database->query("select  docname,docemail from  doctor;");
+                        $list11 = $database->query("select docname, docemail from doctor;");
     
                         for ($y = 0; $y < $list11->num_rows; $y++) {
                             $row00 = $list11->fetch_assoc();
@@ -155,6 +155,27 @@
             } else {
                 $(targetEl).removeClass(active_icon_classes[$(targetEl).attr('link-name')])
                 $($(targetEl).children()[0]).removeClass('non-style-link-menu-active')
+            }
+        })
+
+        // Close popup
+        $('.popup-closer').click((ev) => {
+            var dialog = $(ev.currentTarget).closest('.overlay');
+            
+            $(dialog).removeClass('popup-open');
+            $(dialog).addClass('popup-closed');
+        })
+
+        // Open Popup
+        $('.popup-btn').click((ev) => {
+            console.log("clicked")
+            var dialog = $(ev.currentTarget).attr('popupdata-id');
+            
+            if ($(ev.currentTarget).attr('data')) {
+                processDialogData($(ev.currentTarget).attr('data'), dialog);
+            } else {
+                $(`#${dialog}`).removeClass('popup-closed');
+                $(`#${dialog}`).addClass('popup-open');
             }
         })
     })

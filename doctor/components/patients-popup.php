@@ -1,150 +1,181 @@
-<html>
-<div id="popup1" class="overlay">
-    <div class="popup">
+<div id="popup1" class="overlay popup-closed">
+    <div id="patient-consultation-popup" class="popup">
         <center>
             <div class="popup-header">
-                <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">ViewDetails</p>
-                <a class="close" href="patient.php">&times;</a>
+                <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">View Details</p>
+                <a class="close popup-closer" href="#">&times;</a>
             </div>
-            <div style="display: flex;justify-content: center; max-height: 500px; overflow-y: auto;">
-            <?php
-                if ($result['success']) {
-                    $row = $result['data'];
-                    
-                    $name=$row["pname"];
-                    $email=$row["pemail"];
-                    $dob=$row["pdob"];
-                    // Convert $dob to a DateTime object
-                    $dobDate = new DateTime($dob);
-
-                    // Get the current date
-                    $currentDate = new DateTime();
-
-                    // Calculate the age difference
-                    $ageInterval = $currentDate->diff($dobDate);
-
-                    // Extract the age from the interval
-                    $age = $ageInterval->y;
-                    $tele=$row["ptel"];
-                    $address=$row["paddress"];
-                ?>
-                <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
-                    <tr>
-                        <td class="label-td">
-                            <label for="name" class="form-label">Patient ID: </label>
-                        </td>
-                        <td class="label-td" colspan="2">
-                            <label for="name" class="form-label">Name: </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label-td value-td">
-                            P-<?=$id?>
-                        </td>
-                        <td class="label-td value-td" colspan="2">
-                            <?=$name?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label-td">
-                            <label for="Email" class="form-label">Email: </label>
-                        </td>
-                        <td class="label-td" colspan="2">
-                            <label for="Tele" class="form-label">Telephone: </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label-td value-td">
-                            <?=$email?>
-                        </td>
-                        <td class="label-td value-td" colspan="2">
-                            <?=$tele?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label-td">
-                            <label for="spec" class="form-label">Address: </label>
-                        </td>
-                        <td class="label-td">
-                            <label for="name" class="form-label">Date of Birth: </label>
-                        </td>
-                        <td class="label-td">
-                            <label for="name" class="form-label">Age: </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label-td value-td">
-                            <?=$address?>
-                        </td>
-                        <td class="label-td value-td">
-                            <?=$dob?>
-                        </td>
-                        <td class="label-td value-td">
-                            <?=$age?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <form id="patient-diagnosis-form" name="patient-diagnosis-form" method="POST"><td class="label-td" colspan="3">
-                            <label for="name" class="form-label">Diagnosis: </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label-td value-td" colspan="3">
-                            <textarea class="input-text" name="diagnosis" rows="5" cols="" placeholder="Aa..." required></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label-td" colspan="3">
-                            <label for="name" class="form-label">Diagnostic Request: </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label-td value-td" colspan="3">
-                            <textarea class="input-text" name="diagnostic_request" rows="5" cols="" placeholder="Aa..." required></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label-td" colspan="3">
-                            <label for="name" class="form-label">Prescription: </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label-td value-td" colspan="3">
-                            <textarea class="input-text" name="prescription" rows="5" cols="" placeholder="Aa..." required></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label-td" colspan="3">
-                            <label for="name" class="form-label">Recommendation: </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label-td value-td" colspan="3">
-                            <textarea class="input-text" name="recommendation" rows="5" cols="" placeholder="Aa..." required></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <input name="pid" value="<?=$row['pid']?>" hidden/>
-                            <a href="patient.php">
+            <div class="popup-content" style="max-height: 75vh; overflow-y: auto;">
+                <div style="display: flex;justify-content: center;">
+                    <table width="100%" class="sub-table scrolldown add-doc-form-container" border="0">
+                        <tr>
+                            <td class="label-td">
+                                <label for="name" class="form-label"><b>Patient ID: </b></label>
+                            </td>
+                            <td class="label-td value-td" colspan="2" data-value="pid"></td>
+                        </tr>
+                        <tr>
+                            <td class="label-td">
+                                <label for="name" class="form-label"><b>Name: </b></label>
+                            </td>
+                            <td class="label-td value-td" colspan="2" data-value="pname"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><br></td>
+                        </tr>
+                        <tr>
+                            <td class="label-td">
+                                <label for="Email" class="form-label">Email: </label>
+                            </td>
+                            <td class="label-td">
+                                <label for="Tele" class="form-label">Telephone: </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label-td value-td" data-value="pemail"></td>
+                            <td class="label-td value-td" colspan="2" data-value="ptel"></td>
+                        </tr>
+                        <tr>
+                            <td class="label-td">
+                                <label for="spec" class="form-label">Address: </label>
+                            </td>
+                            <td class="label-td">
+                                <label for="name" class="form-label">Date of Birth: </label>
+                            </td>
+                            <td class="label-td">
+                                <label for="name" class="form-label">Age: </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label-td value-td" data-value="paddress"></td>
+                            <td class="label-td value-td" data-value="pdob"></td>
+                            <td class="label-td value-td" data-value="age"></td>
+                        </tr>
+                        <tr>
+                            <form id="patient-diagnosis-form" name="patient-diagnosis-form" method="POST"><td class="label-td" colspan="3">
+                                <label for="name" class="form-label">Diagnosis: </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label-td value-td" colspan="3">
+                                <textarea class="input-text" name="diagnosis" rows="5" cols="" placeholder="Aa..." required></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label-td" colspan="3">
+                                <label for="name" class="form-label">Diagnostic Request: </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label-td value-td" colspan="3">
+                                <textarea class="input-text" name="diagnostic_request" rows="5" cols="" placeholder="Aa..." required></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label-td" colspan="3">
+                                <label for="name" class="form-label">Prescription: </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label-td value-td" colspan="3">
+                                <textarea class="input-text" name="prescription" rows="5" cols="" placeholder="Aa..." required></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label-td" colspan="3">
+                                <label for="name" class="form-label">Recommendation: </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label-td value-td" colspan="3">
+                                <textarea class="input-text" name="recommendation" rows="5" cols="" placeholder="Aa..." required></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding-top: 10px;">
+                                <input name="pid" data-value="pid" value="" hidden/>
+                                <button type="button" class="btn-secondary-soft btn show-drop-c" style="border: none;">Previous Consultations</button>
                                 <input 
                                   type="submit" 
-                                  value="OK" 
+                                  value="Save" 
                                   form="patient-diagnosis-form"
                                   name="patient-diagnosis-form-submit"
                                   class="login-btn btn-primary-soft btn"
                                 >
-                            </a>
-                        </td>
-                        </form>
-                    </tr>
-                </table>
-            <?php } else { ?>
-                <div><?=$result['message']?></div>
-            <?php } ?>
+                            </td>
+                            </form>
+                        </tr>
+                    </table>
+                </div>
+                <div class="drop-content drop-content-close" style="margin-top: 15px;">
+                    <div class="scrollable">
+                        <div class="main-container">
+                            <div class="has-logic" logic-loop>
+                                <div class="title" data-value="date_created"></div>
+                                <div class="value" data-value="diagnosis"></div>
+                                <div class="value" data-value="diagnostic_request"></div>
+                                <div class="value" data-value="prescription"></div>
+                                <div class="value" data-value="recommendation"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </center>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        // Save Consultation
+        $('form#patient-diagnosis-form').on("submit", function (el) {
+            el.preventDefault();
+            var form_data = utils.serializeArrayToJSON($(this).serializeArray());
 
-</html>
+            $.ajax({
+                url: "apis/index.php/saveConsultation",
+                method: "POST",
+                data: form_data,
+                contentType: "application/json",
+                success: (response) => {
+                    if (response.success) {
+                        var dialog = $(this).closest('.overlay')
+                        $(dialog).removeClass('popup-open');
+                        $(dialog).addClass('popup-closed');
+                    }
+                },
+                error: (xhr, textStatus, th) => {
+                    // Handle error response
+                    console.error('Status code: ' + xhr.status);
+                    console.error('Error message: ' + xhr.statusText);
+                    console.error('Response: ' + xhr.responseText);
+                }
+            });
+        })
+
+        // Show drop-content
+        $('.show-drop-c').click((ev) => {
+            var el = $('.drop-content')[0];
+            
+            if ($(el).hasClass('drop-content-close')) {
+                $(el).removeClass('drop-content-close');
+                var child = $(el).children('.main-container')[0];
+                $(child).css({
+                    'height': 'max-content'
+                })
+                $(el).addClass('drop-content-open');
+
+                setTimeout(() => {
+                    var h = $(el).closest('.popup-content').height();
+                    $(el).closest('.popup-content').scrollTop(h+300);
+                }, 300);
+            } else {
+                $(el).removeClass('drop-content-open');
+                var child = $(el).children('.main-container')[0];
+                $(child).css({
+                    'height': '0px'
+                })
+                $(el).addClass('drop-content-close');
+            }
+        })
+    })
+</script>
