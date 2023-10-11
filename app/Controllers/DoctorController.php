@@ -187,9 +187,13 @@ class DoctorController {
             'message' => ""
         ];
 
-        $patients = $this->patientSeed->getPatientsByDoctorId($db,[
-            $docid
-        ]);
+        if (isset($showonly) && $showonly == 'all') {
+            $patients = $this->patientSeed->getAllPatients($db);
+        } else {
+            $patients = $this->patientSeed->getPatientsByDoctorId($db,[
+                $docid
+            ]);
+        }
 
         if (is_object($patients)) {
             $response['success'] = true;

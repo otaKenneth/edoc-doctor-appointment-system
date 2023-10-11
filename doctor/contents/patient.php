@@ -2,14 +2,44 @@
 include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/DoctorController.php");
 $c_doctors = new DoctorController;
 
-$response = $c_doctors->getPatientList($database, [
+$args = [
     'docid' => $user['docid']
-]);
+];
+
+$currentFilterSelected = 'my';
+
+if (isset($_POST["filter"])) {
+    $currentFilterSelected = $_POST["showonly"];
+    $args = array_merge($args, [
+        'showonly' => $_POST["showonly"]
+    ]);
+}
+
+$response = $c_doctors->getPatientList($database, $args);
 
 $result = $response['success'] ? $response['data']:[];
 ?>
 
 <center>
+    <div>
+        <div style="width: max-content">
+            <form action="" method="post">
+                <div class="filter-container" style="display: flex; align-items: center; padding-left: 15px;">
+                    <span style="text-wrap: nowrap;">Show Details About : &nbsp;</span>
+                    <div style="width: 350px;">
+                        <select name="showonly" id="" class="box filter-container-items"
+                            style="width:100% ;height: 50px;margin: 0;">
+                            <option value="my" <?=$currentFilterSelected == "my"?"selected":""?> >My Patients Only</option><br />
+                            <option value="all" <?=$currentFilterSelected == "all"?"selected":""?>>All Patients</option><br />
+                        </select>
+                    </div>
+                    <input type="submit" name="filter" value=" Filter"
+                        class=" btn-primary-soft btn button-icon btn-filter"
+                        style="padding: 15px; padding-left: 34px; margin :0;">
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="abc scroll">
         <table width="93%" class="sub-table scrolldown"  style="border-spacing:0;">
             <thead>
