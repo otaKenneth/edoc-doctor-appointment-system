@@ -54,6 +54,30 @@ class ScheduleModel extends Model {
             return $th->getMessage();
         }
     }
+
+    public function getScheduleById ($db, $args = []) {
+        try {
+            $query = "SELECT 
+                        schedule.scheduleid,
+                        schedule.title,
+                        doctor.docname,
+                        schedule.scheduledate,
+                        schedule.scheduletime,
+                        schedule.nop 
+                    FROM schedule 
+                    INNER JOIN doctor ON schedule.docid=doctor.docid  
+                    WHERE schedule.scheduleid=?";
+            
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
 }
 
 ?>
