@@ -240,4 +240,51 @@ class DoctorController {
 
         echo json_encode($response);
     }
+
+    public function getScheduleData($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        $schedules = $this->scheduleSeed->getScheduleById($db, [
+            $id
+        ]);
+
+        if (is_object($schedules)) {
+            $response['success'] = true;
+            $response['message'] = "Schedule successfully retrieved.";
+
+            if ($schedules->num_rows > 0) {
+                $sched_data = $schedules->fetch_assoc();
+
+                $pregs = $this->patientSeed->getPatientByScheduleId($db, [
+                    $sched_data['scheduleid']
+                ]);
+
+                $sched_data['pregscount'] = $pregs->num_rows;
+
+                if (is_object($pregs)) {
+                    $response['data'] = [
+                        'schedule_data' => $sched_data,
+                        'pregs_data' => $pregs->fetch_all(MYSQLI_ASSOC)
+                    ];
+                } else {
+                    http_response_code(400);
+                    $response['success'] = false;
+                    $response['message'] = "No Booked Patient Yet.";
+                }
+            } else {
+                http_response_code(400);
+                $response['success'] = false;
+                $response['message'] = "No Schedule Matched.";
+            }
+        } else {
+            http_response_code(400);
+            $response['message'] = $appo;
+        }
+
+        echo json_encode($response);
+    }
 }
