@@ -5,7 +5,10 @@ class Model {
         $types = $this->processArgs($args);
         $stmt = $db->prepare($query);
 
-        $stmt->bind_param($types, ...$args);
+        if (count($args) > 0) {
+            $stmt->bind_param($types, ...$args);
+        }
+        
         $stmt->execute();
         return $stmt;
     }

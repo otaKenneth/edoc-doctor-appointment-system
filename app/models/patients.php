@@ -1,6 +1,22 @@
 <?php
 
 class PatientModel extends Model{
+
+    public function getAllPatients($db) {
+        try {
+            $query = "SELECT * FROM patient";
+
+            $result = $this->run($db, $query, []);
+            if ($result) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
     public function create ($database, $args = []) {
         try {
             $newPatientQuery = "INSERT INTO patient (pemail,pname,ppassword, paddress, pdob,ptel,chief_complaint_c,paps) VALUES (?,?,?,?,?,?,?,?);";

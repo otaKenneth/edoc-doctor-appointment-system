@@ -20,6 +20,22 @@ if ($result['success']) {
 
 ?>
 <center>
+    <div>
+        <div style="width: max-content">
+            <form action="" method="post">
+                <div class="filter-container" style="display: flex; align-items: center; padding-left: 15px;">
+                    <span style="text-wrap: nowrap;">Date:&nbsp;</span>
+                    <div style="width: 350px;">
+                        <input type="date" name="sheduledate" id="date" class="input-text filter-container-items"
+                            style="margin: 0;width: 95%;">
+                    </div>
+                    <input type="submit" name="filter" value=" Filter"
+                        class=" btn-primary-soft btn button-icon btn-filter"
+                        style="padding: 15px; padding-left: 34px; margin :0;">
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="abc scroll">
         <table width="93%" class="sub-table scrolldown" border="0">
             <thead>
