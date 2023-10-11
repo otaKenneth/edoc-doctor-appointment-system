@@ -100,7 +100,7 @@ if ($result['success']) {
                                         <font class="tn-in-text">View</font>
                                     </button>
                                 </a>
-                                <a href="#" class="non-style-link table-btn popup-btn"
+                                <!-- <a href="#" class="non-style-link table-btn popup-btn"
                                   popupdata-id="popup3"
                                   data='<?=json_encode([
                                     'id' => $appoid,
@@ -114,7 +114,7 @@ if ($result['success']) {
                                       style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;">
                                         <font class="tn-in-text">Cancel</font>
                                     </button>
-                                </a>
+                                </a> -->
                             </div>
                         </td>
                     </tr>
