@@ -38,7 +38,7 @@ class ScheduleModel extends Model {
                 WHERE doctor.docid=? ";
 
             if (count($filter) > 0) {
-                foreach ($args['filter'] as $colName => $searchVal) {
+                foreach ($filter as $colName => $searchVal) {
                     $query .= " AND {$colName} = ?";
                     array_push($args, $searchVal);
                 }
