@@ -266,6 +266,11 @@ body{
     display: flex;
     justify-content: space-between;
   }
+
+  .popup-content {
+    max-height: 75vh; overflow-y: auto;  
+  }
+
   .popup .close {
     position: absolute;
     top: 20px;
@@ -668,4 +673,29 @@ span.required {
 .drop-content .scrollable {
   max-height: 400px; 
   overflow-y: scroll;
+}
+
+.hidden {
+  display: none;
+}
+
+.title {
+  font-size: medium;
+  font-weight: 600;
+}
+
+.looped {
+  margin: 10px;
+  padding: 10px;
+}
+
+.border {
+  border-style: solid;
+}
+.border-rounded {
+  border-radius: 5px;
+} 
+.border-1 {
+  border-width: 0.5px;
+  border-color: #ebebeb;
 }

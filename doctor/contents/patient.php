@@ -71,6 +71,20 @@ $result = $response['success'] ? $response['data']:[];
                                             <font class="tn-in-text">View</font>
                                         </button>
                                     </a>
+                                    <a href="#" 
+                                      popupdata-id="popup2"
+                                      data='<?=json_encode([
+                                        'id' => $pid,
+                                        'action' => 'view-2'
+                                      ])?>'
+                                      class="non-style-link table-btn popup-btn"
+                                      style="margin-left: 15px;">
+                                        <button 
+                                        class="btn-secondary-soft btn"
+                                        style="padding-top: 12px;padding-bottom: 12px;margin-top: 10px;">
+                                            <font class="tn-in-text">Consultation History</font>
+                                        </button>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -97,20 +111,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components
                 success: (response) => {
                     if (response.success) {
                         var data = response.data;
-                        $(`#${dialogId} [data-value]`).each( (k, el) => {
-                            var $el = $(el);
-                            var $el_value = data[$el.attr('data-value')];
-                            if ($el.prop('tagName').toLowerCase() === "input") {
-                                $el.val($el_value);
-                            } else {
-                                $el.text($el_value);
-                            }
-                        })
-
-                        getPatientPevConsultations(data.pid);
-                        
-                        $(`#${dialogId}`).removeClass('popup-closed');
-                        $(`#${dialogId}`).addClass('popup-open');
+                        utils.processElementLogic($(`#${dialogId}`), null, data)
+                        utils.showDialog($(`#${dialogId}`))
                     }
                 },
                 error: (xhr, textStatus, th) => {
@@ -120,6 +122,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components
                     console.error('Response: ' + xhr.responseText);
                 }
             })
+        } else if (dData.action === 'view-2') {
+            getPatientPevConsultations(dData.id, dialogId);
+
         } else if (dData.action == 'drop') {
             $(`#${dialogId} [data-value]`).each( (k, el) => {
                 console.log(dData[$(el).attr('data-value')]);
@@ -134,7 +139,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components
 
     }
 
-    function getPatientPevConsultations (pid) {
+    function getPatientPevConsultations (pid, dialogId) {
         $.ajax({
             url: "apis/index.php/getPatientPrevConsultations",
             method: "GET",
@@ -145,9 +150,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components
             success: (response) => {
                 if (response.success) {
                     var data = response.data;
-                    var el = $('#patient-consultation-popup .drop-content .has-logic[logic-loop]');
-                    var parent = $(el).parent();
-                    utils.setValues(el, parent, data);
+                    var $el = $('#patient-consultation-history-popup .has-logic[logic-loop]');
+                    var parent = $($el[0]).parent()[0];
+                    utils.processElementLogic($el, parent, data);
+                    utils.showDialog($(`#${dialogId}`))
                 }
             },
             error: (xhr, textStatus, th) => {

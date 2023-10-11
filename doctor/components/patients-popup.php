@@ -5,7 +5,7 @@
                 <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">View Details</p>
                 <a class="close popup-closer" href="#">&times;</a>
             </div>
-            <div class="popup-content" style="max-height: 75vh; overflow-y: auto;">
+            <div class="popup-content">
                 <div style="display: flex;justify-content: center;">
                     <table width="100%" class="sub-table scrolldown add-doc-form-container" border="0">
                         <tr>
@@ -52,13 +52,15 @@
                             <td class="label-td value-td" data-value="age"></td>
                         </tr>
                         <tr>
-                            <form id="patient-diagnosis-form" name="patient-diagnosis-form" method="POST"><td class="label-td" colspan="3">
-                                <label for="name" class="form-label">Diagnosis: </label>
-                            </td>
+                            <form id="patient-diagnosis-form" name="patient-diagnosis-form" method="POST">
+                                <td class="label-td" colspan="3">
+                                    <label for="name" class="form-label">Diagnosis: </label>
+                                </td>
                         </tr>
                         <tr>
                             <td class="label-td value-td" colspan="3">
-                                <textarea class="input-text" name="diagnosis" rows="5" cols="" placeholder="Aa..." required></textarea>
+                                <textarea class="input-text" name="diagnosis" rows="5" cols="" placeholder="Aa..."
+                                    required></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -68,7 +70,8 @@
                         </tr>
                         <tr>
                             <td class="label-td value-td" colspan="3">
-                                <textarea class="input-text" name="diagnostic_request" rows="5" cols="" placeholder="Aa..." required></textarea>
+                                <textarea class="input-text" name="diagnostic_request" rows="5" cols=""
+                                    placeholder="Aa..." required></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -78,7 +81,8 @@
                         </tr>
                         <tr>
                             <td class="label-td value-td" colspan="3">
-                                <textarea class="input-text" name="prescription" rows="5" cols="" placeholder="Aa..." required></textarea>
+                                <textarea class="input-text" name="prescription" rows="5" cols="" placeholder="Aa..."
+                                    required></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -88,42 +92,58 @@
                         </tr>
                         <tr>
                             <td class="label-td value-td" colspan="3">
-                                <textarea class="input-text" name="recommendation" rows="5" cols="" placeholder="Aa..." required></textarea>
+                                <textarea class="input-text" name="recommendation" rows="5" cols="" placeholder="Aa..."
+                                    required></textarea>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2" style="padding-top: 10px;">
-                                <input name="pid" data-value="pid" value="" hidden/>
-                                <button type="button" class="btn-secondary-soft btn show-drop-c" style="border: none;">Previous Consultations</button>
-                                <input 
-                                  type="submit" 
-                                  value="Save" 
-                                  form="patient-diagnosis-form"
-                                  name="patient-diagnosis-form-submit"
-                                  class="login-btn btn-primary-soft btn"
-                                >
+                                <input name="pid" data-value="pid" value="" hidden />
+                                <input type="submit" value="Save" form="patient-diagnosis-form"
+                                    name="patient-diagnosis-form-submit" class="login-btn btn-primary-soft btn">
                             </td>
                             </form>
                         </tr>
                     </table>
                 </div>
-                <div class="drop-content drop-content-close" style="margin-top: 15px;">
-                    <div class="scrollable">
-                        <div class="main-container">
-                            <div class="has-logic" logic-loop>
-                                <div class="title" data-value="date_created"></div>
-                                <div class="value" data-value="diagnosis"></div>
-                                <div class="value" data-value="diagnostic_request"></div>
-                                <div class="value" data-value="prescription"></div>
-                                <div class="value" data-value="recommendation"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </center>
     </div>
 </div>
+
+<div id="popup2" class="overlay popup-closed">
+    <div id="patient-consultation-history-popup" class="popup">
+        <div class="popup-header">
+            <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">Patient Consultation History</p>
+            <a class="close popup-closer" href="#">&times;</a>
+        </div>
+        <div class="popup-content" style="height: auto; max-height: 400px; overflow-y: scroll;">
+            <div class="has-logic border border-rounded border-1 looped hidden" logic-loop>
+                <div class="title" style="margin-bottom: 10px;">
+                    <span class="form-label">Date:&nbsp;</span>
+                    <span data-value="date_created"></span>
+                </div>
+                <div class="value">
+                    <span class="form-label">Diagnosis:&nbsp;</span>
+                    <p style="margin-top: 0px;" data-value="diagnosis"></p>
+                </div>
+                <div class="value">
+                    <span class="form-label">Diagnostic Request:&nbsp;</span>
+                    <p style="margin-top: 0px;" data-value="diagnostic_request"></p>
+                </div>
+                <div class="value">
+                    <span class="form-label">Prescription:&nbsp;</span>
+                    <p style="margin-top: 0px;" data-value="prescription"></p>
+                </div>
+                <div class="value">
+                    <span class="form-label">Recommendation:&nbsp;</span>
+                    <p style="margin-top: 0px;" data-value="recommendation"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
         // Save Consultation
@@ -139,8 +159,7 @@
                 success: (response) => {
                     if (response.success) {
                         var dialog = $(this).closest('.overlay')
-                        $(dialog).removeClass('popup-open');
-                        $(dialog).addClass('popup-closed');
+                        utils.closeDialog($(dialog));
                     }
                 },
                 error: (xhr, textStatus, th) => {
@@ -155,7 +174,7 @@
         // Show drop-content
         $('.show-drop-c').click((ev) => {
             var el = $('.drop-content')[0];
-            
+
             if ($(el).hasClass('drop-content-close')) {
                 $(el).removeClass('drop-content-close');
                 var child = $(el).children('.main-container')[0];
@@ -166,7 +185,7 @@
 
                 setTimeout(() => {
                     var h = $(el).closest('.popup-content').height();
-                    $(el).closest('.popup-content').scrollTop(h+300);
+                    $(el).closest('.popup-content').scrollTop(h + 300);
                 }, 300);
             } else {
                 $(el).removeClass('drop-content-open');
