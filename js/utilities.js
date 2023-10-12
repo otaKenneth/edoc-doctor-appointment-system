@@ -35,6 +35,7 @@ var utils = {
                 var condition = $(el).attr("logic-if");
                 var result = eval(condition);
                 
+                // console.log(el, loop_key, condition, result, this.data)
                 if (result) {
                     $(el).removeClass("hidden");
                     if (loop_key !== '') {
@@ -69,10 +70,7 @@ var utils = {
                     $(parent).append(clone);
                 });
             }, 300);
-        } else if ($(el).is('[logic-if]')) {
-            var condition = $(el).attr("logic-if").split(/[><=]=|===|!==|!=|<|>/);
-            
-        }  else if ($(el).is('[logic-key]')) {
+        } else if ($(el).is('[logic-key]')) {
             var objKey = $(el).attr('logic-key');
             $(el).find('[data-value]').each( (k, child_element) => {
                 var $c_el = $(child_element);
