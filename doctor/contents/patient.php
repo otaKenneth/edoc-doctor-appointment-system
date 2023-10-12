@@ -141,7 +141,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components
                 success: (response) => {
                     if (response.success) {
                         var data = response.data;
-                        utils.processElementLogic($(`#${dialogId}`), null, data)
+                        utils.processElementLogic($(`#${dialogId}`), data)
                         utils.showDialog($(`#${dialogId}`))
                     }
                 },
@@ -180,9 +180,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components
             success: (response) => {
                 if (response.success) {
                     var data = response.data;
-                    var $el = $('#patient-consultation-history-popup .has-logic[logic-loop]');
-                    var parent = $($el[0]).parent()[0];
-                    utils.processElementLogic($el, parent, data);
+                    var $el = $('#patient-consultation-history-popup');
+                    utils.processElementLogic($el, data);
                     utils.showDialog($(`#${dialogId}`))
                 }
             },

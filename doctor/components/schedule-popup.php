@@ -134,7 +134,7 @@
             <div class="content">
                 <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">Schedule Details</p>
             </div>
-            <div class="abc scroll" style="display: flex;justify-content: center;">
+            <div class="abc has-logic scroll" style="display: flex;justify-content: center;" logic-key="schedule_data">
                 <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
                     <tr>
                         <td class="label-td" colspan="2">
@@ -178,7 +178,7 @@
                     <tr>
                         <td colspan="4">
                             <center>
-                                <div class="abc scroll">
+                                <div id="patients" class="abc scroll">
                                     <table width="100%" class="sub-table scrolldown" border="0">
                                         <thead>
                                             <tr>
@@ -192,9 +192,9 @@
                                                 <th class="table-headin">Patient Telephone</th>
                                         </thead>
                                         <tbody>
-                                            <tr logic-if="result==0">
+                                            <tr class="has-logic" logic-if="this.data==0">
                                                 <td colspan="7">
-                                                    <br><br><br><br>
+                                                    <br><br>
                                                     <center>
                                                         <img src="../img/notfound.svg" width="25%">
 
@@ -203,15 +203,15 @@
                                                             style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">
                                                             We couldnt find anything related to your keywords !</p>
                                                         <a class="non-style-link" href="appointment.php"><button
-                                                                class="login-btn btn-primary-soft btn"
-                                                                style="display: flex;justify-content: center;align-items: center;margin-left:20px;">&nbsp;
-                                                                Show all Appointments &nbsp;</font></button>
+                                                            class="login-btn btn-primary-soft btn"
+                                                            style="display: flex;justify-content: center;align-items: center;margin-left:20px;">&nbsp;
+                                                            Show all Appointments &nbsp;</font></button>
                                                         </a>
                                                     </center>
-                                                    <br><br><br><br>
+                                                    <br><br>
                                                 </td>
                                             </tr>
-                                            <tr logic-if="result>0" logic-loop style="text-align:center;">
+                                            <tr class="has-logic hidden" logic-if="this.data.length>0" logic-loop="pregs_data" style="text-align:center;">
                                                 <td data-value="pid"></td>
                                                 <td style="font-weight:600;padding:25px" data-value="pname"></td>
                                                 <td

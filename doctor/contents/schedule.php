@@ -158,7 +158,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components
                 success: (response) => {
                     if (response.success) {
                         var data = response.data;
-                        utils.processElementLogic($(`#${dialogId}`), null, data.schedule_data);
+                        utils.processElementLogic($(`#${dialogId}`), data);
                         utils.showDialog($(`#${dialogId}`))
                     }
                 },

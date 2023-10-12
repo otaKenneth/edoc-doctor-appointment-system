@@ -6,7 +6,7 @@
                 <a class="close popup-closer" href="#">&times;</a>
             </div>
             <div class="popup-content">
-                <div style="display: flex;justify-content: center;">
+                <div class="has-logic" style="display: flex;justify-content: center;">
                     <table width="100%" class="sub-table scrolldown add-doc-form-container" border="0">
                         <tr>
                             <td class="label-td">
