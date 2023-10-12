@@ -61,11 +61,10 @@ class DoctorController {
             $row['age'] = $ageInterval->y;
             $response['data'] = $row;
         } else {
-            http_response_code(400);
             $response['message'] = $patient;
         }
 
-        echo json_encode($response);
+        return $response;
     }
 
     public function saveConsultation($db, $args = []) {
@@ -83,11 +82,10 @@ class DoctorController {
             $response['success'] = true;
             $response['message'] = "Consultation saved successfully.";
         } else {
-            http_response_code(400);
             $response['message'] = $consultation;
         }
 
-        echo json_encode($response);
+        return $response;
     }
 
     public function getDoctorAppointments ($db, $args = []) {
@@ -135,11 +133,10 @@ class DoctorController {
             $response['success'] = true;
             $response['message'] = "Schedule saved successfully.";
         } else {
-            http_response_code(400);
             $response['message'] = $schedule;
         }
 
-        echo json_encode($response);
+        return $response;
     }
 
     public function getAppointmentData ($db, $args = []) {
@@ -164,11 +161,10 @@ class DoctorController {
                 $response['message'] = "No Appointment Matched.";
             }
         } else {
-            http_response_code(400);
             $response['message'] = $appo;
         }
 
-        echo json_encode($response);
+        return $response;
     }
 
     public function getSpecialities($db, $args = []) {
@@ -177,7 +173,7 @@ class DoctorController {
             'message' => ""
         ];
 
-        echo json_encode($response);
+        return $response;
     }
 
     public function getPatientList($db, $args = []) {
@@ -234,11 +230,10 @@ class DoctorController {
                 $response['message'] = "No Consultations Matched.";
             }
         } else {
-            http_response_code(400);
             $response['message'] = $appo;
         }
 
-        echo json_encode($response);
+        return $response;
     }
 
     public function getScheduleData($db, $args = []) {
@@ -271,20 +266,37 @@ class DoctorController {
                         'pregs_data' => $pregs->fetch_all(MYSQLI_ASSOC)
                     ];
                 } else {
-                    http_response_code(400);
                     $response['success'] = false;
                     $response['message'] = "No Booked Patient Yet.";
                 }
             } else {
-                http_response_code(400);
                 $response['success'] = false;
                 $response['message'] = "No Schedule Matched.";
             }
         } else {
-            http_response_code(400);
             $response['message'] = $appo;
         }
 
-        echo json_encode($response);
+        return $response;
+    }
+
+    public function deleteSchedule($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        $schedule = $this->scheduleSeed->deleteScheduleById($db, [
+            $id
+        ]);
+
+        if (is_string($schedule)) {
+            $response['message'] = $schedule;
+        } else {
+            $response['success'] = true;
+        }
+
+        return $response;
     }
 }

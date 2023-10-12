@@ -15,5 +15,10 @@
     }
 
     header('Content-Type: application/json');
-    echo $c_doctors->{$clean_uri}($database, $input);
+    $result = $c_doctors->{$clean_uri}($database, $input);
+
+    if (!$result['success']) {
+        http_response_code(400);
+    }
+    echo json_encode($result);
 ?>

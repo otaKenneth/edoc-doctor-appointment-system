@@ -158,7 +158,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components
                 success: (response) => {
                     if (response.success) {
                         var data = response.data;
-                        utils.processElementLogic($(`#${dialogId}`), null, data.schedule_data);
+                        utils.processElementLogic($(`#${dialogId}`), data);
                         utils.showDialog($(`#${dialogId}`))
                     }
                 },
@@ -170,12 +170,11 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components
                 }
             })
         } else if (dData.action == 'drop') {
-            $(`#${dialogId} [data-value]`).each((k, el) => {
-                console.log(dData[$(el).attr('data-value')]);
-                $(el).text(dData[$(el).attr('data-value')]);
-            })
+            utils.processElementLogic($(`#${dialogId}`), {
+                'nameget': dData.name
+            });
 
-            $(`#${dialogId}`).attr("data-id", dData['id']);
+            $(`#${dialogId}`).attr("data-id", dData.id);
 
             $(`#${dialogId}`).removeClass('popup-closed');
             $(`#${dialogId}`).addClass('popup-open');

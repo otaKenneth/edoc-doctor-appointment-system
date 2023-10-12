@@ -78,6 +78,21 @@ class ScheduleModel extends Model {
             return $th->getMessage();
         }
     }
+
+    public function deleteScheduleById($db, $args = []) {
+        try {
+            $query = "DELETE FROM schedule WHERE scheduleid=?";
+            
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
 }
 
 ?>

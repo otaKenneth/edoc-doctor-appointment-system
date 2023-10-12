@@ -134,7 +134,7 @@
             <div class="content">
                 <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">Schedule Details</p>
             </div>
-            <div class="abc scroll" style="display: flex;justify-content: center;">
+            <div class="abc has-logic scroll" style="display: flex;justify-content: center;" logic-key="schedule_data">
                 <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
                     <tr>
                         <td class="label-td" colspan="2">
@@ -178,7 +178,7 @@
                     <tr>
                         <td colspan="4">
                             <center>
-                                <div class="abc scroll">
+                                <div id="patients" class="abc scroll">
                                     <table width="100%" class="sub-table scrolldown" border="0">
                                         <thead>
                                             <tr>
@@ -192,9 +192,9 @@
                                                 <th class="table-headin">Patient Telephone</th>
                                         </thead>
                                         <tbody>
-                                            <tr logic-if="result==0">
+                                            <tr class="has-logic" logic-if="this.data.pregs_data==0">
                                                 <td colspan="7">
-                                                    <br><br><br><br>
+                                                    <br><br>
                                                     <center>
                                                         <img src="../img/notfound.svg" width="25%">
 
@@ -203,15 +203,15 @@
                                                             style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">
                                                             We couldnt find anything related to your keywords !</p>
                                                         <a class="non-style-link" href="appointment.php"><button
-                                                                class="login-btn btn-primary-soft btn"
-                                                                style="display: flex;justify-content: center;align-items: center;margin-left:20px;">&nbsp;
-                                                                Show all Appointments &nbsp;</font></button>
+                                                            class="login-btn btn-primary-soft btn"
+                                                            style="display: flex;justify-content: center;align-items: center;margin-left:20px;">&nbsp;
+                                                            Show all Appointments &nbsp;</font></button>
                                                         </a>
                                                     </center>
-                                                    <br><br><br><br>
+                                                    <br><br>
                                                 </td>
                                             </tr>
-                                            <tr logic-if="result>0" logic-loop style="text-align:center;">
+                                            <tr class="has-logic hidden" logic-if="this.data.length>0" logic-loop="pregs_data" style="text-align:center;">
                                                 <td data-value="pid"></td>
                                                 <td style="font-weight:600;padding:25px" data-value="pname"></td>
                                                 <td
@@ -232,3 +232,59 @@
         <br><br>
     </div>
 </div>
+
+<div id="cancel-session-dialog" class="overlay popup-closed">
+    <div class="popup">
+        <center>
+            <h2>Are you sure?</h2>
+            <a class="close popup-closer" href="#">&times;</a>
+            <div class="content">
+                You want to delete this record<br><b data-value="nameget"></b>.
+            </div>
+            <div style="display: flex;justify-content: center;">
+                <a href="#" class="non-style-link" onclick="dropYes(this)">
+                    <button class="btn-primary btn" 
+                      style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;">
+                      <font class="tn-in-text">&nbsp;Yes&nbsp;</font>
+                    </button>
+                </a>
+                <a href="#" class="non-style-link">
+                    <button  
+                      class="btn-primary btn popup-closer"  
+                      style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;">
+                      <font class="tn-in-text">&nbsp;&nbsp;No&nbsp;&nbsp;</font>
+                    </button>
+                </a>
+            </div>
+        </center>
+    </div>
+</div>
+
+<script>
+    function dropYes (el) {
+        var parent = $(el).closest('.overlay')[0];
+        var data_id = $(parent).attr('data-id')
+        var dialogId = $(parent).attr('id');
+
+        $.ajax({
+            url: "apis/index.php/deleteSchedule",
+            method: "POST",
+            data: JSON.stringify({
+                id: data_id
+            }),
+            contentType: "application/json",
+            success: (response) => {
+                if (response.success) {
+                    utils.closeDialog($(`#${dialogId}`))
+                    location.reload();
+                }
+            },
+            error: (xhr, textStatus, th) => {
+                // Handle error response
+                console.error('Status code: ' + xhr.status);
+                console.error('Error message: ' + xhr.statusText);
+                console.error('Response: ' + xhr.responseText);
+            }
+        })
+    }
+</script>
