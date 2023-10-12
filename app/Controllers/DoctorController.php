@@ -75,7 +75,7 @@ class DoctorController {
         ];
 
         $consultation = $this->consultationSeed->createConsultation($db, [
-            $pid, $diagnosis, $diagnostic_request, $prescription, $recommendation
+            $pid, $notes, $diagnosis, $diagnostic_request, $prescription, $recommendation
         ]);
 
         if (is_numeric($consultation)) {

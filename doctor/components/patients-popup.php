@@ -54,8 +54,19 @@
                         <tr>
                             <form id="patient-diagnosis-form" name="patient-diagnosis-form" method="POST">
                                 <td class="label-td" colspan="3">
-                                    <label for="name" class="form-label">Diagnosis: </label>
+                                    <label for="name" class="form-label">Notes: </label>
                                 </td>
+                        </tr>
+                        <tr>
+                            <td class="label-td value-td" colspan="3">
+                                <textarea class="input-text" name="notes" rows="5" cols="" placeholder="Aa..."
+                                    required></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label-td" colspan="3">
+                                <label for="name" class="form-label">Diagnosis: </label>
+                            </td>
                         </tr>
                         <tr>
                             <td class="label-td value-td" colspan="3">
@@ -122,6 +133,10 @@
                 <div class="title" style="margin-bottom: 10px;">
                     <span class="form-label">Date:&nbsp;</span>
                     <span data-value="date_created"></span>
+                </div>
+                <div class="value">
+                    <span class="form-label">Notes:&nbsp;</span>
+                    <p style="margin-top: 0px;" data-value="notes"></p>
                 </div>
                 <div class="value">
                     <span class="form-label">Diagnosis:&nbsp;</span>

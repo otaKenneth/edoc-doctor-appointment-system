@@ -4,7 +4,7 @@ class ConsultationsModel extends Model {
 
     public function createConsultation($db, $args = []) {
         try {
-            $query = "INSERT INTO consultations (patient_id, diagnosis, diagnosis_request, prescription, recommendation) VALUES (?,?,?,?,?)";
+            $query = "INSERT INTO consultations (patient_id, notes, diagnosis, diagnosis_request, prescription, recommendation) VALUES (?,?,?,?,?,?)";
 
             $result = $this->run($db, $query, $args);
             if ($result) {
