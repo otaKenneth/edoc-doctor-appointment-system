@@ -55,4 +55,46 @@ class AppointmentModel extends Model {
             return $th->getMessage();
         }
     }
+
+    public function getDetailedAppointments ($db, $args = [], $filter = []) {
+        try {
+            $query = "SELECT 
+                appointment.appoid,
+                schedule.scheduleid,
+                schedule.title,
+                doctor.docname,
+                patient.pname,
+                schedule.scheduledate,
+                schedule.scheduletime,
+                appointment.apponum,
+                appointment.appodate 
+            FROM schedule 
+            INNER JOIN appointment 
+                ON schedule.scheduleid=appointment.scheduleid 
+            INNER JOIN patient 
+                ON patient.pid=appointment.pid 
+            INNER JOIN doctor 
+                ON schedule.docid=doctor.docid";
+
+            if (count($filter) > 0) {
+                $query .= "WHERE ";
+                $arrFilter = [];
+                foreach ($filter as $colName => $searchVal) {
+                    $arrFilter = "{$colName} = $searchVal";
+                }
+                $query .= implode(" AND ", $arrFilter);
+            }
+            
+            $query .= " ORDER BY schedule.scheduledate DESC";
+
+            $result = $this->run($db, $query, $args);
+            if ($result->execute()) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
 }

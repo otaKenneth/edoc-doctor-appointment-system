@@ -109,9 +109,7 @@ $result = $response['success'] ? $response['data']:[];
                                       ])?>'
                                       class="non-style-link table-btn popup-btn"
                                       style="margin-left: 15px;">
-                                        <button 
-                                        class="btn-secondary-soft btn"
-                                        style="padding-top: 12px;padding-bottom: 12px;margin-top: 10px;">
+                                        <button class="btn-secondary-soft btn">
                                             <font class="tn-in-text">Consultation History</font>
                                         </button>
                                     </a>

@@ -9,84 +9,83 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://eluvohealth.com/wp-content/uploads/2023/07/favicon-150x150.png" sizes="32x32">
-    <link rel="stylesheet" href="../css/animations.css">
-    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/animations.css">  
+    <link rel="stylesheet" href="../css/main.css">  
     <link rel="stylesheet" href="../css/admin.css">
-
-    <title>Eluvo - Doctors</title>
+        
+    <title>Eluvo - Admin</title>
     <style>
-        .popup {
-            animation: transitionIn-Y-bottom 0.5s;
+        .dashbord-tables{
+            animation: transitionIn-Y-over 0.5s;
         }
-
-        .sub-table {
+        .filter-container{
+            animation: transitionIn-Y-bottom  0.5s;
+        }
+        .sub-table{
             animation: transitionIn-Y-bottom 0.5s;
         }
     </style>
-
+    
     <script src="../js/jquery-3.7.1.js"></script>
 </head>
-
 <body>
     <div class="container">
-        <div class="menu">
+    <div class="menu">
             <table class="menu-container" border="0">
                 <tr>
                     <td style="padding:10px" colspan="2">
                         <table border="0" class="profile-container">
                             <tr>
-                                <td width="30%" style="padding-left:20px">
+                                <td width="30%" style="padding-left:20px" >
                                     <img src="../img/user.png" alt="" width="100%" style="border-radius:50%">
                                 </td>
                                 <td style="padding:0px;margin:0px;">
-                                    <p class="profile-title"><?php echo substr($user['docname'],0,13)  ?>..</p>
-                                    <p class="profile-subtitle"><?php echo substr($user['useremail'],0,22)  ?></p>
+                                    <p class="profile-title">Administrator</p>
+                                    <p class="profile-subtitle"><?=$user['aemail']?></p>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <a href="../logout.php"><input type="button" value="Log out"
-                                            class="logout-btn btn-primary-soft btn"></a>
+                                    <a href="../logout.php" ><input type="button" value="Log out" class="logout-btn btn-primary-soft btn"></a>
                                 </td>
                             </tr>
-                        </table>
+                    </table>
                     </td>
                 </tr>
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-dashbord" link-name="Dashboard">
-                        <a href="index.php" class="non-style-link-menu"><div><p class="menu-text">Dashboard</p></div></a>
+                        <a href="index.php" class="non-style-link-menu "><div><p class="menu-text">Dashboard</p></div></a>
+                    </td>
+                </tr>
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-doctor " link-name="Doctors">
+                        <a href="doctors.php" class="non-style-link-menu "><div><p class="menu-text">Doctors</p></div></a>
+                    </td>
+                </tr>
+                <tr class="menu-row" >
+                    <td class="menu-btn menu-icon-schedule" link-name="Schedule">
+                        <a href="schedule.php" class="non-style-link-menu"><div><p class="menu-text">Schedule</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row">
                     <td class="menu-btn menu-icon-appoinment" link-name="Appointments">
-                        <a href="appointment.php" class="non-style-link-menu"><div><p class="menu-text">My Appointments</p></div></a>
-                    </td>
-                </tr>
-                
-                <tr class="menu-row" >
-                    <td class="menu-btn menu-icon-session" link-name="Sessions">
-                        <a href="schedule.php" class="non-style-link-menu"><div><p class="menu-text">My Sessions</p></div></a>
+                        <a href="appointment.php" class="non-style-link-menu"><div><p class="menu-text">Appointment</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-patient" link-name="Patients">
-                        <a href="patient.php" class="non-style-link-menu"><div><p class="menu-text">My Patients</p></div></a>
-                    </td>
-                </tr>
-                <tr class="menu-row" >
-                    <td class="menu-btn menu-icon-settings" link-name="Settings">
-                        <a href="settings.php" class="non-style-link-menu"><div><p class="menu-text">Settings</p></div></a>
+                        <a href="patient.php" class="non-style-link-menu"><div><p class="menu-text">Patients</p></div></a>
                     </td>
                 </tr>
             </table>
         </div>
-        <div class="dash-body">
+
+        <div class="dash-body" style="margin-top: 15px">
             <div id="dash-body-header" style="display: flex; justify-content: space-between; margin-top: 15px; padding-right: 30px;">
                 <div><p style="font-size: 23px;padding-left:12px;font-weight: 600;margin-left:20px;"><?=$active_uri[$clean_uri]['bc']?></p></div>
                 <div class="search-bar" style="display: flex; align-items: center; width: 50%;">

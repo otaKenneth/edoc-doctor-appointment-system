@@ -1,6 +1,9 @@
 <?php
 
 class DoctorController {
+
+    protected $patientSeed, $doctorSeed, $consultationSeed, $scheduleSeed, $appointmentSeed;
+
     public function __construct() {
         $this->patientSeed = new PatientModel;
         $this->doctorSeed = new DoctorModel;

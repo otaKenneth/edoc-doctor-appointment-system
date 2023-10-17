@@ -8,28 +8,7 @@ $request_uri = $_SERVER['REQUEST_URI'];
 $base_url = '/book-a-consultation/';
 $clean_uri = str_replace($base_url, '', $request_uri);
 
-$routes = [
-    '' => 'index.html',
-];
-
-$active_uri = [
-    'doctor/index.php' => [
-        'bc' => 'Dashboard',
-        'link' => 'index.php'
-    ],
-    'doctor/appointment.php' => [
-        'bc' => 'Appointments',
-        'link' => 'appointment.php'
-    ],
-    'doctor/schedule.php' => [
-        'bc' => 'Sessions',
-        'link' => 'schedule.php'
-    ],
-    'doctor/patient.php' => [
-        'bc' => 'Patients',
-        'link' => 'patient.php'
-    ],
-];
+include_once("config/routes.php");
 
 $include_dir = "";
 if (strpos($request_uri, "doctor/") > -1) {
@@ -41,6 +20,18 @@ if (strpos($request_uri, "doctor/") > -1) {
         'doctor/appointment.php' => 'contents/appointment.php',
         'doctor/schedule.php' => 'contents/schedule.php',
         'doctor/patient.php' => 'contents/patient.php',
+        // Add more routes as needed
+    ]);
+} elseif (strpos($request_uri, "admin/") > -1) {
+    $include_dir = "admin/";
+
+    // Define a mapping of URLs to PHP files
+    $routes = array_merge($routes, [
+        'admin/index.php' => 'dashboard.php',
+        'admin/appointment.php' => 'contents/appointment.php',
+        'admin/schedule.php' => 'contents/schedule.php',
+        'admin/doctors.php' => 'contents/doctors.php',
+        'admin/patient.php' => 'contents/patient.php',
         // Add more routes as needed
     ]);
 }
