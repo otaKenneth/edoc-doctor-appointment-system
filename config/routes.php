@@ -37,4 +37,8 @@ $active_uri = [
         'bc' => 'Schedule',
         'link' => 'schedule.php'
     ],
+    'admin/patient.php' => [
+        'bc' => 'Patients',
+        'link' => 'patient.php'
+    ],
 ];

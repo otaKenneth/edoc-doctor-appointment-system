@@ -95,6 +95,7 @@
     
                             <datalist id="doctors">
                         <?php
+                        $list11 = $database->query("select  pname,pemail from patient;");
                         $list11 = $database->query("select docname, docemail from doctor;");
     
                         for ($y = 0; $y < $list11->num_rows; $y++) {
