@@ -10,7 +10,7 @@ var active_icon_classes = {
 $(document).ready(function () {
     $('.menu-row').each( (k, el) => {
         var targetEl = $(el).children()[0];
-        console.log(targetEl);
+        
         // set active links
         if ($(targetEl).attr('link-name') === active_uri) {
             $(targetEl).addClass(active_icon_classes[active_uri])

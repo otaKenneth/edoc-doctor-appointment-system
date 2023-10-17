@@ -27,10 +27,14 @@ $active_uri = [
     ],
     'admin/appointment.php' => [
         'bc' => 'Appointments',
-        'link' => 'index.php'
+        'link' => 'appointment.php'
     ],
     'admin/doctors.php' => [
         'bc' => 'Doctors',
-        'link' => 'index.php'
+        'link' => 'doctors.php'
+    ],
+    'admin/schedule.php' => [
+        'bc' => 'Schedule',
+        'link' => 'schedule.php'
     ],
 ];
