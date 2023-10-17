@@ -67,8 +67,8 @@
                                         <div class="btn-icon-back dashboard-icons" style="background-image: url('../img/icons/patients-hover.svg');"></div>
                                     </div>
                                 </td>
-                                </tr>
-                                <tr>
+                            </tr>
+                            <tr>
                                 <td style="width: 25%;">
                                     <div  class="dashboard-items"  style="padding:20px;margin:auto;width:95%;display: flex; ">
                                         <div>
@@ -161,12 +161,8 @@
                                         </td>
                                         <td style="text-align:center;">
                                             '.substr($scheduletime,0,5).'
-                                        </td>
-
-
-                                        
+                                        </td>    
                                     </tr>';
-                                    
                                 }
                             }
                                     

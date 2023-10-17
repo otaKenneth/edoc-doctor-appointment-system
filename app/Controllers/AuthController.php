@@ -1,6 +1,8 @@
 <?php
 class AuthController {
 
+    protected $patientSeed, $webuserSeed, $adminSeed, $doctorSeed;
+
     public function __construct() {
         $this->patientSeed = new PatientModel;
         $this->webuserSeed = new WebuserModel;
@@ -94,35 +96,45 @@ class AuthController {
         return $response;
     }
 
-    public function getCurrentDoctorUser($db) {        
+    public function getCurrentUser($db) {        
         $useremail = "";
         $response = [
             'success' => false,
             'message' => ""
         ];
+        $result = "Unauthorized.";
 
         if(isset($_SESSION["user"])){
-            if(($_SESSION["user"])=="" or $_SESSION['usertype']!='d'){
-                $response['message'] = "Unauthorized.";
-            }else{
+            if ($_SESSION['user'] !== "") {
                 $useremail=$_SESSION["user"];
+                
+                switch ($_SESSION['usertype']) {
+                    case 'a':
+                        $result = $this->adminSeed->getAdminByEmail($db, [
+                            $useremail
+                        ]);
+                        break;
+                    case 'd':
+                        $result = $this->doctorSeed->getDoctorByEmail($db, [
+                            $useremail
+                        ]);
+                        break;
+                    case 'p':
+                        # code...
+                        break;
+                }
             }
-            
         }else{
             $response['message'] = "Unauthorized.";
         }
         
-        $doctor = $this->doctorSeed->getDoctorByEmail($db, [
-            $useremail
-        ]);
-        
-        if (is_object($doctor)) {
+        if (is_object($result)) {
             $response['success'] = true;
-            $response['message'] = "Doctor Found.";
-            $response['data'] = $doctor->fetch_assoc();
+            $response['message'] = "Result Found.";
+            $response['data'] = $result->fetch_assoc();
             $response['data']['useremail'] = $useremail;
         } else {
-            $response['message'] = $doctor;
+            $response['message'] = $result;
         }
 
         return $response;
