@@ -8,7 +8,7 @@ $request_uri = $_SERVER['REQUEST_URI'];
 $base_url = '/book-a-consultation/';
 $clean_uri = str_replace($base_url, '', $request_uri);
 
-include_once("config/routes.php");
+include_once("app/config/routes.php");
 
 $include_dir = "";
 if (strpos($request_uri, "doctor/") > -1) {
