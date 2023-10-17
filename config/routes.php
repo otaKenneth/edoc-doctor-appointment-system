@@ -29,4 +29,8 @@ $active_uri = [
         'bc' => 'Appointments',
         'link' => 'index.php'
     ],
+    'admin/doctors.php' => [
+        'bc' => 'Doctors',
+        'link' => 'index.php'
+    ],
 ];
