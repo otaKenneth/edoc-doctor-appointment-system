@@ -69,7 +69,7 @@ class AdminController {
         extract($args);
         $response = [
             'success' => false,
-            'message' => ""
+            'message' => "Error: Something went wrong. Contact your Administrator."
         ];
 
         foreach ($changes as $key => $value) {
@@ -78,11 +78,52 @@ class AdminController {
                     $value['currVal']
                 ]);
 
-                if ($schedules->num_rows == 0) {
+                $objPrevAppoData = $this->appointmentSeed->getAppointmentDataById($db, [
+                    $original
+                ])->fetch_assoc();
+
+                if ($schedules->num_rows > 0) {
+                    $schedule = $schedules->fetch_assoc();
+                    
+                    $appoid = $objPrevAppoData['appoid'];
+                    $schedid = $schedule['scheduleid'];
+
+                    $appointment = $this->appointmentSeed->updateAppointment($db, [
+                        $schedid, date('Y-m-d'), $appoid
+                    ]);
+
+                    if (is_numeric($appointment)) {
+                        $response['success'] = true;
+                        $response['message'] = "Appointment saved successfully.";
+                    } else {
+                        $response['message'] = $appointment;
+                    }
+                } else {
                     $response['success'] = false;
-                    $response['message'] = "You need to create a Session for the selected date. {$value['currVal']}";
+                    $response['message'] = "Error: You need to create a Session for the selected date. {$value['currVal']}";
                 }
             }
+        }
+
+        return $response;
+    }
+
+    public function addSession($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        $schedule = $this->scheduleSeed->create($db, [
+            $docid, $title, $date, $time, $nop
+        ]);
+
+        if (is_numeric($schedule)) {
+            $response['success'] = true;
+            $response['message'] = "Schedule saved successfully.";
+        } else {
+            $response['message'] = $schedule;
         }
 
         return $response;
