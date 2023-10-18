@@ -12,7 +12,10 @@ class AppointmentModel extends Model {
                 p.chief_complaint_c,
                 p.ptel,
                 d.*,
-                spec.sname
+                spec.sname,
+                s.title,
+                DATE_FORMAT(scheduledate, '%m/%d/%Y') as appodate,
+                DATE_FORMAT(scheduledate, '%Y-%m-%d') as scheduledate
             FROM `appointment` AS appo
             LEFT JOIN patient AS p
                 ON appo.pid = p.pid

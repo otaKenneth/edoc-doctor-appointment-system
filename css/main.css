@@ -280,6 +280,12 @@ body{
     max-height: 500px; overflow-y: auto;  
   }
 
+  .popup-footer {
+    width: 80%;
+    margin: auto;
+    margin-top: 20px;
+  }
+
   .popup .close {
     position: absolute;
     top: 20px;
@@ -708,4 +714,20 @@ span.required {
 .border-1 {
   border-width: 0.5px;
   border-color: #ebebeb;
+}
+
+.editable:hover {
+  background-image: url('../img/icons/edit-iceblue.svg');
+  padding-left: 23px;
+  background-repeat: no-repeat;
+  background-size: 19px;
+  background-position-y: center;
+}
+
+.cancellable:hover {
+  background-image: url('../img/icons/xclose.svg');
+  padding-left: 23px;
+  background-repeat: no-repeat;
+  background-size: 15px;
+  background-position-y: center;
 }

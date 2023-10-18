@@ -6,6 +6,10 @@ var active_icon_classes = {
     "Schedule": "menu-active menu-icon-schedule-active",
     "Patients": "menu-active menu-icon-patient-active"
 };
+const form = {
+    'id': '',
+    changes: []
+};
 
 $(document).ready(function () {
     $('.menu-row').each( (k, el) => {
@@ -31,7 +35,6 @@ $(document).ready(function () {
 
     // Open Popup
     $('.popup-btn').click((ev) => {
-        console.log("clicked")
         var dialog = $(ev.currentTarget).attr('popupdata-id');
         
         if ($(ev.currentTarget).attr('data')) {
@@ -40,5 +43,39 @@ $(document).ready(function () {
             $(`#${dialog}`).removeClass('popup-closed');
             $(`#${dialog}`).addClass('popup-open');
         }
+    })
+
+    // show editing
+    $('.editable').click(function (ev) {
+        let $el = $(ev.currentTarget);
+        if ($el.hasClass('cancellable')) {
+            $(ev.currentTarget).removeClass('cancellable');
+            $(ev.currentTarget).next().next().addClass('hidden');
+            $(ev.currentTarget).next().removeClass('hidden');
+        } else {
+            $(ev.currentTarget).addClass('cancellable');
+            $(ev.currentTarget).next().addClass('hidden');
+            $(ev.currentTarget).next().next().removeClass('hidden');
+        }
+    })
+
+    $('.field-editable').focus(function (ev) {
+        let $el = $(ev.currentTarget);
+
+        utils.logFormValues($el.attr('name'), 'prevVal', $el.val());
+    })
+    
+    $('.field-editable').focusout(function (ev) {
+        let $el = $(ev.currentTarget);
+        let datatype = $el.attr('data-datatype');
+        var parent = $el.parent()[0];
+
+        let editableValues = utils.processEditableValues($el.attr('name'), datatype, $el.val());
+        utils.logFormValues($el.attr('name'), 'currVal', $el.val());
+
+        $(parent).addClass('hidden');
+        $(parent).prev().removeClass('hidden');
+        $(parent).prev().prev().removeClass('cancellable');
+        $(parent).prev().text(editableValues.currVal);
     })
 })

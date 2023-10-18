@@ -12,7 +12,6 @@ var utils = {
         return JSON.stringify(jsonObject);
     },
     processLoop: function (loop_el) {
-        console.log(loop_el);
         loop_el.each((k, el) => {
             var loop_key = $(el).attr('logic-loop');
             
@@ -84,7 +83,6 @@ var utils = {
         } else {
             $(el).find('[data-value]').each( (k, child_element) => {
                 var $c_el = $(child_element);
-                console.log(this.data)
                 var $el_value = this.data[$c_el.attr('data-value')];
                 if ($c_el.prop('tagName').toLowerCase() === "input") {
                     $c_el.val($el_value);
@@ -98,7 +96,7 @@ var utils = {
         if (data !== null) {
             this.data = data;
         }
-        console.log(this.data);
+
         element.each((k, el) => {
             var has_logic_count = $(el).find(".has-logic").length;
 
@@ -129,5 +127,39 @@ var utils = {
     closeDialog: function ($element) {
         $element.removeClass('popup-open');
         $element.addClass('popup-closed');
+    },
+    logFormValues: function (inputname, datatype, val) {
+        let result = {
+            'currVal': '',
+            'prevVal': val
+        };
+
+        if (typeof form.changes[inputname] == "undefined") {
+            form.changes = {...form.changes, [inputname]:result};
+        } else {
+            form.changes[inputname][datatype] = val;
+        }
+
+    },
+    processEditableValues: function (inputname, datatype, prevVal) {
+        let result = {
+            'currVal': '',
+            'prevVal': prevVal
+        };
+
+        if (result.prevVal != '') {
+            switch (datatype) {
+                case "date":
+                    let tempObjDate = new Date(result.prevVal);
+                    result.currVal = (tempObjDate.getMonth()+1) + '/' + tempObjDate.getDate() + '/' + tempObjDate.getFullYear();
+                    break;
+            
+                default:
+                    result.currVal = prevVal;
+                    break;
+            }
+        }
+
+        return result;
     }
 };
