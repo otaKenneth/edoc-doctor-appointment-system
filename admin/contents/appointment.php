@@ -161,7 +161,7 @@
                             <div style="display:flex;justify-content: center;">
                             
                             <a href="#" 
-                              datapopup-id="popup1"
+                              popupdata-id="popup2"
                               data='<?=json_encode([
                                 'action' => 'view',
                                 'id' => $appoid
@@ -174,20 +174,7 @@
                             </a>
                             &nbsp;&nbsp;&nbsp;
                             <a href="#" 
-                              datapopup-id="popup2"
-                              data='<?=json_encode([
-                                'action' => 'view',
-                                'id' => $appoid
-                              ])?>'
-                              class="non-style-link table-btn popup-btn"
-                            >
-                                <button class="btn-primary-soft btn button-icon btn-edit">
-                                    <font class="tn-in-text">Edit</font>
-                                </button>
-                            </a>
-                            &nbsp;&nbsp;&nbsp;
-                            <a href="#" 
-                              datapopup-id="popup3"
+                              popupdata-id="popup3"
                               data='<?=json_encode([
                                 'action' => 'drop',
                                 'id' => $appoid,
@@ -211,3 +198,43 @@
         </table>
     </div>
 </center>
+<?php 
+include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/admin/components/appointments-popup.php");
+?>
+<script>
+    function processDialogData (dialogData, dialogId) {
+        var dData = JSON.parse(dialogData);
+
+        if (dData.action === 'view') {
+            $.ajax({
+                url: "apis/index.php/getAppointmentData",
+                method: "GET",
+                data: JSON.parse(dialogData),
+                contentType: "application/json",
+                success: (response) => {
+                    if (response.success) {
+                        var data = response.data;
+                        utils.processElementLogic($(`#${dialogId}`), data)
+                        utils.showDialog($(`#${dialogId}`))
+                    }
+                },
+                error: (xhr, textStatus, th) => {
+                    // Handle error response
+                    console.error('Status code: ' + xhr.status);
+                    console.error('Error message: ' + xhr.statusText);
+                    console.error('Response: ' + xhr.responseText);
+                }
+            })
+        } else if (dData.action == 'drop') {
+            $(`#${dialogId} [data-value]`).each( (k, el) => {
+                console.log(dData[$(el).attr('data-value')]);
+                $(el).text(dData[$(el).attr('data-value')]);
+            })
+
+            $(`#${dialogId}`).attr("data-id", dData['id']);
+
+            utils.showDialog($(`#${dialogId}`));
+        }
+
+    }
+</script>
