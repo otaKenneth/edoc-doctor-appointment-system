@@ -1,0 +1,37 @@
+/* toaster.css */
+.toaster-container {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    z-index: 9999;
+    text-align: center;
+    width: 300px;
+}
+
+.toaster {
+    display: inline-block;
+    background: #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.5s;
+    margin-bottom: 10px;
+}
+
+.success {
+    background: #4CAF50;
+}
+
+.warning {
+    background: #FFC107;
+}
+
+.error {
+    background: #af5b55;
+}
+
+.icon {
+    margin-right: 10px;
+}
