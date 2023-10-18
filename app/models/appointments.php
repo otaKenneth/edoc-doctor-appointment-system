@@ -1,6 +1,57 @@
 <?php
 
 class AppointmentModel extends Model {
+
+    public function create ($db, $args = []) {
+        try {
+            $lastAppo = $this->getLastAppointment($db)->fetch_assoc();
+            $args[] = $lastAppo['apponum'] + 1;
+
+            $query = "INSERT INTO appointment (pid, scheduleid, appodate, apponum) VALUES (?,?,?,?)";
+
+            $result = $this->run($db, $query, $args);
+            if ($result->execute()) {
+                return $result->insert_id;
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
+    public function updateAppointment ($db, $args = []) {
+        try {
+            $query = "UPDATE appointment
+                SET scheduleid = ?, appodate = ?
+                WHERE appoid = ?";
+
+            $result = $this->run($db, $query, $args);
+            if ($result->execute()) {
+                return 1;
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
+    public function getLastAppointment ($db, $args = []) {
+        try {
+            $query = "SELECT * FROM appointment ORDER BY appoid DESC limit 1";
+
+            $result = $this->run($db, $query, $args);
+            if ($result->execute()) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
     public function getAppointmentDataById ($db, $args = []) {
         try {
             $query = "SELECT
@@ -45,7 +96,7 @@ class AppointmentModel extends Model {
                     ON patient.pid=appointment.pid 
                 INNER JOIN schedule 
                     ON schedule.scheduleid=appointment.scheduleid 
-                WHERE schedule.docid=?";
+                WHERE schedule.docid=? AND appointment.cancelled = 0";
             
             $result = $this->run($db, $query, $args);
             if ($result->execute()) {
@@ -81,9 +132,10 @@ class AppointmentModel extends Model {
 
             if (count($filter) > 0) {
                 $query .= "WHERE ";
-                $arrFilter = [];
+                $arrFilter = ["appointment.cancelled = 0"];
                 foreach ($filter as $colName => $searchVal) {
-                    $arrFilter = "{$colName} = $searchVal";
+                    $arrFilter[] = "{$colName} = ?";
+                    $args[] = $searchVal;
                 }
                 $query .= implode(" AND ", $arrFilter);
             }

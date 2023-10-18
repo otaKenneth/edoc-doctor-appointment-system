@@ -267,3 +267,5 @@ CREATE TABLE IF NOT EXISTS `consultations` (
   PRIMARY KEY (`id`), 
   KEY `PATIENT_INDEX` (`patient_id`) 
 );
+
+ALTER TABLE `edoc`.`appointment` ADD COLUMN `cancelled` BOOLEAN DEFAULT 0 NULL AFTER `appodate`;

@@ -202,6 +202,7 @@
 include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/admin/components/appointments-popup.php");
 ?>
 <script>
+    var objAppoitmentData = null;
     function processDialogData (dialogData, dialogId) {
         var dData = JSON.parse(dialogData);
 
@@ -213,8 +214,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/admin/components/
                 contentType: "application/json",
                 success: (response) => {
                     if (response.success) {
-                        var data = response.data;
-                        utils.processElementLogic($(`#${dialogId}`), data)
+                        objAppoitmentData = response.data;
+                        utils.processElementLogic($(`#${dialogId}`), objAppoitmentData)
                         utils.showDialog($(`#${dialogId}`))
                     }
                 },

@@ -237,21 +237,20 @@
             url: "apis/index.php/updateAppointment",
             method: "GET",
             data: {
-                changes: form.changes
+                changes: form.changes,
+                original: objAppoitmentData.appoid,
             },
             contentType: "application/json",
             success: (response) => {
                 if (response.success) {
-                    // var data = response.data;
-                    // utils.processElementLogic($(`#${dialogId}`), data)
-                    // utils.showDialog($(`#${dialogId}`))
+                    showSuccessToast([response.message])
                 }
             },
             error: (xhr, textStatus, th) => {
                 // Handle error response
                 console.error('Error message: ' + xhr.statusText);
                 let response = JSON.parse(xhr.responseText);
-                showErrorToast([response.message], "error");
+                showErrorToast([response.message]);
             }
         })
     })

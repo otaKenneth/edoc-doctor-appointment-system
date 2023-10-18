@@ -56,7 +56,9 @@ $list110 = $database->query("select  * from  schedule;");
                         </td>
                         <td>
                             <div>
-                                <a href="?action=add-session&id=none&error=0" class="non-style-link">
+                                <a href="#" class="non-style-link popup-btn"
+                                  popupdata-id="popup1"
+                                >
                                     <button
                                         class="login-btn btn-primary btn button-icon"
                                         style="margin-left:25px;background-image: url('../img/icons/add.svg');">Add a Session</font>
@@ -188,32 +190,34 @@ $list110 = $database->query("select  * from  schedule;");
                                     $docname = $row["docname"];
                                     $scheduledate = $row["scheduledate"];
                                     $scheduletime = $row["scheduletime"];
-                                    $nop = $row["nop"];
-                                    echo '<tr>
-                                        <td> &nbsp;' .
-                                        substr($title, 0, 30)
-                                        . '</td>
-                                        <td>
-                                        ' . substr($docname, 0, 20) . '
+                                    $nop = $row["nop"]; ?>
+                                
+                                    <tr>
+                                        <td> &nbsp;<?=substr($title, 0, 30)?></td>
+                                        <td><?=substr($docname, 0, 20)?></td>
+                                        <td style="text-align:center;">
+                                            <?=substr($scheduledate, 0, 10) . ' ' . substr($scheduletime, 0, 5)?>
                                         </td>
                                         <td style="text-align:center;">
-                                            ' . substr($scheduledate, 0, 10) . ' ' . substr($scheduletime, 0, 5) . '
+                                            <?=$nop?>
                                         </td>
-                                        <td style="text-align:center;">
-                                            ' . $nop . '
-                                        </td>
-
                                         <td>
-                                        <div style="display:flex;justify-content: center;">
-                                        
-                                        <a href="?action=view&id=' . $scheduleid . '" class="non-style-link"><button  class="btn-primary-soft btn button-icon btn-view"  style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;"><font class="tn-in-text">View</font></button></a>
-                                       &nbsp;&nbsp;&nbsp;
-                                       <a href="?action=drop&id=' . $scheduleid . '&name=' . $title . '" class="non-style-link"><button  class="btn-primary-soft btn button-icon btn-delete"  style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;"><font class="tn-in-text">Remove</font></button></a>
-                                        </div>
+                                            <div style="display:flex;justify-content: center;">
+                                                <a href="?action=view&id=' . $scheduleid . '" class="non-style-link table-btn popup-btn">
+                                                    <button  class="btn-primary-soft btn button-icon btn-view">
+                                                        <font class="tn-in-text">View</font>
+                                                    </button>
+                                                </a>
+                                                &nbsp;&nbsp;&nbsp;
+                                                <a href="?action=drop&id=' . $scheduleid . '&name=' . $title . '" class="non-style-link table-btn popup-btn">
+                                                    <button  class="btn-primary-soft btn button-icon btn-delete">
+                                                        <font class="tn-in-text">Remove</font>
+                                                    </button>
+                                                </a>
+                                            </div>
                                         </td>
-                                    </tr>';
-
-                                }
+                                    </tr>
+                                <?php }
                             }
 
                             ?>
@@ -224,3 +228,15 @@ $list110 = $database->query("select  * from  schedule;");
         </td>
     </tr>
 </table>
+<?php include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/admin/components/schedule-popup.php"); ?>
+<script>
+    function processDialogData (dialogData, dialogId) {
+        var dData = JSON.parse(dialogData);
+
+        if (dData.action === 'view') {
+
+        } else {
+
+        }
+    }
+</script>
