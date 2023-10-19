@@ -1,11 +1,13 @@
 <?php
 class AdminController {
 
-    protected $appointmentSeed, $scheduleSeed, $patientSeed;
+    protected $appointmentSeed, $scheduleSeed, $patientSeed, $doctorSeed, $webuserSeed;
     public function __construct() {
         $this->appointmentSeed = new AppointmentModel;
         $this->scheduleSeed = new ScheduleModel;
         $this->patientSeed = new PatientModel;
+        $this->doctorSeed = new DoctorModel;
+        $this->webuserSeed = new WebuserModel;
     }
 
     public function getAppointments($db, $args = []) {
@@ -248,6 +250,115 @@ class AdminController {
             $response['data'] = $row;
         } else {
             $response['message'] = $patient;
+        }
+
+        return $response;
+    }
+
+    public function getDoctorData ($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => "Error: Something went wrong. Contact your Administrator."
+        ];
+
+        $doctor = $this->doctorSeed->getDoctorById($db, [
+            $id
+        ]);
+
+        if (is_object($doctor)) {
+            $response['success'] = true;
+            $response['message'] = "Doctor successfully retrieved.";
+
+            if ($doctor->num_rows > 0) {
+                $response['data'] = $doctor->fetch_assoc();
+            } else {
+                $response['success'] = false;
+                $response['message'] = "No Doctor Matched.";
+            }
+        } else {
+            $response['message'] = $doctor;
+        }
+
+        return $response;
+    }
+
+    public function addDoctor ($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => "Error: Something went wrong. Contact your Administrator."
+        ];
+
+        if (count($args) == 0) {
+            return $response;
+        }
+        // check if exist
+        $check_result = $this->webuserSeed->getWebuserByEmail($db, [$email]);
+        if ($check_result->num_rows > 0) {
+            $response['message'] = "Error: This doctor already exist.";
+        } else {
+            // add new doctor
+            $doctor = $this->doctorSeed->create($db, [
+                $name, $email, $password, $tele, $spec
+            ]);
+            
+            if (is_numeric($doctor)) {
+                $response['message'] = [];
+                $response['message'][] = "Doctor has been successfully added.";
+                
+                $webuser = $this->webuserSeed->create($db, [
+                    $email, 'd'
+                ]);
+                
+                if (is_numeric($webuser)) {
+                    $response['success'] = true;
+                    $response['message'][] = "User {$email} has been added.";
+                } else {
+                    $response['message'][] = $webuser;
+                }
+            } else {
+                $response['message'] = $doctor;
+            }
+        }
+
+        return $response;
+    }
+
+    public function deleteDoctor($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => "Error: Something went wrong. Contact your Administrator."
+        ];
+
+        // check if exist
+        $check_result = $this->doctorSeed->getDoctorById($db, [$id]);
+        $doctor_row = $check_result->fetch_assoc();
+        if ($check_result->num_rows > 0) {
+            // add new doctor
+            $doctor = $this->doctorSeed->deleteDoctorById($db, [
+                $id
+            ]);
+
+            if (is_string($doctor)) {
+                $response['message'] = $doctor;
+            } else {
+                $response['message'] = [];
+                $response['message'][] = "Doctor {$doctor_row['docname']} has been deleted.";
+                $webuser = $this->webuserSeed->deleteWebuserByEmail($db, [
+                    $doctor_row['docemail']
+                ]);
+
+                if (is_string($webuser)) { 
+                    $response['message'] = $webuser;
+                } else {
+                    $response['success'] = true;
+                    $response['message'][] = "User {$doctor_row['docemail']} has been deleted.";
+                }
+            }
+        } else {
+            $response['message'] = "Error: This doctor does not exist.";
         }
 
         return $response;

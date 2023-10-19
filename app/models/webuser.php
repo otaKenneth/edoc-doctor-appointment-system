@@ -1,7 +1,7 @@
 <?php
 
 class WebuserModel extends Model {
-    public function create ($database, $args) {
+    public function create ($database, $args = []) {
         try {
             $query = "INSERT INTO webuser VALUES (?, ?)";
             $stmt = $database->prepare($query);
@@ -17,9 +17,24 @@ class WebuserModel extends Model {
         }
     }
 
-    public function getWebuserByEmail($db, $args) {
+    public function getWebuserByEmail($db, $args = []) {
         try {
             $query = "SELECT * FROM webuser WHERE email = ?";
+            
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
+    public function deleteWebuserByEmail($db, $args = []) {
+        try {
+            $query = "DELETE FROM webuser WHERE email = ?";
             
             $result = $this->run($db, $query, $args);
             if ($result) {
