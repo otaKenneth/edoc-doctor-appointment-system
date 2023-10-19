@@ -1,12 +1,10 @@
 <table border="0" width="100%" style=" border-spacing: 0;margin:0;padding:0;">
-
     <tr>
         <td colspan="4" style="padding-top:10px;">
-            <p class="heading-main12" style="margin-left: 45px;font-size:18px;color:rgb(49, 49, 49)">All Patients (
-                <?php echo $list11->num_rows; ?>)
+            <p class="heading-main12" style="margin-left: 45px;font-size:18px;color:rgb(49, 49, 49)">
+                All Patients (<?php echo $list11->num_rows; ?>)
             </p>
         </td>
-
     </tr>
     <?php
     if ($_POST) {
@@ -15,13 +13,8 @@
         $sqlmain = "select * from patient where pemail='$keyword' or pname='$keyword' or pname like '$keyword%' or pname like '%$keyword' or pname like '%$keyword%' ";
     } else {
         $sqlmain = "select * from patient order by pid desc";
-
     }
-
-
-
     ?>
-
     <tr>
         <td colspan="4">
             <center>
@@ -29,62 +22,42 @@
                     <table width="93%" class="sub-table scrolldown" style="border-spacing:0;">
                         <thead>
                             <tr>
-                                <th class="table-headin">
-
-
-                                    Name
-
-                                </th>
-                                <th class="table-headin">
-
-
-                                    NIC
-
-                                </th>
-                                <th class="table-headin">
-
-
-                                    Telephone
-
-                                </th>
+                                <th class="table-headin">Name</th>
+                                <th class="table-headin">Telephone</th>
                                 <th class="table-headin">
                                     Email
                                 </th>
-                                <th class="table-headin">
-
-                                    Date of Birth
-
-                                </th>
-                                <th class="table-headin">
-
-                                    Events
-
+                                <th class="table-headin">Date of Birth</th>
+                                <th class="table-headin">Events</th>
                             </tr>
                         </thead>
                         <tbody>
-
                             <?php
-
-
                             $result = $database->query($sqlmain);
 
-                            if ($result->num_rows == 0) {
-                                echo '<tr>
+                            if ($result->num_rows == 0) { ?>
+                                <tr>
                                     <td colspan="4">
-                                    <br><br><br><br>
-                                    <center>
-                                    <img src="../img/notfound.svg" width="25%">
-                                    
-                                    <br>
-                                    <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We  couldnt find anything related to your keywords !</p>
-                                    <a class="non-style-link" href="patient.php"><button  class="login-btn btn-primary-soft btn"  style="display: flex;justify-content: center;align-items: center;margin-left:20px;">&nbsp; Show all Patients &nbsp;</font></button>
-                                    </a>
-                                    </center>
-                                    <br><br><br><br>
+                                        <br><br>
+                                        <center>
+                                            <img src="../img/notfound.svg" width="25%">
+                                            
+                                            <br>
+                                            <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">
+                                                We couldnt find anything related to your keywords !
+                                            </p>
+                                            <a class="non-style-link" href="patient.php">
+                                                <button class="login-btn btn-primary-soft btn" 
+                                                  style="display: flex;justify-content: center;align-items: center;margin-left:20px;"
+                                                >
+                                                    <font>&nbsp; Show all Patients &nbsp;</font>
+                                                </button>
+                                            </a>
+                                        </center>
+                                        <br><br>
                                     </td>
-                                    </tr>';
-
-                            } else {
+                                </tr>
+                            <?php } else {
                                 for ($x = 0; $x < $result->num_rows; $x++) {
                                     $row = $result->fetch_assoc();
                                     $pid = $row["pid"];
@@ -92,38 +65,31 @@
                                     $email = $row["pemail"];
                                     $nic = $row["pnic"];
                                     $dob = $row["pdob"];
-                                    $tel = $row["ptel"];
+                                    $tel = $row["ptel"]; ?>
 
-                                    echo '<tr>
-                                        <td> &nbsp;' .
-                                        substr($name, 0, 35)
-                                        . '</td>
-                                        <td>
-                                        ' . substr($nic, 0, 12) . '
-                                        </td>
-                                        <td>
-                                            ' . substr($tel, 0, 10) . '
-                                        </td>
-                                        <td>
-                                        ' . substr($email, 0, 20) . '
-                                         </td>
-                                        <td>
-                                        ' . substr($dob, 0, 10) . '
-                                        </td>
+                                    <tr>
+                                        <td><?=substr($name, 0, 35)?></td>
+                                        <td align="right"><?=substr($tel, 0, 10)?></td>
+                                        <td align="right"><?=substr($email, 0, 20)?></td>
+                                        <td align="center"><?=substr($dob, 0, 10)?></td>
                                         <td >
-                                        <div style="display:flex;justify-content: center;">
-                                        
-                                        <a href="?action=view&id=' . $pid . '" class="non-style-link"><button  class="btn-primary-soft btn button-icon btn-view"  style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;"><font class="tn-in-text">View</font></button></a>
-                                       
-                                        </div>
+                                            <div style="display:flex;justify-content: center;">
+                                                <a href="#" class="non-style-link table-btn popup-btn"
+                                                  popupdata-id="popup1"
+                                                  data='<?=json_encode([
+                                                    'action' => 'view',
+                                                    'id' => $pid
+                                                  ])?>'
+                                                >
+                                                    <button class="btn-primary-soft btn button-icon btn-view">
+                                                        <font class="tn-in-text">View</font>
+                                                    </button>
+                                                </a>
+                                            </div>
                                         </td>
-                                    </tr>';
+                                    </tr>
 
-                                }
-                            }
-
-                            ?>
-
+                            <?php } } ?>
                         </tbody>
 
                     </table>
@@ -131,7 +97,32 @@
             </center>
         </td>
     </tr>
-
-
-
 </table>
+<?php include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/admin/components/patient-popup.php"); ?>
+<script>
+    function processDialogData (dialogData, dialogId) {
+        var dData = JSON.parse(dialogData);
+
+        if (dData.action === 'view') {
+            $.ajax({
+                url: "apis/index.php/getPatientData",
+                method: "GET",
+                data: JSON.parse(dialogData),
+                contentType: "application/json",
+                success: (response) => {
+                    if (response.success) {
+                        var data = response.data;
+                        utils.processElementLogic($(`#${dialogId}`), data);
+                        utils.showDialog($(`#${dialogId}`))
+                    }
+                },
+                error: (xhr, textStatus, th) => {
+                    // Handle error response
+                    console.error('Error message: ' + xhr.statusText);
+                    let response = JSON.parse(xhr.responseText);
+                    showErrorToast([response.message]);
+                }
+            })
+        }
+    }
+</script>
