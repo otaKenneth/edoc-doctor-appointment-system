@@ -92,7 +92,7 @@ class AdminController {
                         $schedid, date('Y-m-d'), $appoid
                     ]);
 
-                    if (is_numeric($appointment)) {
+                    if (is_bool($appointment)) {
                         $response['success'] = true;
                         $response['message'] = "Appointment saved successfully.";
                     } else {
@@ -129,6 +129,26 @@ class AdminController {
         return $response;
     }
 
+    public function cancelAppointment($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        $appointment = $this->appointmentSeed->cancelAppointmentById($db, [
+            $id
+        ]);
+
+        if (is_bool($appointment)) {
+            $response['success'] = true;
+            $response['message'] = "Appointment has been cancelled.";
+        } else {
+            $response['message'] = $appointment;
+        }
+
+        return $response;
+    }
 }
 
 ?>

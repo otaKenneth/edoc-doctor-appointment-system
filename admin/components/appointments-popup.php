@@ -228,6 +228,32 @@
         </div>
     </div>
 </div>
+
+<div id="popup3" class="overlay popup-closed">
+    <div class="popup">
+        <center>
+            <h2>Are you sure?</h2>
+            <a class="close popup-closer" href="#">&times;</a>
+            <div class="content">
+                You want to delete this record<br><br>
+                Patient Name: &nbsp;<b data-value="name"></b><br>
+                Appointment number &nbsp; : <b data-value="apponum"></b><br><br>
+            </div>
+            <div class="popup-footer" style="display: flex; justify-content: center;">
+                <a href="#" class="non-style-link" onclick="dropYes(this)">
+                    <button class="btn-primary btn" style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;">
+                        <font class="tn-in-text">&nbsp;Yes&nbsp;</font>
+                    </button>
+                </a>&nbsp;&nbsp;&nbsp;
+                <a href="#" class="non-style-link popup-closer">
+                    <button class="btn-primary btn" style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;">
+                        <font class="tn-in-text">&nbsp;&nbsp;No&nbsp;&nbsp;</font>
+                    </button>
+                </a>
+            </div>
+        </center>
+    </div>
+</div>
 <script>
     $('#form-appointment-details').on('submit', (ev) => {
         form.id = "form-appointment-details";
@@ -254,4 +280,33 @@
             }
         })
     })
+
+    function dropYes(el) {
+        var parent = $(el).closest('.overlay')[0];
+        var data_id = $(parent).attr('data-id')
+        var dialogId = $(parent).attr('id');
+
+        $.ajax({
+            url: "apis/index.php/cancelAppointment",
+            method: "POST",
+            data: JSON.stringify({
+                id: data_id
+            }),
+            contentType: "application/json",
+            success: (response) => {
+                if (response.success) {
+                    utils.closeDialog($(`#${dialogId}`))
+                    showSuccessToast([response.message])
+                }
+            },
+            error: (xhr, textStatus, th) => {
+                // Handle error response
+                console.error('Status code: ' + xhr.status);
+                console.error('Error message: ' + xhr.statusText);
+                console.error('Response: ' + xhr.responseText);
+            }
+        }).then(() => {
+            location.reload();
+        })
+    }
 </script>

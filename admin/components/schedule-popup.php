@@ -116,9 +116,9 @@
                 },
                 error: (xhr, textStatus, th) => {
                     // Handle error response
-                    console.error('Status code: ' + xhr.status);
                     console.error('Error message: ' + xhr.statusText);
-                    console.error('Response: ' + xhr.responseText);
+                    let response = JSON.parse(xhr.responseText);
+                    showErrorToast([response.message]);
                 }
             });
         })

@@ -28,7 +28,7 @@ class AppointmentModel extends Model {
 
             $result = $this->run($db, $query, $args);
             if ($result->execute()) {
-                return 1;
+                return true;
             } else {
                 return $result->error;
             }
@@ -128,18 +128,19 @@ class AppointmentModel extends Model {
             INNER JOIN patient 
                 ON patient.pid=appointment.pid 
             INNER JOIN doctor 
-                ON schedule.docid=doctor.docid";
+                ON schedule.docid=doctor.docid ";
+
+            $query .= "WHERE ";
+            $arrFilter = ["appointment.cancelled = 0"];
 
             if (count($filter) > 0) {
-                $query .= "WHERE ";
-                $arrFilter = ["appointment.cancelled = 0"];
                 foreach ($filter as $colName => $searchVal) {
                     $arrFilter[] = "{$colName} = ?";
                     $args[] = $searchVal;
                 }
-                $query .= implode(" AND ", $arrFilter);
             }
             
+            $query .= implode(" AND ", $arrFilter);
             $query .= " ORDER BY schedule.scheduledate DESC";
 
             $result = $this->run($db, $query, $args);
@@ -152,4 +153,20 @@ class AppointmentModel extends Model {
             return $th->getMessage();
         }
     }
+
+    public function cancelAppointmentById($db, $args = []) {
+        try {
+            $query = "UPDATE appointment SET cancelled = 1 WHERE appoid = ?";
+
+            $result = $this->run($db, $query, $args);
+            if ($result->execute()) {
+                return true;
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
 }
