@@ -1,10 +1,11 @@
 <?php
 class AdminController {
 
-    protected $appointmentSeed, $scheduleSeed;
+    protected $appointmentSeed, $scheduleSeed, $patientSeed;
     public function __construct() {
         $this->appointmentSeed = new AppointmentModel;
         $this->scheduleSeed = new ScheduleModel;
+        $this->patientSeed = new PatientModel;
     }
 
     public function getAppointments($db, $args = []) {
@@ -145,6 +146,71 @@ class AdminController {
             $response['message'] = "Appointment has been cancelled.";
         } else {
             $response['message'] = $appointment;
+        }
+
+        return $response;
+    }
+
+    public function deleteSchedule($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => "Error: Something went wrong. Contact your Administrator."
+        ];
+
+        $schedule = $this->scheduleSeed->deleteScheduleById($db, [
+            $id
+        ]);
+
+        if (is_string($schedule)) {
+            $response['message'] = $schedule;
+        } else {
+            $response['success'] = true;
+            $response['message'] = "Schedule has been deleted.";
+        }
+
+        return $response;
+    }
+
+    public function getScheduleData($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        $schedules = $this->scheduleSeed->getScheduleById($db, [
+            $id
+        ]);
+
+        if (is_object($schedules)) {
+            $response['success'] = true;
+            $response['message'] = "Schedule successfully retrieved.";
+
+            if ($schedules->num_rows > 0) {
+                $sched_data = $schedules->fetch_assoc();
+
+                $pregs = $this->patientSeed->getPatientByScheduleId($db, [
+                    $sched_data['scheduleid']
+                ]);
+
+                $sched_data['pregscount'] = $pregs->num_rows;
+
+                if (is_object($pregs)) {
+                    $response['data'] = [
+                        'schedule_data' => $sched_data,
+                        'pregs_data' => $pregs->fetch_all(MYSQLI_ASSOC)
+                    ];
+                } else {
+                    $response['success'] = false;
+                    $response['message'] = "No Booked Patient Yet.";
+                }
+            } else {
+                $response['success'] = false;
+                $response['message'] = "No Schedule Matched.";
+            }
+        } else {
+            $response['message'] = $appo;
         }
 
         return $response;

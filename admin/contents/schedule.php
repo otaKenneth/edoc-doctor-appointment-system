@@ -203,13 +203,26 @@ $list110 = $database->query("select  * from  schedule;");
                                         </td>
                                         <td>
                                             <div style="display:flex;justify-content: center;">
-                                                <a href="?action=view&id=' . $scheduleid . '" class="non-style-link table-btn popup-btn">
+                                                <a href="#" class="non-style-link table-btn popup-btn"
+                                                  popupdata-id="popup2"
+                                                  data='<?=json_encode([
+                                                    'action' => 'view',
+                                                    'id' => $scheduleid
+                                                  ])?>'
+                                                >
                                                     <button  class="btn-primary-soft btn button-icon btn-view">
                                                         <font class="tn-in-text">View</font>
                                                     </button>
                                                 </a>
                                                 &nbsp;&nbsp;&nbsp;
-                                                <a href="?action=drop&id=' . $scheduleid . '&name=' . $title . '" class="non-style-link table-btn popup-btn">
+                                                <a href="#" class="non-style-link table-btn popup-btn"
+                                                  popupdata-id="popup3"
+                                                  data='<?=json_encode([
+                                                    'action' => 'drop',
+                                                    'id' => $scheduleid,
+                                                    'name' => $title
+                                                  ])?>'
+                                                >
                                                     <button  class="btn-primary-soft btn button-icon btn-delete">
                                                         <font class="tn-in-text">Remove</font>
                                                     </button>
@@ -234,9 +247,34 @@ $list110 = $database->query("select  * from  schedule;");
         var dData = JSON.parse(dialogData);
 
         if (dData.action === 'view') {
-
+            $.ajax({
+                url: "apis/index.php/getScheduleData",
+                method: "GET",
+                data: JSON.parse(dialogData),
+                contentType: "application/json",
+                success: (response) => {
+                    if (response.success) {
+                        var data = response.data;
+                        utils.processElementLogic($(`#${dialogId}`), data);
+                        utils.showDialog($(`#${dialogId}`))
+                    }
+                },
+                error: (xhr, textStatus, th) => {
+                    // Handle error response
+                    console.error('Error message: ' + xhr.statusText);
+                    let response = JSON.parse(xhr.responseText);
+                    showErrorToast([response.message]);
+                }
+            })
         } else {
+            $(`#${dialogId} [data-value]`).each( (k, el) => {
+                console.log(dData[$(el).attr('data-value')]);
+                $(el).text(dData[$(el).attr('data-value')]);
+            })
 
+            $(`#${dialogId}`).attr("data-id", dData['id']);
+
+            utils.showDialog($(`#${dialogId}`));
         }
     }
 </script>

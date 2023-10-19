@@ -10,7 +10,7 @@ class AppointmentModel extends Model {
             $query = "INSERT INTO appointment (pid, scheduleid, appodate, apponum) VALUES (?,?,?,?)";
 
             $result = $this->run($db, $query, $args);
-            if ($result->execute()) {
+            if ($result) {
                 return $result->insert_id;
             } else {
                 return $result->error;
@@ -27,7 +27,7 @@ class AppointmentModel extends Model {
                 WHERE appoid = ?";
 
             $result = $this->run($db, $query, $args);
-            if ($result->execute()) {
+            if ($result) {
                 return true;
             } else {
                 return $result->error;
@@ -42,7 +42,7 @@ class AppointmentModel extends Model {
             $query = "SELECT * FROM appointment ORDER BY appoid DESC limit 1";
 
             $result = $this->run($db, $query, $args);
-            if ($result->execute()) {
+            if ($result) {
                 return $result->get_result();
             } else {
                 return $result->error;
@@ -79,7 +79,7 @@ class AppointmentModel extends Model {
             WHERE appoid = ?";
 
             $result = $this->run($db, $query, $args);
-            if ($result->execute()) {
+            if ($result) {
                 return $result->get_result();
             } else {
                 return $result->error;
@@ -99,7 +99,7 @@ class AppointmentModel extends Model {
                 WHERE schedule.docid=? AND appointment.cancelled = 0";
             
             $result = $this->run($db, $query, $args);
-            if ($result->execute()) {
+            if ($result) {
                 return $result->get_result();
             } else {
                 return $result->error;
@@ -144,7 +144,7 @@ class AppointmentModel extends Model {
             $query .= " ORDER BY schedule.scheduledate DESC";
 
             $result = $this->run($db, $query, $args);
-            if ($result->execute()) {
+            if ($result) {
                 return $result->get_result();
             } else {
                 return $result->error;
@@ -159,7 +159,7 @@ class AppointmentModel extends Model {
             $query = "UPDATE appointment SET cancelled = 1 WHERE appoid = ?";
 
             $result = $this->run($db, $query, $args);
-            if ($result->execute()) {
+            if ($result) {
                 return true;
             } else {
                 return $result->error;

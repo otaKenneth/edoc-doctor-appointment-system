@@ -22,7 +22,7 @@ class DoctorModel extends Model {
             $query = "SELECT * FROM `doctor` WHERE docemail = ? AND docpassword = ?";
         
             $result = $this->run($db, $query, $args);
-            if ($result->execute()) {
+            if ($result) {
                 return $result->get_result();
             } else {
                 return $result->error;
@@ -40,7 +40,7 @@ class DoctorModel extends Model {
                 WHERE docid = ?";
         
             $result = $this->run($db, $query, $args);
-            if ($result->execute()) {
+            if ($result) {
                 return $result->get_result();
             } else {
                 return $result->error;

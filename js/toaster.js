@@ -16,11 +16,11 @@ function createToast(messages, className, icon) {
 
         setTimeout(() => {
             toast.style.opacity = "0";
-        }, 6000);
+        }, 4000);
 
         setTimeout(() => {
             toast.remove();
-        }, 6500);
+        }, 4300);
     }
 }
 

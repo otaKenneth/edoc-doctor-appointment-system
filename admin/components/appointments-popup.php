@@ -255,29 +255,33 @@
     </div>
 </div>
 <script>
-    $('#form-appointment-details').on('submit', (ev) => {
-        form.id = "form-appointment-details";
-        ev.preventDefault();
+    $(document).ready(() => {
+        // Add Appointment
+        $('#form-appointment-details').on('submit', (ev) => {
+            form.id = "form-appointment-details";
+            ev.preventDefault();
 
-        $.ajax({
-            url: "apis/index.php/updateAppointment",
-            method: "GET",
-            data: {
-                changes: form.changes,
-                original: objAppoitmentData.appoid,
-            },
-            contentType: "application/json",
-            success: (response) => {
-                if (response.success) {
-                    showSuccessToast([response.message])
+            $.ajax({
+                url: "apis/index.php/updateAppointment",
+                method: "GET",
+                data: {
+                    changes: form.changes,
+                    original: objAppoitmentData.appoid,
+                },
+                contentType: "application/json",
+                success: (response) => {
+                    if (response.success) {
+                        showSuccessToast([response.message])
+                        utils.pageReload(4500)
+                    }
+                },
+                error: (xhr, textStatus, th) => {
+                    // Handle error response
+                    console.error('Error message: ' + xhr.statusText);
+                    let response = JSON.parse(xhr.responseText);
+                    showErrorToast([response.message]);
                 }
-            },
-            error: (xhr, textStatus, th) => {
-                // Handle error response
-                console.error('Error message: ' + xhr.statusText);
-                let response = JSON.parse(xhr.responseText);
-                showErrorToast([response.message]);
-            }
+            })
         })
     })
 
@@ -297,6 +301,7 @@
                 if (response.success) {
                     utils.closeDialog($(`#${dialogId}`))
                     showSuccessToast([response.message])
+                    utils.pageReload(4500)
                 }
             },
             error: (xhr, textStatus, th) => {
@@ -305,8 +310,6 @@
                 console.error('Error message: ' + xhr.statusText);
                 console.error('Response: ' + xhr.responseText);
             }
-        }).then(() => {
-            location.reload();
         })
     }
 </script>

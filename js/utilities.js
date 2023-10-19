@@ -52,13 +52,14 @@ var utils = {
         if ($(el).is('[logic-loop]')) {
             var parent = $(el).parent()[0];
             
-            var clone = $(el).clone();
             // hide first element
             $(el).addClass('hidden');
             $(parent).find('.loop-clone').remove();
             
             setTimeout(() => {
                 this.data.forEach((row) => {
+                    var clone = $(el).clone();
+                    
                     $(clone).find('[data-value]').each((k, child_element) => {
                         $(child_element).text(row[$(child_element).attr('data-value')]);
                     });
@@ -161,5 +162,10 @@ var utils = {
         }
 
         return result;
+    },
+    pageReload: function (time) {
+        setTimeout(() => {
+            location.reload();
+        }, time)
     }
 };
