@@ -293,6 +293,11 @@ class AdminController {
         if (count($args) == 0) {
             return $response;
         }
+
+        if ($password !== $cpassword) {
+            $response['message'] = "Passwords didn't matched.";
+            return $response;
+        }
         // check if exist
         $check_result = $this->webuserSeed->getWebuserByEmail($db, [$email]);
         if ($check_result->num_rows > 0) {

@@ -175,29 +175,28 @@
             el.preventDefault();
             var form_data = utils.serializeArrayToJSON($(this).serializeArray());
 
-            if (form_data.password === form_data.cpassword) {
-                $.ajax({
-                    url: "apis/index.php/addDoctor",
-                    method: "POST",
-                    data: form_data,
-                    contentType: "application/json",
-                    success: (response) => {
-                        if (response.success) {
-                            var dialog = $(this).closest('.overlay')
-                            $(dialog).removeClass('popup-open');
-                            $(dialog).addClass('popup-closed');
-                            showSuccessToast(response.message)
-                            utils.pageReload(4500)
-                        }
-                    },
-                    error: (xhr, textStatus, th) => {
-                        // Handle error response
-                        console.error('Error message: ' + xhr.statusText);
-                        let response = JSON.parse(xhr.responseText);
-                        showErrorToast(response.message)
+            $.ajax({
+                url: "apis/index.php/addDoctor",
+                method: "POST",
+                data: form_data,
+                contentType: "application/json",
+                success: (response) => {
+                    if (response.success) {
+                        var dialog = $(this).closest('.overlay')
+                        $(dialog).removeClass('popup-open');
+                        $(dialog).addClass('popup-closed');
+                        showSuccessToast(response.message)
+                        utils.pageReload(4500)
                     }
-                })
-            }
+                },
+                error: (xhr, textStatus, th) => {
+                    // Handle error response
+                    console.error('Error message: ' + xhr.statusText);
+                    let response = JSON.parse(xhr.responseText);
+                    console.log(typeof(response.message))
+                    showErrorToast(response.message)
+                }
+            })
 
         })
     })
