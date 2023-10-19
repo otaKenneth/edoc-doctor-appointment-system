@@ -20,15 +20,12 @@ class WebuserModel extends Model {
     public function getWebuserByEmail($db, $args) {
         try {
             $query = "SELECT * FROM webuser WHERE email = ?";
-            $stmt = $db->prepare($query);
-            // Define the data types for each parameter
-            $types = "s"; // Adjust these data types based on your actual data types
-
-            $stmt->bind_param($types, ...$args);
-            if ($stmt->execute()) {
-                return $stmt->get_result();
+            
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $result->get_result();
             } else {
-                return $stmt->error;
+                return $result->error;
             }
         } catch (\Throwable $th) {
             return $th->getMessage();
