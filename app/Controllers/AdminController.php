@@ -77,13 +77,14 @@ class AdminController {
 
         foreach ($changes as $key => $value) {
             if ($key == "scheduledate") {
-                $schedules = $this->scheduleSeed->getScheduleByDate($db, [
-                    $value['currVal']
-                ]);
-
                 $objPrevAppoData = $this->appointmentSeed->getAppointmentDataById($db, [
                     $original
                 ])->fetch_assoc();
+
+                $schedules = $this->scheduleSeed->getScheduleByDateAndDoctor($db, [
+                    $value['currVal'], $objPrevAppoData['docid']
+                ]);
+
 
                 if ($schedules->num_rows > 0) {
                     $schedule = $schedules->fetch_assoc();
