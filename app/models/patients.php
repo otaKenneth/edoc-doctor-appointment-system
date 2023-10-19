@@ -92,7 +92,7 @@ class PatientModel extends Model{
                     on patient.pid=appointment.pid 
                 INNER JOIN schedule 
                     on schedule.scheduleid=appointment.scheduleid 
-                WHERE schedule.scheduleid=?";
+                WHERE schedule.scheduleid=? AND appointment.cancelled = 0";
 
             $result = $this->run($db, $query, $args);
             if ($result) {

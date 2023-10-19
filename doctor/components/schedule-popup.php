@@ -171,7 +171,7 @@
                     <tr>
                         <td class="label-td" colspan="2">
                             <label for="spec" class="form-label"><b>Patients that Already registerd for this
-                                    session:</b><span data-value="pregscount"></span></label>
+                                    session:</b><span data-value="pregscount"></span>/<span data-value="nop"></span></label>
                             <br><br>
                         </td>
                     </tr>
