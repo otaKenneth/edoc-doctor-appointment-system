@@ -215,6 +215,43 @@ class AdminController {
 
         return $response;
     }
+
+    public function getPatientData($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        $patient = $this->patientSeed->getPatientById($db, [
+            $id
+        ]);
+
+        if (is_object($patient)) {
+            $response['success'] = true;
+            $response['message'] = "Patient Found.";
+            $row = $patient->fetch_assoc();
+
+            $row["pid"] = "P-".$row['pid'];
+            $dob=$row["pdob"];
+            // Convert $dob to a DateTime object
+            $dobDate = new DateTime($dob);
+
+            // Get the current date
+            $currentDate = new DateTime();
+
+            // Calculate the age difference
+            $ageInterval = $currentDate->diff($dobDate);
+
+            // Extract the age from the interval
+            $row['age'] = $ageInterval->y;
+            $response['data'] = $row;
+        } else {
+            $response['message'] = $patient;
+        }
+
+        return $response;
+    }
 }
 
 ?>
