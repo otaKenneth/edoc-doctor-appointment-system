@@ -367,7 +367,7 @@ class AdminController {
         } else {
             // add new doctor
             $doctor = $this->doctorSeed->create($db, [
-                $name, $email, $password, $tele, $spec
+                $email, $name, $password, $tele, $spec
             ]);
             
             if (is_numeric($doctor)) {
