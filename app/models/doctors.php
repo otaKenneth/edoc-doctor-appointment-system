@@ -17,6 +17,22 @@ class DoctorModel extends Model {
         }
     }
 
+    public function updateDoctor ($db, $cols = [], $args = []) {
+        try {
+            $updtCols = $this->processUpdateCols($cols);
+            $query = "UPDATE doctor SET $updtCols WHERE docid = ?";
+            
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $result;
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
     public function getAllDoctors($db, $args = []) {
         try {
             $query = "SELECT * FROM doctor";

@@ -147,7 +147,7 @@
                         <td class="label-td editable" width="5%"></td>
                         <td class="label-td" colspan="2" data-value="sname"></td>
                         <td class="label-td hidden" colspan="2">
-                            <select name="spec" class="field-editable box" data-value="specialties">
+                            <select name="specialties" class="field-editable box" data-value="specialties">
                             <?php
                             foreach ($admin_cache_data['specialties'] as $row00) {
                                 $sn = $row00["sname"];

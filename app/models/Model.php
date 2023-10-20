@@ -29,6 +29,15 @@ class Model {
         }
         return $types;
     }
+
+    public function processUpdateCols($args) {
+        $arr = [];
+        foreach ($args as $value) {
+            $arr[] = "{$value} = ? ";
+        }
+
+        return implode(",", $arr);
+    }
 }
 
 

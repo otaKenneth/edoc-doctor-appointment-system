@@ -392,6 +392,42 @@ class AdminController {
         return $response;
     }
 
+    public function updateDoctor($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => "Error: Something went wrong. Contact your Administrator."
+        ];
+
+        $errs= 0;
+        foreach ($changes as $key => $value) {
+            $newVal = $value['currVal'];
+            
+            $doctor = $this->doctorSeed->updateDoctor($db, [
+                $key
+            ],[
+                $newVal, $original
+            ]);
+
+            if (is_string($response['message'])) {
+                $response['message'] = [];
+            }
+
+            if (is_string($doctor)) {
+                $response['message'][] = $doctor;
+                $errs += 1;
+            } else {
+                $response['message'][] = "Doctor's {$key} has been updated.";
+            }
+        }
+
+        if ($errs === 0) {
+            $response['success'] = true;
+        }
+
+        return $response;
+    }
+
     public function deleteDoctor($db, $args = []) {
         extract($args);
         $response = [
