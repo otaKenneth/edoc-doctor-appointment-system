@@ -53,10 +53,9 @@
                                     <?php
                                     $list11 = $database->query("select  * from  specialties order by sname asc;");
     
-                                    for ($y=0;$y<$list11->num_rows;$y++){
-                                        $row00=$list11->fetch_assoc();
-                                        $sn=$row00["sname"];
-                                        $id00=$row00["id"]; ?>
+                                    foreach ($admin_cache_data['specialties'] as $row00) {
+                                        $sn = $row00["sname"];
+                                        $id00 = $row00["id"]; ?>
                                         <option value="<?=$id00?>"><?=$sn?></option>
                                     <?php } ?>
                                 </select><br>

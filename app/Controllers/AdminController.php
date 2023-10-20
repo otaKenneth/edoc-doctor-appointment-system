@@ -1,13 +1,74 @@
 <?php
 class AdminController {
 
-    protected $appointmentSeed, $scheduleSeed, $patientSeed, $doctorSeed, $webuserSeed;
+    protected $appointmentSeed, $scheduleSeed, $patientSeed, $doctorSeed, $webuserSeed, $specialtiesSeed;
     public function __construct() {
         $this->appointmentSeed = new AppointmentModel;
         $this->scheduleSeed = new ScheduleModel;
         $this->patientSeed = new PatientModel;
         $this->doctorSeed = new DoctorModel;
         $this->webuserSeed = new WebuserModel;
+        $this->specialtiesSeed = new Specialties;
+    }
+
+    public function getAdminsDefaults ($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        $list11 = [];
+        if ($uri == "admin/patient.php") {
+            $list11 = $this->patientSeed->getAllPatients($db);
+        } else {
+            $list11 = $this->doctorSeed->getAllDoctors($db);
+        }
+
+        if (is_object($list11)) {
+            if ($list11->num_rows > 0) {
+                $response['data'] = [];
+    
+                $table = [];
+                foreach ($list11->fetch_all(MYSQLI_ASSOC) as $row) {
+                    $name = isset($row['pname']) ? $row['pname']:$row['docname'];
+                    $email = isset($row['pemail']) ? $row['pemail']:$row['docemail'];
+                    
+                    $tRow = [
+                        'name' => $name,
+                        'email' => $email
+                    ];
+    
+                    $table[] = $tRow;
+                }
+                $response['data']['search_options'] = $table;
+                $response['success'] = true;
+            } else {
+                $response['success'] = true;
+                $response['data']['search_options'] = $list11;
+                $response['message'] = "No data.";
+            }
+        } elseif (is_array($list11) && count($list11) == 0) {
+            $response['success'] = true;
+            $response['data']['search_options'] = $list11;
+            $response['message'] = "No data.";
+        } else {
+            // string: error message
+            $response['success'] = false;
+            $response['message'][] = $list11;
+        }
+
+        $specialties = $this->specialtiesSeed->getAll($db);
+        if (is_object($specialties)) {
+            $response['data']['specialties'] = $specialties->fetch_all(MYSQLI_ASSOC);
+            $response['success'] = true;
+        }
+
+        if (!$response['success']) {
+            $response['message'] = "Error: Cannot find values.";
+        }
+
+        return $response;
     }
 
     public function getAppointments($db, $args = []) {
