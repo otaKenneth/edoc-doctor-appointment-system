@@ -93,6 +93,21 @@ class ScheduleModel extends Model {
             return $th->getMessage();
         }
     }
+
+    public function getScheduleByDateAndDoctor ($db, $args = []) {
+        try {
+            $query = "SELECT * FROM schedule WHERE scheduledate=? AND docid = ?";
+            
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
 }
 
 ?>

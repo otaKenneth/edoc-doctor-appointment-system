@@ -109,9 +109,7 @@ $result = $response['success'] ? $response['data']:[];
                                       ])?>'
                                       class="non-style-link table-btn popup-btn"
                                       style="margin-left: 15px;">
-                                        <button 
-                                        class="btn-secondary-soft btn"
-                                        style="padding-top: 12px;padding-bottom: 12px;margin-top: 10px;">
+                                        <button class="btn-secondary-soft btn">
                                             <font class="tn-in-text">Consultation History</font>
                                         </button>
                                     </a>
@@ -147,9 +145,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components
                 },
                 error: (xhr, textStatus, th) => {
                     // Handle error response
-                    console.error('Status code: ' + xhr.status);
                     console.error('Error message: ' + xhr.statusText);
-                    console.error('Response: ' + xhr.responseText);
+                    let response = JSON.parse(xhr.responseText);
+                    showErrorToast([response.message]);
                 }
             })
         } else if (dData.action === 'view-2') {
@@ -187,9 +185,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components
             },
             error: (xhr, textStatus, th) => {
                 // Handle error response
-                console.error('Status code: ' + xhr.status);
                 console.error('Error message: ' + xhr.statusText);
-                console.error('Response: ' + xhr.responseText);
+                let response = JSON.parse(xhr.responseText);
+                showErrorToast([response.message]);
             }
         })
     }
