@@ -263,11 +263,11 @@
 
             $.ajax({
                 url: "apis/index.php/updateAppointment",
-                method: "GET",
-                data: {
+                method: "POST",
+                data: JSON.stringify({
                     changes: form.changes,
                     original: objAppoitmentData.appoid,
-                },
+                }),
                 contentType: "application/json",
                 success: (response) => {
                     if (response.success) {

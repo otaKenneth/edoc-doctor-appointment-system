@@ -51,8 +51,6 @@
                             <td class="label-td" colspan="2">
                                 <select name="spec" id="" class="box">
                                     <?php
-                                    $list11 = $database->query("select  * from  specialties order by sname asc;");
-    
                                     foreach ($admin_cache_data['specialties'] as $row00) {
                                         $sn = $row00["sname"];
                                         $id00 = $row00["id"]; ?>
@@ -105,11 +103,16 @@
                 <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
                     <tr>
                         <td class="label-td" colspan="2">
+                            <form id="doctors-view" method="POST">
                             <label for="name" class="form-label">Name: </label>
                         </td>
                     </tr>
                     <tr>
+                        <td class="label-td editable" width="5%"></td>
                         <td class="label-td" colspan="2" data-value="docname"></td>
+                        <td class="label-td hidden" colspan="2">
+                            <input class="field-editable input-text" type="text" name="docname" data-value="docname" value="">
+                        </td>
                     </tr>
                     <tr>
                         <td class="label-td" colspan="2">
@@ -117,7 +120,11 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="label-td editable" width="5%"></td>
                         <td class="label-td" colspan="2" data-value="docemail"></td>
+                        <td class="label-td hidden" colspan="2">
+                            <input type="text" name="docemail" data-value="docemail" value="" class="field-editable input-text">
+                        </td>
                     </tr>
                     <tr>
                         <td class="label-td" colspan="2">
@@ -125,7 +132,11 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="label-td editable" width="5%"></td>
                         <td class="label-td" colspan="2" data-value="doctel"></td>
+                        <td class="label-td hidden" colspan="2">
+                            <input type="text" class="field-editable input-text" data-value="doctel" value="" name="doctel">
+                        </td>
                     </tr>
                     <tr>
                         <td class="label-td" colspan="2">
@@ -133,13 +144,25 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="label-td editable" width="5%"></td>
                         <td class="label-td" colspan="2" data-value="sname"></td>
+                        <td class="label-td hidden" colspan="2">
+                            <select name="spec" class="field-editable box" data-value="specialties">
+                            <?php
+                            foreach ($admin_cache_data['specialties'] as $row00) {
+                                $sn = $row00["sname"];
+                                $id00 = $row00["id"]; ?>
+                                <option value="<?=$id00?>"><?=$sn?></option>
+                            <?php } ?>
+                            </select>
+                            </form>
+                        </td>
                     </tr>
                 </table>
             </div>
         </center>
         <div class="popup-footer">
-            <a href="doctors.php"><input type="button" value="OK" class="login-btn btn-primary-soft btn" ></a>
+            <a href="#"><input type="submit" form="doctors-view" value="OK" class="login-btn btn-primary-soft btn" ></a>
         </div>
     </div>
 </div>
@@ -198,6 +221,33 @@
             })
 
         })
+
+        $('form#doctors-view').on('submit', function (el) {
+            el.preventDefault();
+            form.id = "doctors-view";
+
+            $.ajax({
+                url: "apis/index.php/updateDoctor",
+                method: "POST",
+                data: JSON.stringify({
+                    changes: form.changes,
+                    original: objDoctorsData.docid,
+                }),
+                contentType: "application/json",
+                success: (response) => {
+                    if (response.success) {
+                        showSuccessToast([response.message])
+                        utils.pageReload(4500)
+                    }
+                },
+                error: (xhr, textStatus, th) => {
+                    // Handle error response
+                    console.error('Error message: ' + xhr.statusText);
+                    let response = JSON.parse(xhr.responseText);
+                    showErrorToast([response.message]);
+                }
+            })
+        })
     })
 
     function dropYes(el) {
@@ -228,231 +278,3 @@
         })
     }
 </script>
-
-<?php 
-    if($_GET){
-        
-        $id=$_GET["id"];
-        $action=$_GET["action"];
-        if($action=='add'){
-                $error_1=$_GET["error"];
-                $errorlist= array(
-                    '1'=>'<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Already have an account for this Email address.</label>',
-                    '2'=>'<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Password Conformation Error! Reconform Password</label>',
-                    '3'=>'<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;"></label>',
-                    '4'=>"",
-                    '0'=>'',
-
-                );
-                if($error_1!='4'){
-                echo '';
-
-            }else{
-                echo '
-                    <div id="popup1" class="overlay">
-                            <div class="popup">
-                            <center>
-                            <br><br><br><br>
-                                <h2>New Record Added Successfully!</h2>
-                                <a class="close" href="doctors.php">&times;</a>
-                                <div class="content">
-                                    
-                                    
-                                </div>
-                                <div style="display: flex;justify-content: center;">
-                                
-                                <a href="doctors.php" class="non-style-link"><button  class="btn-primary btn"  style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;"><font class="tn-in-text">&nbsp;&nbsp;OK&nbsp;&nbsp;</font></button></a>
-
-                                </div>
-                                <br><br>
-                            </center>
-                    </div>
-                    </div>
-        ';
-            }
-        }elseif($action=='edit'){
-            $sqlmain= "select * from doctor where docid='$id'";
-            $result= $database->query($sqlmain);
-            $row=$result->fetch_assoc();
-            $name=$row["docname"];
-            $email=$row["docemail"];
-            $spe=$row["specialties"];
-            
-            $spcil_res= $database->query("select sname from specialties where id='$spe'");
-            $spcil_array= $spcil_res->fetch_assoc();
-            $spcil_name=$spcil_array["sname"];
-            $nic=$row['docnic'];
-            $tele=$row['doctel'];
-
-            $error_1=$_GET["error"];
-                $errorlist= array(
-                    '1'=>'<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Already have an account for this Email address.</label>',
-                    '2'=>'<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Password Conformation Error! Reconform Password</label>',
-                    '3'=>'<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;"></label>',
-                    '4'=>"",
-                    '0'=>'',
-
-                );
-
-            if($error_1!='4'){
-                    echo '
-                    <div id="popup1" class="overlay">
-                            <div class="popup">
-                            <center>
-                            
-                                <a class="close" href="doctors.php">&times;</a> 
-                                <div style="display: flex;justify-content: center;">
-                                <div class="abc">
-                                <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
-                                <tr>
-                                        <td class="label-td" colspan="2">'.
-                                            $errorlist[$error_1]
-                                        .'</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">Edit Doctor Details.</p>
-                                        Doctor ID : '.$id.' (Auto Generated)<br><br>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label-td" colspan="2">
-                                            <form action="edit-doc.php" method="POST" class="add-new-form">
-                                            <label for="Email" class="form-label">Email: </label>
-                                            <input type="hidden" value="'.$id.'" name="id00">
-                                            <input type="hidden" name="oldemail" value="'.$email.'" >
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label-td" colspan="2">
-                                        <input type="email" name="email" class="input-text" placeholder="Email Address" value="'.$email.'" required><br>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        
-                                        <td class="label-td" colspan="2">
-                                            <label for="name" class="form-label">Name: </label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label-td" colspan="2">
-                                            <input type="text" name="name" class="input-text" placeholder="Doctor Name" value="'.$name.'" required><br>
-                                        </td>
-                                        
-                                    </tr>
-                                    
-                                    <tr>
-                                        <td class="label-td" colspan="2">
-                                            <label for="nic" class="form-label">NIC: </label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label-td" colspan="2">
-                                            <input type="text" name="nic" class="input-text" placeholder="NIC Number" value="'.$nic.'" required><br>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label-td" colspan="2">
-                                            <label for="Tele" class="form-label">Telephone: </label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label-td" colspan="2">
-                                            <input type="tel" name="Tele" class="input-text" placeholder="Telephone Number" value="'.$tele.'" required><br>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label-td" colspan="2">
-                                            <label for="spec" class="form-label">Choose specialties: (Current'.$spcil_name.')</label>
-                                            
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label-td" colspan="2">
-                                            <select name="spec" id="" class="box">';
-                                                
-                
-                                                $list11 = $database->query("select  * from  specialties;");
-                
-                                                for ($y=0;$y<$list11->num_rows;$y++){
-                                                    $row00=$list11->fetch_assoc();
-                                                    $sn=$row00["sname"];
-                                                    $id00=$row00["id"];
-                                                    echo "<option value=".$id00.">$sn</option><br/>";
-                                                };
-                
-                
-                
-                                                
-                                echo     '       </select><br><br>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label-td" colspan="2">
-                                            <label for="password" class="form-label">Password: </label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label-td" colspan="2">
-                                            <input type="password" name="password" class="input-text" placeholder="Defind a Password" required><br>
-                                        </td>
-                                    </tr><tr>
-                                        <td class="label-td" colspan="2">
-                                            <label for="cpassword" class="form-label">Conform Password: </label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label-td" colspan="2">
-                                            <input type="password" name="cpassword" class="input-text" placeholder="Conform Password" required><br>
-                                        </td>
-                                    </tr>
-                                    
-                        
-                                    <tr>
-                                        <td colspan="2">
-                                            <input type="reset" value="Reset" class="login-btn btn-primary-soft btn" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        
-                                            <input type="submit" value="Save" class="login-btn btn-primary btn">
-                                        </td>
-                        
-                                    </tr>
-                                
-                                    </form>
-                                    </tr>
-                                </table>
-                                </div>
-                                </div>
-                            </center>
-                            <br><br>
-                    </div>
-                    </div>
-                    ';
-        }else{
-            echo '
-                <div id="popup1" class="overlay">
-                        <div class="popup">
-                        <center>
-                        <br><br><br><br>
-                            <h2>Edit Successfully!</h2>
-                            <a class="close" href="doctors.php">&times;</a>
-                            <div class="content">
-                                
-                                
-                            </div>
-                            <div style="display: flex;justify-content: center;">
-                            
-                            <a href="doctors.php" class="non-style-link"><button  class="btn-primary btn"  style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;"><font class="tn-in-text">&nbsp;&nbsp;OK&nbsp;&nbsp;</font></button></a>
-
-                            </div>
-                            <br><br>
-                        </center>
-                </div>
-                </div>
-    ';
-
-
-
-        }; };
-    };
-
-?>

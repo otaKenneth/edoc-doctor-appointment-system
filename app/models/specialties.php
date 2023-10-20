@@ -18,7 +18,7 @@ class Specialties extends Model {
 
     public function getAll($db, $args = []) {
         try {
-            $query = "SELECT sname FROM specialties ORDER BY sname ASC";
+            $query = "SELECT * FROM specialties ORDER BY sname ASC";
 
             $result = $this->run($db, $query, $args);
             if ($result) {

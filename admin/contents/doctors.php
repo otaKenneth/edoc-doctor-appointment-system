@@ -124,6 +124,7 @@ if ($_POST) {
 </tr>
 <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/admin/components/doctors-popup.php"); ?>
 <script>
+    var objDoctorsData = null;
     function processDialogData (dialogData, dialogId) {
         var dData = JSON.parse(dialogData);
 
@@ -135,8 +136,8 @@ if ($_POST) {
                 contentType: "application/json",
                 success: (response) => {
                     if (response.success) {
-                        var data = response.data;
-                        utils.processElementLogic($(`#${dialogId}`), data);
+                        objDoctorsData = response.data;
+                        utils.processElementLogic($(`#${dialogId}`), objDoctorsData);
                         utils.showDialog($(`#${dialogId}`))
                     }
                 },
