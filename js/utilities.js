@@ -87,6 +87,8 @@ var utils = {
                 var $el_value = this.data[$c_el.attr('data-value')];
                 if ($c_el.prop('tagName').toLowerCase() === "input") {
                     $c_el.val($el_value);
+                } else if ($c_el.prop('tagName').toLowerCase() === "select") {
+                    $c_el.val($el_value);
                 } else {
                     $c_el.text($el_value);
                 }

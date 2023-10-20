@@ -1,8 +1,4 @@
 <?php
-    include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/AdminController.php");
-
-    $c_admin = new AdminController;
-
     $params = [];
     $result = $c_admin->getAppointments($database, $params);
 

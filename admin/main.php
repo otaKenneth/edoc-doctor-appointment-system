@@ -1,10 +1,25 @@
 <?php
     include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/AuthController.php");
+    include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/AdminController.php");
 
     $auth = new AuthController;
+    $c_admin = new AdminController;
+
     $result = $auth->getCurrentUser($database);
     if ($result['success']) {
         $user = $result['data'];
+    }
+
+    $admin_cache = $c_admin->getAdminsDefaults($database, [
+        'uri' => $clean_uri 
+    ]);
+
+    $admin_cache_data = [
+        'search_options' => [],
+        'specialties' => []
+    ];
+    if ($admin_cache['success']) {
+        $admin_cache_data = $admin_cache['data'];
     }
 ?>
 <!DOCTYPE html>
@@ -99,13 +114,12 @@
                         $list11 = $database->query("select  pname,pemail from patient;");
                         $list11 = $database->query("select docname, docemail from doctor;");
     
-                        for ($y = 0; $y < $list11->num_rows; $y++) {
-                            $row00 = $list11->fetch_assoc();
-                            $d = $row00["docname"];
-                            $c = $row00["docemail"];
+                        foreach ($admin_cache_data['search_options'] as $row00) {
+                            $d = $row00["name"];
+                            $c = $row00["email"];
                         ?>
-                            <option value='$d'><br/>
-                            <option value='$c'><br/>
+                            <option value='<?=$d?>'><?=$d?></option>
+                            <option value='<?=$c?>'><?=$c?></option>
                         <?php }; ?>
                         </datalist>
                         <input type="Submit" value="Search" class="login-btn btn-primary btn"

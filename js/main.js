@@ -76,6 +76,12 @@ $(document).ready(function () {
         $(parent).addClass('hidden');
         $(parent).prev().removeClass('hidden');
         $(parent).prev().prev().removeClass('cancellable');
-        $(parent).prev().text(editableValues.currVal);
+
+        if ($el.prop('tagName').toLowerCase() === "input") {
+            $(parent).prev().text(editableValues.currVal);
+        } else if ($el.prop('tagName').toLowerCase() === "select") {
+            console.log("shiiett")
+            $(parent).prev().text($el.find('option:selected').text());
+        }
     })
 })

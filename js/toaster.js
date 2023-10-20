@@ -25,15 +25,18 @@ function createToast(messages, className, icon) {
 }
 
 function showSuccessToast(message) {
-    createToast(message, "success", "✅");
+    let msg = typeof(message) == "string" ? [message]:message;
+    createToast(msg, "success", "✅");
 }
 
 function showWarningToast(message) {
-    createToast(message, "warning", "⚠️");
+    let msg = typeof(message) == "string" ? [message]:message;
+    createToast(msg, "warning", "⚠️");
 }
 
 function showErrorToast(message) {
-    createToast(message, "error", "❌");
+    let msg = typeof(message) == "string" ? [message]:message;
+    createToast(msg, "error", "❌");
 }
 
 // Example with multiple messages

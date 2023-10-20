@@ -94,9 +94,9 @@ class ScheduleModel extends Model {
         }
     }
 
-    public function getScheduleByDate ($db, $args = []) {
+    public function getScheduleByDateAndDoctor ($db, $args = []) {
         try {
-            $query = "SELECT * FROM schedule WHERE scheduledate=?";
+            $query = "SELECT * FROM schedule WHERE scheduledate=? AND docid = ?";
             
             $result = $this->run($db, $query, $args);
             if ($result) {
