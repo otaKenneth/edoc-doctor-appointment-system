@@ -1,7 +1,7 @@
 <?php
 class AdminController {
 
-    protected $appointmentSeed, $scheduleSeed, $patientSeed, $doctorSeed, $webuserSeed, $specialtiesSeed;
+    protected $appointmentSeed, $scheduleSeed, $patientSeed, $doctorSeed, $webuserSeed, $specialtiesSeed, $uploadsSeed;
     public function __construct() {
         $this->appointmentSeed = new AppointmentModel;
         $this->scheduleSeed = new ScheduleModel;
@@ -9,6 +9,7 @@ class AdminController {
         $this->doctorSeed = new DoctorModel;
         $this->webuserSeed = new WebuserModel;
         $this->specialtiesSeed = new Specialties;
+        $this->uploadsSeed = new UploadsModel;
     }
 
     public function getAdminsDefaults ($db, $args = []) {
@@ -295,6 +296,7 @@ class AdminController {
             $response['success'] = true;
             $response['message'] = "Patient Found.";
             $row = $patient->fetch_assoc();
+            $pid = $row['pid'];
 
             $row["pid"] = "P-".$row['pid'];
             $dob=$row["pdob"];
@@ -309,6 +311,16 @@ class AdminController {
 
             // Extract the age from the interval
             $row['age'] = $ageInterval->y;
+
+            $uploads = $this->uploadsSeed->getUploadByPatientId($db, [
+                $pid
+            ]);
+
+            $row['uploads'] = [];
+            if ($uploads->num_rows > 0) {
+                $row['uploads'] = $uploads->fetch_all(MYSQLI_ASSOC);
+            }
+
             $response['data'] = $row;
         } else {
             $response['message'] = $patient;
@@ -462,6 +474,57 @@ class AdminController {
             }
         } else {
             $response['message'] = "Error: This doctor does not exist.";
+        }
+
+        return $response;
+    }
+
+    public function uploadPatientFiles ($db, $args = []) {
+        if (is_array($args) && count($args) > 0) {
+            extract($args);
+        } else {
+            $args = $_POST;
+            extract($args);
+        }
+        
+        $response = [
+            'success' => false,
+            'message' => "Error: Something went wrong. Contact your Administrator."
+        ];
+
+        if (is_array($_FILES)) {
+            $uploadedFiles = $_FILES['file'];
+            // Loop through uploaded files and save them to the server
+            foreach ($uploadedFiles['tmp_name'] as $key => $tmp_name) {
+                $file_name = $uploadedFiles['name'][$key];
+                $file_tmp = $tmp_name;
+                $file_type = $uploadedFiles['type'][$key];
+
+                // Define a target directory where you want to save the files
+                $target_directory = '../../app/uploads/';
+
+                // Create the target path (directory + filename)
+                $target_path = $target_directory . $file_name;
+                $db_file_path = "app/uploads/" . $file_name;
+
+                // Move the file to the target path
+                move_uploaded_file($file_tmp, $target_path);
+
+                $type = stripos($file_type,'image') > -1 ? "image" : "pdf";
+                // You can also insert the file information into a database if needed
+                $upload = $this->uploadsSeed->insert($db, [
+                    $file_name, $db_file_path, $type, $patient_id
+                ]);
+
+                if (is_numeric($upload)) {
+                    $response['success'] = true;
+                    $response['message'] = "Files Uploaded.";
+                } else {
+                    $response['message'] = $upload;
+                }
+            }
+        } else {
+            $response['message'] = "Error: Invalid Request.";
         }
 
         return $response;
