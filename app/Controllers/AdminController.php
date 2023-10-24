@@ -492,7 +492,18 @@ class AdminController {
             'message' => "Error: Something went wrong. Contact your Administrator."
         ];
 
-        if (is_array($_FILES)) {
+        if (isset($deleted)) {
+            $filesDeleted = $this->deletePatientUploads($db, [
+                'to_delete' => json_decode($deleted),
+            ]);
+
+            if ($filesDeleted) {
+                $response['success'] = true;
+                $response['message'] = $filesDeleted['message'];
+            }
+        }
+
+        if (is_array($_FILES) && count($_FILES) > 0) {
             $uploadedFiles = $_FILES['file'];
             // Loop through uploaded files and save them to the server
             foreach ($uploadedFiles['tmp_name'] as $key => $tmp_name) {
@@ -524,7 +535,39 @@ class AdminController {
                 }
             }
         } else {
-            $response['message'] = "Error: Invalid Request.";
+            if (!$response['success']) {
+                if (!is_array($response['message'])) {
+                    $response['message'] = [];
+                }
+                $response['message'][] = "No File(s).";
+            }
+        }
+
+        return $response;
+    }
+
+    public function deletePatientUploads($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => "Error: Something went wrong. Contact your Administrator."
+        ];
+
+        foreach ($to_delete as $id) {
+            $uploads = $this->uploadsSeed->delete($db, [
+                $id,
+            ]);
+
+            if (is_string($uploads)) {
+                $response['message'] = $uploads;
+            } else {
+                $response['success'] = true;
+
+                if (!is_array($response['message'])) {
+                    $response['message'] = [];
+                }
+                $response['message'][] = "File [{$id}] has been deleted.";
+            }
         }
 
         return $response;

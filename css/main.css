@@ -767,7 +767,7 @@ span.required {
   flex-wrap: wrap;
 }
 
-#files-drag-n-drop .filepuloaded {
+#files-drag-n-drop .fileuploaded {
   position: relative;
   width: 140px;
   height: 145px;
@@ -778,7 +778,7 @@ span.required {
   transition: background 0.3s;
 }
 
-.filepuloaded .link-fileuploaded {
+.fileuploaded .link-fileuploaded {
   height: 100%; width: 100%;
   display: flex;
   align-items: center;
@@ -787,19 +787,19 @@ span.required {
   overflow: hidden;
 }
 
-.filepuloaded:hover {
+.fileuploaded:hover {
   background: #f0f0f0; /* Background color on hover */
 }
 
-.filepuloaded:hover .delete-button{
+.fileuploaded:hover .delete-button{
   display: block;
 }
 
-.filepuloaded.pdf {
+.fileuploaded.pdf {
   border: #d30e00 solid 0.8px;
 }
 
-.filepuloaded.img {
+.fileuploaded.img {
   border: #1b62b3 solid 0.8px;
 }
 

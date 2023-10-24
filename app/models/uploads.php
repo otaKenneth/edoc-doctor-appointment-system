@@ -30,5 +30,20 @@ class UploadsModel extends Model {
             return $th->getMessage();
         }
     }
+
+    public function delete($db, $args = []) {
+        try {
+            $query = "DELETE FROM uploads WHERE id = ?";
+
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $result;
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
 }
 ?>

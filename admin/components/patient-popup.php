@@ -65,8 +65,8 @@
                                 </label>
                             </button>
                             <!-- image -->
-                            <div id="img-template" class="filepuloaded img hidden">
-                                <div class="delete-button">
+                            <div id="img-template" class="fileuploaded img hidden">
+                                <div class="delete-button" onclick="deleteFile(this)">
                                     <img src="../img/icons/delete-white.svg" alt="Delete">
                                 </div>
                                 <a href="" target="_blank" class="container-link-fileupload" style="height: 100%; width: 100%;">
@@ -77,8 +77,8 @@
                                 </a>
                             </div>
                             <!-- file -->
-                            <div id="pdf-template" class="filepuloaded pdf hidden">
-                                <div class="delete-button">
+                            <div id="pdf-template" class="fileuploaded pdf hidden">
+                                <div class="delete-button" onclick="deleteFile(this)">
                                     <img src="../img/icons/delete-white.svg" alt="Delete">
                                 </div>
                                 <a href="" target="_blank" class="container-link-fileupload" style="height: 100%; width: 100%;">
@@ -97,22 +97,26 @@
             </div>
         </center>
         <div class="popup-footer">
-            <a href="#" class="popup-closer"><input id="ok" type="button" value="OK" class="login-btn btn-primary-soft btn submit" ></a>
+            <a href="#"><input id="ok" type="button" value="OK" class="login-btn btn-primary-soft btn submit" ></a>
+            <a href="#" class="popup-closer"><input id="close" type="button" value="Close" class="login-btn btn-secondary-soft btn"></a>
         </div>
     </div>
 </div>
 <script>
+var deletedFileKeys = [];
+var uploadedFiles = [];
+
 $(document).ready(function () {
-    var uploadedFiles = [];
     // Bind an event handler to the file input change event
     $("#input-file-drag-n-drop").change(function() {
         // Get the selected file
         var $imgTemplateEl = $('#files-drag-n-drop #img-template');
         var $pdfTemplateEl = $('#files-drag-n-drop #pdf-template');
 
-        uploadedFiles = this.files;
-        for (let i = 0; i < uploadedFiles.length; i++) {
-            var file = uploadedFiles[i];
+        var newFiles = this.files;
+        for (let i = 0; i < newFiles.length; i++) {
+            var file = newFiles[i];
+            uploadedFiles.push(file);
             
             if (file) {
                 // Check if the file is an image
@@ -120,7 +124,7 @@ $(document).ready(function () {
                     // Create a FileReader to read and display the image
                     var reader = new FileReader();
     
-                    reader.onload = (function (file) {
+                    reader.onload = (function (file, i) {
                         return function(e) {
                             // e.target.result
                             if (file.type.match('image.*')) {
@@ -128,6 +132,8 @@ $(document).ready(function () {
                                 $clone.removeClass('hidden');
                                 $clone.addClass('template-copy');
                                 $clone.removeAttr('id');
+                                $clone.attr('filekey', i);
+                                $clone.attr('just-uploaded', true);
                                 $clone.find('.container-link-fileupload').attr('href', URL.createObjectURL(file));
                                 $clone.find('.link-fileuploaded img').attr('src', e.target.result);
                                 $clone.find('.filename').text(file.name);
@@ -138,13 +144,15 @@ $(document).ready(function () {
                                 $clone.removeClass('hidden');
                                 $clone.addClass('template-copy');
                                 $clone.removeAttr('id');
+                                $clone.attr('filekey', i);
+                                $clone.attr('just-uploaded', true);
                                 $clone.find('.container-link-fileupload').attr('href', URL.createObjectURL(file));
                                 $clone.find('.filename').text(file.name);
                                 // Display the PDF file as a link
                                 $("#files-drag-n-drop").append($clone);
                             }
                         }
-                    })(file);
+                    })(file, i);
     
                     // Read the file as a data URL
                     reader.readAsDataURL(file);
@@ -158,7 +166,7 @@ $(document).ready(function () {
     });
 
     $('#ok.submit').click((e) => {
-        if (uploadedFiles.length === 0) {
+        if (uploadedFiles.length === 0 && deletedFileKeys.length === 0) {
             showErrorToast("Please upload files first.")
             return;
         }
@@ -167,6 +175,10 @@ $(document).ready(function () {
         var formData = new FormData();
         for (var i = 0; i < uploadedFiles.length; i++) {
             formData.append('file[]', uploadedFiles[i]);
+        }
+
+        if (deletedFileKeys.length > 0) {
+            formData.append('deleted', JSON.stringify(deletedFileKeys))
         }
         var id = $(e.currentTarget).closest('.overlay').attr('data-id');
         formData.append('patient_id', id);
@@ -181,13 +193,31 @@ $(document).ready(function () {
                 // Handle the server's response, if needed
                 if (response.success) {
                     showSuccessToast(response.message)
+                    deletedFileKeys = [];
+                    uploadedFiles = [];
                 }
             },
             error: function(xhr, status, error) {
                 // Handle errors, if any
                 console.log("Error: " + error);
+                let response = JSON.parse(xhr.responseText);
+                showErrorToast([response.message]);
             }
         });
     })
 })
+
+function deleteFile(el) {
+    let $el = $(el);
+    let $parent = $el.closest(".fileuploaded.template-copy");
+    let fileKey = $parent.attr('filekey');
+
+    console.log(fileKey, $parent);
+    if ($parent.is("[just-uploaded]")) {
+        uploadedFiles.splice(fileKey, 1);
+    } else {
+        deletedFileKeys.push(fileKey);
+    }
+    $parent.remove();
+}
 </script>

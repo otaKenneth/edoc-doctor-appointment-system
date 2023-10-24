@@ -144,6 +144,7 @@
                 $clone.removeClass('hidden');
                 $clone.addClass('template-copy');
                 $clone.removeAttr('id');
+                $clone.attr('filekey', file['id']);
                 $clone.find('.container-link-fileupload').attr('href', cur_loc+file['location']);
                 $clone.find('.filename').text(file['filename']);
                 // Display the PDF file as a link
@@ -153,6 +154,7 @@
                 $clone.removeClass('hidden');
                 $clone.addClass('template-copy');
                 $clone.removeAttr('id');
+                $clone.attr('filekey', file['id']);
                 $clone.find('.container-link-fileupload').attr('href', cur_loc+file['location']);
                 $clone.find('.link-fileuploaded img').attr('src', cur_loc+file['location']);
                 $clone.find('.filename').text(file['filename']);
