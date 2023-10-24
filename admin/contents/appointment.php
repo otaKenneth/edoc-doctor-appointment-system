@@ -197,12 +197,14 @@
 <?php 
 include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/admin/components/appointments-popup.php");
 ?>
+<script src="../js/patients.js"></script>
 <script>
     var objAppoitmentData = null;
     function processDialogData (dialogData, dialogId) {
         var dData = JSON.parse(dialogData);
 
         if (dData.action === 'view') {
+            $('#files-drag-n-drop .template-copy').remove();
             $.ajax({
                 url: "apis/index.php/getAppointmentData",
                 method: "GET",
@@ -213,6 +215,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/admin/components/
                         objAppoitmentData = response.data;
                         utils.processElementLogic($(`#${dialogId}`), objAppoitmentData)
                         utils.showDialog($(`#${dialogId}`))
+
+                        showUploads(objAppoitmentData.uploads)
                     }
                 },
                 error: (xhr, textStatus, th) => {

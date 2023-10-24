@@ -115,10 +115,20 @@ class AdminController {
 
         if (is_object($appo)) {
             $response['success'] = true;
-            $response['message'] = "Appointment successfully retrieved.";
-
+            
             if ($appo->num_rows > 0) {
-                $response['data'] = $appo->fetch_assoc();
+                $row = $appo->fetch_assoc();
+                $uploads = $this->uploadsSeed->getUploadByPatientId($db, [
+                    $row['pid']
+                ]);
+
+                $row['uploads'] = [];
+                if ($uploads) {
+                    $row['uploads'] = $uploads->fetch_all(MYSQLI_ASSOC);
+                }
+                
+                $response['message'] = "Appointment successfully retrieved.";
+                $response['data'] = $row;
             } else {
                 $response['success'] = false;
                 $response['message'] = "No Appointment Matched.";
