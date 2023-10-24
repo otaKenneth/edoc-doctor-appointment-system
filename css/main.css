@@ -277,7 +277,7 @@ body{
   }
 
   .popup-content {
-    max-height: 500px; overflow-y: auto;  
+    max-height: 435px; overflow-y: auto;  
   }
 
   .popup-footer {
@@ -730,4 +730,97 @@ span.required {
   background-repeat: no-repeat;
   background-size: 15px;
   background-position-y: center;
+}
+
+.container-drag-n-drop {
+  padding: 13px 8px;
+  width: 90%;
+  border: dashed #74C5C5;
+}
+
+.content-drag-n-drop {
+  height: auto;
+  display: flex;
+}
+
+.clickable-drag-n-drop {
+  width: 140px; height: 145px;
+  border: dashed #0A76D8;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.clickable-drag-n-drop:hover{
+  background-color: #e7e5e5;
+}
+
+.clickable-drag-n-drop > label {
+  text-align: center; display: flex; flex-direction: column;
+  font-size: large;
+  font-weight: 600;
+}
+
+#files-drag-n-drop {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#files-drag-n-drop .fileuploaded {
+  position: relative;
+  width: 140px;
+  height: 145px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left: 15px;
+  margin-bottom: 15px;  
+  transition: background 0.3s;
+}
+
+.fileuploaded .link-fileuploaded {
+  height: 100%; width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.fileuploaded:hover {
+  background: #f0f0f0; /* Background color on hover */
+}
+
+.fileuploaded:hover .delete-button{
+  display: block;
+}
+
+.fileuploaded.pdf {
+  border: #d30e00 solid 0.8px;
+}
+
+.fileuploaded.img {
+  border: #1b62b3 solid 0.8px;
+}
+
+.delete-button {
+  display: none;
+  position: absolute;
+  top: -15px;
+  right: -14px;
+  cursor: pointer;
+  padding: 5px;
+  background: #7f7f7f;
+  border-radius: 50%;
+  padding-right: 7px;
+  padding-left: 7px;
+}
+
+.delete-button img {
+  width: 24px; /* Adjust the width and height to fit your image size */
+  height: 24px;
+}
+
+.delete-button:hover {
+  background-color: #ff0000; /* Red background on hover */
 }
