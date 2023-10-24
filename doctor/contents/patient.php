@@ -126,11 +126,13 @@ $result = $response['success'] ? $response['data']:[];
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components/patients-popup.php");
 ?>
+<script src="../js/patients.js"></script>
 <script>
     function processDialogData (dialogData, dialogId) {
         var dData = JSON.parse(dialogData);
 
         if (dData.action === 'view') {
+            $('#files-drag-n-drop .template-copy').remove();
             $.ajax({
                 url: "apis/index.php/getDoctorPatient",
                 method: "GET",
@@ -141,6 +143,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/doctor/components
                         var data = response.data;
                         utils.processElementLogic($(`#${dialogId}`), data)
                         utils.showDialog($(`#${dialogId}`))
+                        showUploads(data.uploads)
                     }
                 },
                 error: (xhr, textStatus, th) => {
