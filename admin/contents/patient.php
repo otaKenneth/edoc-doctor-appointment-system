@@ -102,8 +102,10 @@
 <script>
     function processDialogData (dialogData, dialogId) {
         var dData = JSON.parse(dialogData);
+        $(`#${dialogId}`).attr('data-id', dData.id)
 
         if (dData.action === 'view') {
+            $('#files-drag-n-drop .template-copy').remove();
             $.ajax({
                 url: "apis/index.php/getPatientData",
                 method: "GET",
@@ -114,6 +116,9 @@
                         var data = response.data;
                         utils.processElementLogic($(`#${dialogId}`), data);
                         utils.showDialog($(`#${dialogId}`))
+
+                        var uploads = data.uploads;
+                        showUploads(uploads)
                     }
                 },
                 error: (xhr, textStatus, th) => {
@@ -124,5 +129,38 @@
                 }
             })
         }
+    }
+
+    function showUploads (data) {
+        var $imgTemplateEl = $('#files-drag-n-drop #img-template');
+        var $pdfTemplateEl = $('#files-drag-n-drop #pdf-template');
+
+        let loc = location;
+        let cur_loc = `${loc.protocol}//${loc.hostname}/book-a-consultation/`;
+
+        data.forEach((file, k) => {
+            if (file['type'] === "pdf") {
+                let $clone = $pdfTemplateEl.clone();
+                $clone.removeClass('hidden');
+                $clone.addClass('template-copy');
+                $clone.removeAttr('id');
+                $clone.attr('filekey', file['id']);
+                $clone.find('.container-link-fileupload').attr('href', cur_loc+file['location']);
+                $clone.find('.filename').text(file['filename']);
+                // Display the PDF file as a link
+                $("#files-drag-n-drop").append($clone);
+            } else if (file['type'] === "image") {
+                let $clone = $imgTemplateEl.clone();
+                $clone.removeClass('hidden');
+                $clone.addClass('template-copy');
+                $clone.removeAttr('id');
+                $clone.attr('filekey', file['id']);
+                $clone.find('.container-link-fileupload').attr('href', cur_loc+file['location']);
+                $clone.find('.link-fileuploaded img').attr('src', cur_loc+file['location']);
+                $clone.find('.filename').text(file['filename']);
+                // Display the image as a preview
+                $("#files-drag-n-drop").append($clone);
+            }
+        })
     }
 </script>
