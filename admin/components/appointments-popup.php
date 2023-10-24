@@ -221,6 +221,32 @@
                     </table>
                 </div>
                 </form>
+                <div class="container-drag-n-drop">
+                    <div class="content-drag-n-drop">
+                        <div id="files-drag-n-drop">
+                            <!-- image -->
+                            <div id="img-template" class="fileuploaded img hidden">
+                                <a href="" target="_blank" class="container-link-fileupload" style="height: 100%; width: 100%;">
+                                    <div class="link-fileuploaded">
+                                        <img style="width: 100%; height: 100%;" src="" alt="Preview">
+                                        <span class="filename"></span>
+                                    </div>
+                                </a>
+                            </div>
+                            <!-- file -->
+                            <div id="pdf-template" class="fileuploaded pdf hidden">
+                                <a href="" target="_blank" class="container-link-fileupload" style="height: 100%; width: 100%;">
+                                    <div class="link-fileuploaded">
+                                        <img src="../img/icons/pdf-red.svg" alt="" 
+                                            style="height: 40px;"
+                                        >
+                                        <span class="filename"></span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </center>
         <div class="popup-footer">

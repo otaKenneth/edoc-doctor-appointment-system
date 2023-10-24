@@ -2,7 +2,7 @@
 
 class DoctorController {
 
-    protected $patientSeed, $doctorSeed, $consultationSeed, $scheduleSeed, $appointmentSeed;
+    protected $patientSeed, $doctorSeed, $consultationSeed, $scheduleSeed, $appointmentSeed, $uploadsSeed;
 
     public function __construct() {
         $this->patientSeed = new PatientModel;
@@ -10,6 +10,7 @@ class DoctorController {
         $this->consultationSeed = new ConsultationsModel;
         $this->scheduleSeed = new ScheduleModel;
         $this->appointmentSeed = new AppointmentModel;
+        $this->uploadsSeed = new UploadsModel;
     }
 
     function getDoctor($db, $args = []) {
@@ -49,6 +50,14 @@ class DoctorController {
             $response['success'] = true;
             $response['message'] = "Patient Found.";
             $row = $patient->fetch_assoc();
+
+            $row['uploads'] = [];
+            $uploads = $this->uploadsSeed->getUploadByPatientId($db, [
+                $row['pid']
+            ]);
+            if ($uploads) {
+                $row['uploads'] = $uploads->fetch_all(MYSQLI_ASSOC);
+            }
 
             $dob=$row["pdob"];
             // Convert $dob to a DateTime object
