@@ -524,9 +524,11 @@ class AdminController {
                 // Define a target directory where you want to save the files
                 $target_directory = '../../app/uploads/';
 
+                $extension = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+                $new_filename = md5($file_name) . ".{$extension}";
                 // Create the target path (directory + filename)
-                $target_path = $target_directory . $file_name;
-                $db_file_path = "app/uploads/" . $file_name;
+                $target_path = $target_directory . $new_filename;
+                $db_file_path = "app/uploads/" . $new_filename;
 
                 // Move the file to the target path
                 move_uploaded_file($file_tmp, $target_path);
