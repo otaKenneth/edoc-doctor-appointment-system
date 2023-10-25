@@ -15,7 +15,14 @@
     }
 
     header('Content-Type: application/json');
-    $result = $c_admin->{$clean_uri}($database, $input);
+    try {
+        $result = $c_admin->{$clean_uri}($database, $input);
+    } catch (\Throwable $th) {
+        $result = [
+            'success' => false,
+            'message' => $th->getMessage(),
+        ];
+    }
 
     if (!$result['success']) {
         http_response_code(400);
