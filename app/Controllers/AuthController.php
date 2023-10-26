@@ -120,7 +120,9 @@ class AuthController {
                         ]);
                         break;
                     case 'p':
-                        # code...
+                        $result = $this->patientSeed->getPatientByEmail($db, [
+                            $useremail
+                        ]);
                         break;
                 }
             }

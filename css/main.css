@@ -216,7 +216,7 @@ body{
 .abc{
   width: 100%;
   height: auto;
-  max-height: 400px;
+  max-height: 65vh;
   overflow: auto;
 }
 

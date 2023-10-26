@@ -34,6 +34,16 @@ if (strpos($request_uri, "doctor/") > -1) {
         'admin/patient.php' => 'contents/patient.php',
         // Add more routes as needed
     ]);
+} elseif (strpos($request_uri, 'patient') > -1) {
+    $include_dir = "patient/";
+
+    $routes = array_merge($routes, [
+        'patient/index.php' => 'dashboard.php',
+        'patient/doctors.php' => 'contents/doctors.php',
+        'patient/schedule.php' => 'contents/schedule.php',
+        'patient/appointment.php' => 'contents/appointment.php',
+        'patient/settings.php' => 'contents/settings.php',
+    ]);
 }
 
 // Check if the requested URL is in the mapping

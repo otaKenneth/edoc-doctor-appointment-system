@@ -51,7 +51,7 @@
 </head>
 <body>
     <div class="container">
-    <div class="menu">
+        <div class="menu">
             <table class="menu-container" border="0">
                 <tr>
                     <td style="padding:10px" colspan="2">
@@ -110,18 +110,15 @@
                             placeholder="Search Doctor name or Email" list="doctors">&nbsp;&nbsp;
     
                             <datalist id="doctors">
-                        <?php
-                        $list11 = $database->query("select  pname,pemail from patient;");
-                        $list11 = $database->query("select docname, docemail from doctor;");
-    
-                        foreach ($admin_cache_data['search_options'] as $row00) {
-                            $d = $row00["name"];
-                            $c = $row00["email"];
-                        ?>
-                            <option value='<?=$d?>'><?=$d?></option>
-                            <option value='<?=$c?>'><?=$c?></option>
-                        <?php }; ?>
-                        </datalist>
+                            <?php
+                            foreach ($admin_cache_data['search_options'] as $row00) {
+                                $d = $row00["name"];
+                                $c = $row00["email"];
+                            ?>
+                                <option value='<?=$d?>'><?=$d?></option>
+                                <option value='<?=$c?>'><?=$c?></option>
+                            <?php } ?>
+                            </datalist>
                         <input type="Submit" value="Search" class="login-btn btn-primary btn"
                             style="padding-left: 25px;padding-right: 25px;padding-top: 10px;padding-bottom: 10px;">
                     </form>
