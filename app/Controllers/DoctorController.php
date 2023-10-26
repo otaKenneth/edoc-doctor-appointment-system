@@ -115,7 +115,7 @@ class DoctorController {
             ];
         }
 
-        $schedule = $this->scheduleSeed->getSchedules($db, [
+        $schedule = $this->scheduleSeed->getSchedulesByDoctorId($db, [
             $userid
         ], $filter);
 

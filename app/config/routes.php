@@ -41,4 +41,24 @@ $active_uri = [
         'bc' => 'Patients',
         'link' => 'patient.php'
     ],
+    'patient/index.php' => [
+        'bc' => 'Home',
+        'link' => 'index.php'
+    ],
+    'patient/doctors.php' => [
+        'bc'=> 'Doctors',
+        'link'=> 'doctors.php'
+    ],
+    'patient/schedule.php' => [
+        'bc'=> 'Scheduled Sessions',
+        'link'=> 'schedule.php'
+    ],
+    'patient/appointment.php' => [
+        'bc'=> 'My Bookings',
+        'link'=> 'appointment.php'
+    ],
+    'patient/settings.php' => [
+        'bc'=> 'Settings',
+        'link'=> 'settings.php'
+    ],
 ];

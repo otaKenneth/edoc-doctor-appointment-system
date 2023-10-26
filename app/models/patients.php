@@ -32,6 +32,21 @@ class PatientModel extends Model{
         }
     }
 
+    public function getPatientByEmail($database, $args = []) {
+        try {
+            $query = "SELECT * FROM patient WHERE pemail = ?";
+
+            $result = $this->run($database, $query, $args);
+            if ($result) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
     public function getPatientByEmailPass ($db, $args = []) {
         try {
             $query = "SELECT * FROM patient WHERE pemail = ? AND ppassword = ?";

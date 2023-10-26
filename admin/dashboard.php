@@ -80,12 +80,6 @@
         </center>
     </td>
 </tr>
-
-
-
-
-
-
 <tr>
     <td colspan="4">
         <table width="100%" border="0" class="dashbord-tables">
