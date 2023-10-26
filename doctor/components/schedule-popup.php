@@ -3,7 +3,7 @@
         <center>
             <a class="close popup-closer" href="#">&times;</a>
             <div style="display: flex;justify-content: center;">
-                <div class="abc">
+                <div class="popup-content">
                     <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
                         <tr>
                             <td class="label-td" colspan="2"></td>
@@ -134,7 +134,7 @@
             <div class="content">
                 <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">Schedule Details</p>
             </div>
-            <div class="abc has-logic scroll" style="display: flex;justify-content: center;" logic-key="schedule_data">
+            <div class="popup-content has-logic scroll" style="display: flex;justify-content: center;" logic-key="schedule_data">
                 <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
                     <tr>
                         <td class="label-td" colspan="2">
@@ -178,7 +178,7 @@
                     <tr>
                         <td colspan="4">
                             <center>
-                                <div id="patients" class="abc scroll">
+                                <div id="patients" class="popup-content scroll">
                                     <table width="100%" class="sub-table scrolldown" border="0">
                                         <thead>
                                             <tr>

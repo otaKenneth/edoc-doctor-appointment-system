@@ -4,7 +4,11 @@ var active_icon_classes = {
     "Appointments": "menu-active menu-icon-appoinment-active",
     "Sessions": "menu-active menu-icon-session-active",
     "Schedule": "menu-active menu-icon-schedule-active",
-    "Patients": "menu-active menu-icon-patient-active"
+    "Patients": "menu-active menu-icon-patient-active",
+    "Home": "menu-active menu-icon-home-active",
+    "Scheduled Sessions": "menu-active menu-icon-patient-active",
+    "My Bookings": "menu-active menu-icon-appoinment-active",
+    "Settings": "menu-active menu-icon-patient-active",
 };
 const form = {
     'id': '',

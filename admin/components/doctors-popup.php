@@ -6,7 +6,7 @@
                 <a class="close popup-closer" href="#">&times;</a> 
             </div>
             <div style="display: flex;justify-content: center;">
-                <div class="abc">
+                <div class="popup-content">
                     <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
                         <tr>
                             <form id="add-new-doctor" method="POST" class="add-new-form">

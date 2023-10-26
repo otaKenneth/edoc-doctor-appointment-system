@@ -19,7 +19,7 @@ class ScheduleModel extends Model {
         }
     }
 
-    public function getSchedules($db, $args = [], $filter = []) {
+    public function getSchedulesByDoctorId($db, $args = [], $filter = []) {
         try {
             $query = "SELECT 
                     schedule.docid,
@@ -99,6 +99,53 @@ class ScheduleModel extends Model {
             $query = "SELECT * FROM schedule WHERE scheduledate=? AND docid = ?";
             
             $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
+    public function getScheduleByPatientId($db, $args = [], $filter = []) {
+        try {
+            $select = "*";
+            if (isset($args['select'])) {
+                $select = implode(",", $args['select']);
+            }
+
+            $query_args = $args['args'];
+
+            $query = "SELECT {$select} FROM schedule 
+                    INNER JOIN appointment ON schedule.scheduleid=appointment.scheduleid 
+                    INNER JOIN patient ON patient.pid=appointment.pid 
+                    INNER JOIN doctor ON schedule.docid=doctor.docid  
+                    WHERE patient.pid = ? AND appointment.cancelled = 0 ";
+            
+            foreach ($filter as $key => $arVal) {
+                $value = $arVal['value'];
+
+                if (is_numeric($key)) {
+                    $query .= " AND " . $arVal['q'];
+                } else {
+                    $condition = $arVal['condition'];
+                    $query .= " AND {$key} {$condition} ?";
+                }
+
+                if (isset($arVal['count'])) {
+                    for ($i = 0; $i < $arVal['count']; $i++) {
+                        $query_args[] = $value;
+                    }
+                } else {
+                    $query_args[] = $value;
+                }
+
+            }
+
+            $query .= " ORDER BY schedule.scheduledate ASC";
+            $result = $this->run($db, $query, $query_args);
             if ($result) {
                 return $result->get_result();
             } else {
