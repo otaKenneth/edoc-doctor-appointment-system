@@ -27,7 +27,7 @@ if ($_GET) {
                                     $docemail=$row["docemail"];
                                     $scheduledate=$row["scheduledate"];
                                     $scheduletime=$row["scheduletime"];
-                                    $apponum = $row["new_apponum"];
+                                    $apponum = $row["apponum"];
                                     ?>
                                 <form action="booking-complete.php" method="post">
                                     <input type="hidden" name="scheduleid" value="<?=$scheduleid?>" >

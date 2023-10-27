@@ -111,17 +111,6 @@ class ScheduleController {
 
             if ($schedules->num_rows > 0) {
                 $sched_data = $schedules->fetch_assoc();
-
-                $pregs = $this->appointmentSeed->getLastAppointmentBySched($db, [
-                    $sched_data['scheduleid']
-                ]);
-
-                if (is_object($pregs)) {
-                    $t_appos = $pregs->fetch_assoc();
-                    $sched_data['new_apponum'] = $t_appos['apponum'] + 1;
-                } else {
-                    $sched_data['new_apponum'] = 1;
-                }
                 $response['data'] = $sched_data;
             } else {
                 $response['success'] = false;

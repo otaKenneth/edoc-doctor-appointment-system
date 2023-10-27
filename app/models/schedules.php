@@ -64,9 +64,18 @@ class ScheduleModel extends Model {
                         schedule.scheduledate,
                         schedule.scheduletime,
                         schedule.nop,
-                        doctor.*
+                        doctor.*,
+                        CASE 
+                            WHEN appo.apponum IS NULL THEN 1
+                            ELSE appo.apponum
+                        END as apponum
                     FROM schedule 
                     INNER JOIN doctor ON schedule.docid=doctor.docid  
+                    LEFT JOIN (
+                        SELECT scheduleid, MAX(apponum) AS apponum FROM appointment 
+                        WHERE cancelled = 0 
+                        GROUP BY scheduleid
+                    ) AS appo ON appo.scheduleid = schedule.scheduleid
                     WHERE schedule.scheduleid=?";
             
             $result = $this->run($db, $query, $args);
@@ -163,9 +172,21 @@ class ScheduleModel extends Model {
 
             $query_args = $args['args'];
 
-            $query = "SELECT * FROM schedule 
+            $query = "SELECT
+                        schedule.*,
+                        doctor.*,
+                        CASE
+                            WHEN appo.apponum IS NULL THEN 1
+                            ELSE appo.apponum
+                        END AS apponum
+                    FROM schedule 
                     INNER JOIN doctor ON schedule.docid=doctor.docid
-                    WHERE scheduleid IS NOT NULL ";
+                    LEFT JOIN (
+                        SELECT scheduleid, MAX(apponum) AS apponum FROM appointment 
+                        WHERE cancelled = 0 
+                        GROUP BY scheduleid
+                    ) AS appo ON appo.scheduleid = schedule.scheduleid
+                    WHERE schedule.scheduleid IS NOT NULL ";
             
             foreach ($filter as $key => $arVal) {
                 $value = $arVal['value'];
