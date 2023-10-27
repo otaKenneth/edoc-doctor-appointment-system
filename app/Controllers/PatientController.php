@@ -82,9 +82,9 @@ class PatientController {
 
         if (isset($search)) {
             $filter[0] = [
-                'q' => "(doctor.docname LIKE ? OR schedule.title LIKE ? OR schedule.scheduledate LIKE ?)",
+                'q' => "(doctor.docname LIKE ? OR doctor.docemail LIKE ? OR schedule.title LIKE ? OR schedule.scheduledate LIKE ?)",
                 'value' => "%{$search}%",
-                'count' => 3
+                'count' => 4
             ];
         }
 
