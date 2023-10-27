@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('Asia/Kolkata');
+$today = date('Y-m-d');
 
 if ($_GET) {
     if(isset($_GET["id"])){
@@ -10,12 +12,12 @@ if ($_GET) {
     }
 }
 ?>
-<table border="0" width="100%" style=" border-spacing: 0;margin:0;padding:0;margin-top:25px; ">
+<table border="0" width="100%" style=" border-spacing: 0;margin:0;padding:0;">
     <tr>
         <td colspan="4">
             <center>
                 <div class="abc scroll">
-                    <table width="100%" class="sub-table scrolldown" border="0" style="padding: 50px;border:none">
+                    <table width="100%" class="sub-table scrolldown" border="0" style="padding: 10px 40px;border:none">
                         <tbody>
                             <tr>
                                 <?php
@@ -29,7 +31,8 @@ if ($_GET) {
                                     $scheduletime=$row["scheduletime"];
                                     $apponum = $row["apponum"];
                                     ?>
-                                <form action="booking-complete.php" method="post">
+                                <form id="complete-booking" method="post">
+                                    <input type="hidden" name="pid" value="<?=$user['pid']?>" >
                                     <input type="hidden" name="scheduleid" value="<?=$scheduleid?>" >
                                     <input type="hidden" name="apponum" value="<?=$apponum?>" >
                                     <input type="hidden" name="date" value="<?=$today?>" >
@@ -40,7 +43,11 @@ if ($_GET) {
                                         <div style="width:100%">
                                                 <div class="h1-search" style="font-size:25px;">
                                                     Session Details
-                                                </div><br><br>
+                                                </div>
+                                                <div class="h2-search">
+                                                    <div>How do you feel?</div>
+                                                    <textarea name="feel" id="feel" cols="30" rows="5" class="input-text" placeholder="I feel stomach ache..."></textarea>
+                                                </div>
                                                 <div class="h3-search" style="font-size:18px;line-height:30px">
                                                     Doctor name:  &nbsp;&nbsp;<b><?=$docname?></b><br>
                                                     Doctor Email:  &nbsp;&nbsp;<b><?=$docemail?></b> 
@@ -91,3 +98,34 @@ if ($_GET) {
         </td> 
     </tr>                
 </table>
+<script>
+    $(document).ready(() => {
+        $('form#complete-booking').on('submit', (ev) => {
+            ev.preventDefault();
+            var form_data = utils.serializeArrayToJSON($(ev.currentTarget).serializeArray());
+
+            $.ajax({
+                url: "apis/index.php/Patient/booknow",
+                method: "POST",
+                data: form_data,
+                contentType: "application/json",
+                success: (response) => {
+                    if (response.success) {
+                        var dialog = $(this).closest('.overlay')
+                        $(dialog).removeClass('popup-open');
+                        $(dialog).addClass('popup-closed');
+                        showSuccessToast(response.message)
+                        utils.pageReload(4500)
+                    }
+                },
+                error: (xhr, textStatus, th) => {
+                    // Handle error response
+                    console.error('Error message: ' + xhr.statusText);
+                    let response = JSON.parse(xhr.responseText);
+                    console.log(typeof(response.message))
+                    showErrorToast(response.message)
+                }
+            })
+        })
+    })
+</script>

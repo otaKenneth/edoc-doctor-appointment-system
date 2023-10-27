@@ -145,6 +145,7 @@
 <script src="../js/toaster.js"></script>
 <script src="../js/utilities.js"></script>
 <script>
+    var myid = <?=$user['pid']?>;
     var active_uri = "<?=$active_uri[$clean_uri]['bc']?>";
     console.log(active_uri)
 </script>

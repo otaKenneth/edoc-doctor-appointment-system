@@ -1,11 +1,12 @@
 <?php   
 class PatientController {
 
-    protected $patientSeed, $doctorSeed, $scheduleSeed;
+    protected $patientSeed, $doctorSeed, $scheduleSeed, $appointmentSeed;
     public function __construct() {
         $this->patientSeed = new PatientModel();
         $this->doctorSeed = new DoctorModel();
         $this->scheduleSeed = new ScheduleModel();
+        $this->appointmentSeed = new AppointmentModel();
     }
 
     public function getPatientDefault($db, $args = []) {
@@ -113,6 +114,26 @@ class PatientController {
         return $response;
     }
 
+    public function booknow($db, $args = []) {
+        extract($args);
+        $response = [
+            'success'=> false,
+            'message'=> 'Error: Something went wrong. Please contact your administrator.'
+        ];
 
+        $appointment = $this->appointmentSeed->create($db, [
+            $pid, $scheduleid, $date
+        ]);
+
+        $apponum +=1;
+        if (!is_string($appointment)) {
+            $response['success'] = true;
+            $response['message'] = "Your appointment number is {$apponum}";
+        } else {
+            $response['message'] = $appointment;
+        }
+        
+        return $response;
+    }
 }
 ?>
