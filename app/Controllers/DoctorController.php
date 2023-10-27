@@ -311,4 +311,32 @@ class DoctorController {
 
         return $response;
     }
+
+    public function getDoctorData ($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => "Error: Something went wrong. Contact your Administrator."
+        ];
+
+        $doctor = $this->doctorSeed->getDoctorById($db, [
+            $id
+        ]);
+
+        if (is_object($doctor)) {
+            $response['success'] = true;
+            $response['message'] = "Doctor successfully retrieved.";
+
+            if ($doctor->num_rows > 0) {
+                $response['data'] = $doctor->fetch_assoc();
+            } else {
+                $response['success'] = false;
+                $response['message'] = "No Doctor Matched.";
+            }
+        } else {
+            $response['message'] = $doctor;
+        }
+
+        return $response;
+    }
 }

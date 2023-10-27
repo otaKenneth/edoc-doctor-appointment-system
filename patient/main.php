@@ -1,9 +1,8 @@
 <?php
     include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/AuthController.php");
-    include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/PatientController.php");
+    include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/Controller.php");
     
     $auth = new AuthController;
-    $c_patient = new PatientController;
 
     $result = $auth->getCurrentUser($database);
     if ($result['success']) {
@@ -31,7 +30,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://eluvohealth.com/wp-content/uploads/2023/07/favicon-150x150.png" sizes="32x32">
     <link rel="stylesheet" href="../css/animations.css">  
-    <link rel="stylesheet" href="../css/main.css">  
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/toaster.css">
     <link rel="stylesheet" href="../css/admin.css">
         
     <title>Dashboard</title>

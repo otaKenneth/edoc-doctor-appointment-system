@@ -64,9 +64,28 @@
                                         <td><?=substr($spcil_name,0,20)?></td>
                                         <td>
                                             <div style="display:flex;justify-content: center;">
-                                                <a href="?action=view&id='.$docid.'" class="non-style-link"><button  class="btn-primary-soft btn button-icon btn-view"  style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;"><font class="tn-in-text">View</font></button></a>
+                                                <a href="#" popupdata-id="dialog-doctor-view"
+                                                    data='<?=json_encode([
+                                                        'action' => 'view',
+                                                        'id' => $docid
+                                                    ])?>'
+                                                    class="non-style-link table-btn popup-btn">
+                                                    <button class="btn-primary-soft btn button-icon btn-view">
+                                                        <font class="tn-in-text">View</font>
+                                                    </button>
+                                                </a>
                                                 &nbsp;&nbsp;&nbsp;
-                                                <a href="?action=session&id='.$docid.'&name='.$name.'"  class="non-style-link"><button  class="btn-primary-soft btn button-icon menu-icon-session-active"  style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;"><font class="tn-in-text">Sessions</font></button></a>
+                                                <a href="#" popupdata-id="dialog-doctor-sessionlist"
+                                                    data='<?=json_encode([
+                                                        'action'=> 'session',
+                                                        'id' => $docid,
+                                                        'name'=> $name,
+                                                    ])?>'
+                                                    class="non-style-link table-btn popup-btn">
+                                                    <button class="btn-primary-soft btn button-icon menu-icon-session-active">
+                                                        <font class="tn-in-text">Sessions</font>
+                                                    </button>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -82,3 +101,35 @@
         </td> 
     </tr>                
 </table>
+<?php include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/patient/components/doctors-popup.php"); ?>
+<script>
+    var objDoctorsData = null;
+    function processDialogData(dialogData, dialogId) {
+        var dData = JSON.parse(dialogData);
+
+        if (dData.action === 'view') {
+            $.ajax({
+                url: "apis/index.php/Doctors/getDoctorData",
+                method: "GET",
+                data: JSON.parse(dialogData),
+                contentType: "application/json",
+                success: (response) => {
+                    if (response.success) {
+                        objDoctorsData = response.data;
+                        utils.processElementLogic($(`#${dialogId}`), objDoctorsData);
+                        utils.showDialog($(`#${dialogId}`))
+                    }
+                },
+                error: (xhr, textStatus, th) => {
+                    // Handle error response
+                    console.error('Error message: ' + xhr.statusText);
+                    let response = JSON.parse(xhr.responseText);
+                    showErrorToast([response.message]);
+                }
+            })
+        } else if (dData.action === 'session') {
+            utils.processElementLogic($(`#${dialogId}`), dData);
+            utils.showDialog($(`#${dialogId}`))
+        }
+    }
+</script>

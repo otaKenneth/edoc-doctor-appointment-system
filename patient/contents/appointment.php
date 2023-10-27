@@ -104,7 +104,20 @@
                                                     Scheduled Date: <?=$scheduledate?><br>Starts: <b>@<?=substr($scheduletime,0,5)?></b> (24h)
                                                 </div>
                                                 <br>
-                                                <a href="?action=drop&id='.$appoid.'&title='.$title.'&doc='.$docname.'" ><button  class="login-btn btn-primary-soft btn "  style="padding-top:11px;padding-bottom:11px;width:100%"><font class="tn-in-text">Cancel Booking</font></button></a>
+                                                <a href="#" popupdata-id="dialog-cancel"
+                                                    class="table-btn popup-btn"
+                                                    data='<?=json_encode([
+                                                        'action' => 'drop',
+                                                        'id' => $appoid,
+                                                        'title' => $title,
+                                                        'doc' => $docname
+                                                    ])?>'
+                                                >
+                                                    <button class="login-btn btn-primary-soft btn " 
+                                                        style="padding-top:11px;padding-bottom:11px;width:100%">
+                                                        <font class="tn-in-text">Cancel Booking</font>
+                                                    </button>
+                                                </a>
                                             </div>
                                         </div>
                                     </td>
@@ -118,3 +131,15 @@
         </td> 
     </tr>
 </table>
+<?php include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/patient/components/appointments-popup.php"); ?>
+<script>
+    function processDialogData(dialogData, dialogId) {
+        var dData = JSON.parse(dialogData);
+
+        if (dData.action == 'drop') {
+            $(`#${dialogId}`).attr('data-id', dData.id);
+            utils.processElementLogic($(`#${dialogId}`), dData);
+            utils.showDialog($(`#${dialogId}`))
+        }
+    }
+</script>
