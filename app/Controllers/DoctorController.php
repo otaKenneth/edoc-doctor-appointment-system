@@ -43,7 +43,7 @@ class DoctorController {
         ];
 
         $patient = $this->patientSeed->getPatientById($db, [
-            $id
+            $schedule, $id
         ]);
 
         if (is_object($patient)) {

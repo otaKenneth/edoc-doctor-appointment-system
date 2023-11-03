@@ -74,6 +74,7 @@ $result = $response['success'] ? $response['data']:[];
                             $email=$row["pemail"];
                             $dob=$row["pdob"];
                             $tel=$row["ptel"];
+                            $scheduleid = $row['scheduleid'];
                         ?>
                         <tr>
                             <td> &nbsp;<?=substr($name,0,35)?></td>
@@ -92,6 +93,7 @@ $result = $response['success'] ? $response['data']:[];
                                       popupdata-id="popup1"
                                       data='<?=json_encode([
                                         'id' => $pid,
+                                        'schedule' => $scheduleid,
                                         'action' => 'view'
                                       ])?>'
                                       class="non-style-link table-btn popup-btn">
