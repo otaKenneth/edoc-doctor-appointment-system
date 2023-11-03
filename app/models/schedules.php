@@ -63,9 +63,19 @@ class ScheduleModel extends Model {
                         doctor.docname,
                         schedule.scheduledate,
                         schedule.scheduletime,
-                        schedule.nop 
+                        schedule.nop,
+                        doctor.*,
+                        CASE 
+                            WHEN appo.apponum IS NULL THEN 1
+                            ELSE appo.apponum
+                        END as apponum
                     FROM schedule 
                     INNER JOIN doctor ON schedule.docid=doctor.docid  
+                    LEFT JOIN (
+                        SELECT scheduleid, MAX(apponum) AS apponum FROM appointment 
+                        WHERE cancelled = 0 
+                        GROUP BY scheduleid
+                    ) AS appo ON appo.scheduleid = schedule.scheduleid
                     WHERE schedule.scheduleid=?";
             
             $result = $this->run($db, $query, $args);
@@ -123,6 +133,60 @@ class ScheduleModel extends Model {
                     INNER JOIN patient ON patient.pid=appointment.pid 
                     INNER JOIN doctor ON schedule.docid=doctor.docid  
                     WHERE patient.pid = ? AND appointment.cancelled = 0 ";
+            
+            foreach ($filter as $key => $arVal) {
+                $value = $arVal['value'];
+
+                if (is_numeric($key)) {
+                    $query .= " AND " . $arVal['q'];
+                } else {
+                    $condition = $arVal['condition'];
+                    $query .= " AND {$key} {$condition} ?";
+                }
+
+                if (isset($arVal['count'])) {
+                    for ($i = 0; $i < $arVal['count']; $i++) {
+                        $query_args[] = $value;
+                    }
+                } else {
+                    $query_args[] = $value;
+                }
+
+            }
+
+            $query .= " ORDER BY schedule.scheduledate ASC";
+            $result = $this->run($db, $query, $query_args);
+            if ($result) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
+    public function getAllSessions($db, $args = [], $filter = []) {
+        try {
+            $select = "*";
+
+            $query_args = $args['args'];
+
+            $query = "SELECT
+                        schedule.*,
+                        doctor.*,
+                        CASE
+                            WHEN appo.apponum IS NULL THEN 1
+                            ELSE appo.apponum
+                        END AS apponum
+                    FROM schedule 
+                    INNER JOIN doctor ON schedule.docid=doctor.docid
+                    LEFT JOIN (
+                        SELECT scheduleid, MAX(apponum) AS apponum FROM appointment 
+                        WHERE cancelled = 0 
+                        GROUP BY scheduleid
+                    ) AS appo ON appo.scheduleid = schedule.scheduleid
+                    WHERE schedule.scheduleid IS NOT NULL ";
             
             foreach ($filter as $key => $arVal) {
                 $value = $arVal['value'];

@@ -42,9 +42,9 @@ body{
     background: #555; 
   }
 
-
-
-
+textarea {
+  resize: none;
+}
 
 .input-text{
     border-radius: 4px;
@@ -216,7 +216,7 @@ body{
 .abc{
   width: 100%;
   height: auto;
-  max-height: 65vh;
+  max-height: 80vh;
   overflow: auto;
 }
 

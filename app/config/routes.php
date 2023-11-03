@@ -53,6 +53,10 @@ $active_uri = [
         'bc'=> 'Scheduled Sessions',
         'link'=> 'schedule.php'
     ],
+    'patient/booking.php' => [
+        'bc'=> 'Booking',
+        'link'=> 'booking.php'
+    ],
     'patient/appointment.php' => [
         'bc'=> 'My Bookings',
         'link'=> 'appointment.php'

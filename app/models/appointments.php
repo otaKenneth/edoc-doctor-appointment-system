@@ -169,4 +169,19 @@ class AppointmentModel extends Model {
         }
     }
 
+    public function getLastAppointmentBySched($db, $args = []) {
+        try {
+            $query = "SELECT * FROM appointment WHERE scheduleid = ? ORDER BY apponum DESC LIMIT 1";
+
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return true;
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
 }
