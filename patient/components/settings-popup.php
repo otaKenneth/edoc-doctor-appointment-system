@@ -48,7 +48,7 @@
                             eDoc Web App<br>
                             
                         </div>
-                        <div style="display: flex;justify-content: center;">
+                        <div class="popup-content" style="display: flex;justify-content: center;">
                         <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
                         
                             <tr>
@@ -159,7 +159,7 @@
                             
                                 <a class="close" href="settings.php">&times;</a> 
                                 <div style="display: flex;justify-content: center;">
-                                <div class="abc">
+                                <div class="popup-content">
                                 <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
                                 <tr>
                                         <td class="label-td" colspan="2">'.
