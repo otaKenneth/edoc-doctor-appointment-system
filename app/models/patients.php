@@ -68,7 +68,10 @@ class PatientModel extends Model{
 
     public function getPatientById($db, $args = []) {
         try {
-            $query = "SELECT * FROM patient WHERE pid = ?";
+            $query = "SELECT patient.*, schedule.*, d.docname FROM patient 
+                    INNER JOIN schedule ON schedule.scheduleid = ?
+                    LEFT JOIN doctor AS d ON d.docid = schedule.docid
+                    WHERE pid = ?";
 
             $result = $this->run($db, $query, $args);
             if ($result) {
