@@ -52,8 +52,38 @@
                             <td class="label-td value-td" data-value="age"></td>
                         </tr>
                         <tr>
+                            <td colspan="3"><br></td>
+                        </tr>
+                        <tr>
                             <td class="label-td">
-                                <br>
+                                <label for="name" class="form-label">Date of Care: </label>
+                            </td>
+                            <td class="label-td value-td" data-value="scheduledate"></td>
+                            <td class="label-td value-td" data-value="scheduletime"></td>
+                        </tr>
+                        <tr>
+                            <td class="label-td">
+                                <label for="name" class="form-label">Status: </label>
+                            </td>
+                            <td class="label-td value-td">Scheduled</td>
+                        </tr>
+                        <tr>
+                            <td class="label-td">
+                                <label for="name" class="form-label">ELUVO Specialist: </label>
+                            </td>
+                            <td class="label-td value-td" data-value="docname"></td>
+                        </tr>
+                        <tr>
+                            <td class="label-td">
+                                <label for="name" class="form-label">Chief Complaint: </label>
+                            </td>
+                            <td class="label-td value-td" data-value="chief_complaint_c"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><br></td>
+                        </tr>
+                        <tr>
+                            <td class="label-td">
                                 <label for="name" class="form-label">Files: </label>
                             </td>
                         </tr>
@@ -92,7 +122,7 @@
                         <tr>
                             <form id="patient-diagnosis-form" name="patient-diagnosis-form" method="POST">
                                 <td class="label-td" colspan="3">
-                                    <label for="name" class="form-label">Notes: </label>
+                                    <label for="name" class="form-label">ELUVO Specialist Notes: </label>
                                 </td>
                         </tr>
                         <tr>
@@ -114,7 +144,7 @@
                         </tr>
                         <tr>
                             <td class="label-td" colspan="3">
-                                <label for="name" class="form-label">Diagnostic Request: </label>
+                                <label for="name" class="form-label">History of Illness: </label>
                             </td>
                         </tr>
                         <tr>
@@ -125,7 +155,7 @@
                         </tr>
                         <tr>
                             <td class="label-td" colspan="3">
-                                <label for="name" class="form-label">Prescription: </label>
+                                <label for="name" class="form-label">Medications: </label>
                             </td>
                         </tr>
                         <tr>
@@ -136,7 +166,7 @@
                         </tr>
                         <tr>
                             <td class="label-td" colspan="3">
-                                <label for="name" class="form-label">Recommendation: </label>
+                                <label for="name" class="form-label">Recommendations: </label>
                             </td>
                         </tr>
                         <tr>
@@ -181,15 +211,15 @@
                     <p style="margin-top: 0px;" data-value="diagnosis"></p>
                 </div>
                 <div class="value">
-                    <span class="form-label">Diagnostic Request:&nbsp;</span>
+                    <span class="form-label">History of Illness:&nbsp;</span>
                     <p style="margin-top: 0px;" data-value="diagnostic_request"></p>
                 </div>
                 <div class="value">
-                    <span class="form-label">Prescription:&nbsp;</span>
+                    <span class="form-label">Medications:&nbsp;</span>
                     <p style="margin-top: 0px;" data-value="prescription"></p>
                 </div>
                 <div class="value">
-                    <span class="form-label">Recommendation:&nbsp;</span>
+                    <span class="form-label">Recommendations:&nbsp;</span>
                     <p style="margin-top: 0px;" data-value="recommendation"></p>
                 </div>
             </div>
