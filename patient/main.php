@@ -1,25 +1,25 @@
 <?php
     include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/AuthController.php");
-    include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/AdminController.php");
-
+    include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/Controllers/Controller.php");
+    
     $auth = new AuthController;
-    $c_admin = new AdminController;
 
     $result = $auth->getCurrentUser($database);
     if ($result['success']) {
         $user = $result['data'];
     }
 
-    $admin_cache = $c_admin->getAdminsDefaults($database, [
-        'uri' => $clean_uri 
+    $patient_cache = $c_patient->getPatientDefault($database, [
+        'uri' => $clean_uri,
+        'userid' => $user['pid']
     ]);
 
-    $admin_cache_data = [
+    $patient_cache_data = [
         'search_options' => [],
         'specialties' => []
     ];
-    if ($admin_cache['success']) {
-        $admin_cache_data = $admin_cache['data'];
+    if ($patient_cache['success']) {
+        $patient_cache_data = $patient_cache['data'];
     }
 ?>
 <!DOCTYPE html>
@@ -30,11 +30,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://eluvohealth.com/wp-content/uploads/2023/07/favicon-150x150.png" sizes="32x32">
     <link rel="stylesheet" href="../css/animations.css">  
-    <link rel="stylesheet" href="../css/main.css">  
-    <link rel="stylesheet" href="../css/toaster.css">  
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/toaster.css">
     <link rel="stylesheet" href="../css/admin.css">
         
-    <title>Eluvo - Admin</title>
+    <title>Dashboard</title>
     <style>
         .dashbord-tables{
             animation: transitionIn-Y-over 0.5s;
@@ -42,11 +42,11 @@
         .filter-container{
             animation: transitionIn-Y-bottom  0.5s;
         }
-        .sub-table{
+        .sub-table,.anime{
             animation: transitionIn-Y-bottom 0.5s;
         }
     </style>
-    
+
     <script src="../js/jquery-3.7.1.js"></script>
 </head>
 <body>
@@ -61,8 +61,8 @@
                                     <img src="../img/user.png" alt="" width="100%" style="border-radius:50%">
                                 </td>
                                 <td style="padding:0px;margin:0px;">
-                                    <p class="profile-title">Administrator</p>
-                                    <p class="profile-subtitle"><?=$user['aemail']?></p>
+                                    <p class="profile-title"><?php echo substr($user['pname'],0,13)  ?>..</p>
+                                    <p class="profile-subtitle"><?php echo substr($user['pemail'],0,22)  ?></p>
                                 </td>
                             </tr>
                             <tr>
@@ -70,54 +70,51 @@
                                     <a href="../logout.php" ><input type="button" value="Log out" class="logout-btn btn-primary-soft btn"></a>
                                 </td>
                             </tr>
-                    </table>
-                    </td>
-                </tr>
-                <tr class="menu-row" >
-                    <td class="menu-btn menu-icon-dashbord" link-name="Dashboard">
-                        <a href="index.php" class="non-style-link-menu "><div><p class="menu-text">Dashboard</p></div></a>
+                        </table>
                     </td>
                 </tr>
                 <tr class="menu-row">
-                    <td class="menu-btn menu-icon-doctor " link-name="Doctors">
-                        <a href="doctors.php" class="non-style-link-menu "><div><p class="menu-text">Doctors</p></div></a>
-                    </td>
-                </tr>
-                <tr class="menu-row" >
-                    <td class="menu-btn menu-icon-schedule" link-name="Schedule">
-                        <a href="schedule.php" class="non-style-link-menu"><div><p class="menu-text">Schedule</p></div></a>
+                    <td class="menu-btn menu-icon-home" link-name="Home">
+                        <a href="index.php" class="non-style-link-menu"><div><p class="menu-text">Home</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row">
-                    <td class="menu-btn menu-icon-appoinment" link-name="Appointments">
-                        <a href="appointment.php" class="non-style-link-menu"><div><p class="menu-text">Appointment</p></div></a>
+                    <td class="menu-btn menu-icon-doctor" link-name="Doctors">
+                        <a href="doctors.php" class="non-style-link-menu"><div><p class="menu-text">All Doctors</p></div></a>
+                    </td>
+                </tr>
+                
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-session" link-name="Scheduled Sessions">
+                        <a href="schedule.php" class="non-style-link-menu"><div><p class="menu-text">Scheduled Sessions</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row" >
-                    <td class="menu-btn menu-icon-patient" link-name="Patients">
-                        <a href="patient.php" class="non-style-link-menu"><div><p class="menu-text">Patients</p></div></a>
+                    <td class="menu-btn menu-icon-appoinment" link-name="My Bookings">
+                        <a href="appointment.php" class="non-style-link-menu"><div><p class="menu-text">My Bookings</p></div></a>
+                    </td>
+                </tr>
+                <tr class="menu-row" >
+                    <td class="menu-btn menu-icon-settings" link-name="Settings">
+                        <a href="settings.php" class="non-style-link-menu"><div><p class="menu-text">Settings</p></div></a>
                     </td>
                 </tr>
             </table>
         </div>
-
-        <div class="dash-body" style="margin-top: 15px">
+        <div class="dash-body" style="max-height: 100%; overflow-y: auto;">
             <div id="dash-body-header" style="display: flex; justify-content: space-between; margin-top: 15px; padding-right: 30px;">
                 <div><p style="font-size: 23px;padding-left:12px;font-weight: 600;margin-left:20px;"><?=$active_uri[$clean_uri]['bc']?></p></div>
                 <div class="search-bar" style="display: flex; align-items: center; width: 50%;">
                     <form action="" method="post" class="header-search">
                         <input type="search" name="search" class="input-text header-searchbar"
-                            placeholder="Search Doctor name or Email" list="doctors">&nbsp;&nbsp;
-    
-                            <datalist id="doctors">
+                            placeholder="Search Doctor name / Email / Date (YYYY-MM-DD)" list="mainsearchbox">
+                            <datalist id="mainsearchbox">
                             <?php
-                            foreach ($admin_cache_data['search_options'] as $row00) {
-                                $d = $row00["name"];
-                                $c = $row00["email"];
+                            foreach ($patient_cache_data['search_options'] as $row00) {
+                                $d = $row00["value"];
                             ?>
-                                <option value='<?=$d?>'><?=$d?></option>
-                                <option value='<?=$c?>'><?=$c?></option>
-                            <?php } ?>
+                                <option value='<?=$d?>'>
+                            <?php }; ?>
                             </datalist>
                         <input type="Submit" value="Search" class="login-btn btn-primary btn"
                             style="padding-left: 25px;padding-right: 25px;padding-top: 10px;padding-bottom: 10px;">
@@ -131,7 +128,6 @@
                         <p class="heading-sub12" style="padding: 0;margin: 0;">
                             <?php 
                                 date_default_timezone_set('Asia/Kolkata');
-    
                                 $date = date('Y-m-d');
                                 echo $date;
                             ?>
@@ -144,13 +140,14 @@
                 <?php include_once($routes[$clean_uri]); ?>
             </div>
         </div>
-        <div class="footer"></div>
     </div>
 </body>
 <script src="../js/toaster.js"></script>
 <script src="../js/utilities.js"></script>
 <script>
-    var active_uri = "<?=$active_uri[$clean_uri]['bc']?>"
+    var myid = <?=$user['pid']?>;
+    var active_uri = "<?=$active_uri[$clean_uri]['bc']?>";
+    console.log(active_uri)
 </script>
 <script src="../js/main.js"></script>
 </html>

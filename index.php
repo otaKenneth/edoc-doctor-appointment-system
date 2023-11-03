@@ -4,7 +4,7 @@ include("connection.php");
 include($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/app/models/Model.php");
 
 // Get the requested URL path
-$request_uri = $_SERVER['REQUEST_URI'];
+$request_uri = explode("?", $_SERVER['REQUEST_URI'])[0];
 $base_url = '/book-a-consultation/';
 $clean_uri = str_replace($base_url, '', $request_uri);
 
@@ -33,6 +33,17 @@ if (strpos($request_uri, "doctor/") > -1) {
         'admin/doctors.php' => 'contents/doctors.php',
         'admin/patient.php' => 'contents/patient.php',
         // Add more routes as needed
+    ]);
+} elseif (strpos($request_uri, 'patient') > -1) {
+    $include_dir = "patient/";
+
+    $routes = array_merge($routes, [
+        'patient/index.php' => 'dashboard.php',
+        'patient/doctors.php' => 'contents/doctors.php',
+        'patient/schedule.php' => 'contents/schedule.php',
+        'patient/booking.php' => 'contents/booking.php',
+        'patient/appointment.php' => 'contents/appointment.php',
+        'patient/settings.php' => 'contents/settings.php',
     ]);
 }
 
