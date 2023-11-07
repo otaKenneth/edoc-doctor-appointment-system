@@ -1,12 +1,4 @@
-<table border="0" width="100%" style=" border-spacing: 0;margin:0;padding:0;">
-    <tr>
-        <td colspan="4" style="padding-top:10px;">
-            <p class="heading-main12" style="margin-left: 45px;font-size:18px;color:rgb(49, 49, 49)">
-                All Patients (<?php echo $list11->num_rows; ?>)
-            </p>
-        </td>
-    </tr>
-    <?php
+<?php
     if ($_POST) {
         $keyword = $_POST["search"];
 
@@ -14,7 +6,17 @@
     } else {
         $sqlmain = "select * from patient order by pid desc";
     }
-    ?>
+
+    $result = $database->query($sqlmain);
+?>
+<table border="0" width="100%" style=" border-spacing: 0;margin:0;padding:0;">
+    <tr>
+        <td colspan="4" style="padding-top:10px;">
+            <p class="heading-main12" style="margin-left: 45px;font-size:18px;color:rgb(49, 49, 49)">
+                All Patients (<?php echo $result->num_rows; ?>)
+            </p>
+        </td>
+    </tr>
     <tr>
         <td colspan="4">
             <center>
@@ -33,7 +35,6 @@
                         </thead>
                         <tbody>
                             <?php
-                            $result = $database->query($sqlmain);
 
                             if ($result->num_rows == 0) { ?>
                                 <tr>
