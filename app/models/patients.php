@@ -66,11 +66,27 @@ class PatientModel extends Model{
         }
     }
 
-    public function getPatientById($db, $args = []) {
+    public function getPatientBySchedAndPid ($db, $args = []) {
         try {
             $query = "SELECT patient.*, schedule.*, d.docname FROM patient 
                     INNER JOIN schedule ON schedule.scheduleid = ?
                     LEFT JOIN doctor AS d ON d.docid = schedule.docid
+                    WHERE pid = ?";
+
+            $result = $this->run($db, $query, $args);
+            if ($result) {
+                return $result->get_result();
+            } else {
+                return $result->error;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
+    public function getPatientById($db, $args = []) {
+        try {
+            $query = "SELECT * FROM patient 
                     WHERE pid = ?";
 
             $result = $this->run($db, $query, $args);

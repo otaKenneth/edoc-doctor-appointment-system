@@ -42,7 +42,7 @@ class DoctorController {
             'message' => ""
         ];
 
-        $patient = $this->patientSeed->getPatientById($db, [
+        $patient = $this->patientSeed->getPatientBySchedAndPid($db, [
             $schedule, $id
         ]);
 
