@@ -584,6 +584,30 @@ class AdminController {
 
         return $response;
     }
+
+    public function addSessionBooking($db, $args = []) {
+        extract($args);
+        $response = [
+            'success' => false,
+            'message' => "Error: Something went wrong. Contact your Administrator."
+        ];
+
+        $date = $scheduledate;
+        $pid = $patient;
+
+        $appointment = $this->appointmentSeed->create($db, [
+            $pid, $scheduleid, $date
+        ]);
+
+        if (!is_string($appointment)) {
+            $response['success'] = true;
+            $response['message'] = "Successfully created an Appointment.";
+        } else {
+            $response['message'] = $appointment;
+        }
+
+        return $response;
+    }
 }
 
 ?>

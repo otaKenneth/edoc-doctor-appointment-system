@@ -5,6 +5,8 @@ $today = date('Y-m-d');
 
 $list110 = $database->query("select  * from  schedule;");
 
+$patient_sqlmain = "select * from patient order by pid desc";
+$patients = $database->query($patient_sqlmain);
 ?>
 <table border="0" width="100%" style=" border-spacing: 0;margin:0;padding:0; margin-top: 20px;">
     <tr>
@@ -243,6 +245,7 @@ $list110 = $database->query("select  * from  schedule;");
 </table>
 <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/book-a-consultation/admin/components/schedule-popup.php"); ?>
 <script>
+    var schedule_data = {};
     function processDialogData (dialogData, dialogId) {
         var dData = JSON.parse(dialogData);
 
@@ -257,6 +260,8 @@ $list110 = $database->query("select  * from  schedule;");
                         var data = response.data;
                         utils.processElementLogic($(`#${dialogId}`), data);
                         utils.showDialog($(`#${dialogId}`))
+                        schedule_data = data.schedule_data;
+                        $('#popup4').attr("data-id", data.schedule_data.scheduleid)
                     }
                 },
                 error: (xhr, textStatus, th) => {

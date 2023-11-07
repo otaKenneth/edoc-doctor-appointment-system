@@ -105,36 +105,39 @@
             <div class="popup-content has-logic scroll" style="display: flex;justify-content: center;" logic-key="schedule_data">
                 <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
                     <tr>
-                        <td class="label-td" colspan="2">
-                            <label for="name" class="form-label">Session Title: </label>
-                        </td>
+                        <td></td>
+                        <td width="25%"></td>
+                        <td></td>
                     </tr>
                     <tr>
+                        <td class="label-td">
+                            <label for="name" class="form-label">Session Title: </label>
+                        </td>
                         <td class="label-td" colspan="2" data-value="title"></td>
                     </tr>
                     <tr>
-                        <td class="label-td" colspan="2">
+                        <td class="label-td">
                             <label for="Email" class="form-label">Doctor of this session: </label>
                         </td>
-                    </tr>
-                    <tr>
                         <td class="label-td" colspan="2" data-value="docname"></td>
                     </tr>
                     <tr>
-                        <td class="label-td" colspan="2">
-                            <label for="nic" class="form-label">Scheduled Date: </label>
-                        </td>
                     </tr>
                     <tr>
+                        <td class="label-td">
+                            <label for="nic" class="form-label">Scheduled Date: </label>
+                        </td>
                         <td class="label-td" colspan="2" data-value="scheduledate"></td>
                     </tr>
                     <tr>
-                        <td class="label-td" colspan="2">
-                            <label for="Tele" class="form-label">Scheduled Time: </label>
-                        </td>
                     </tr>
                     <tr>
+                        <td class="label-td">
+                            <label for="Tele" class="form-label">Scheduled Time: </label>
+                        </td>
                         <td class="label-td" colspan="2" data-value="scheduletime"></td>
+                    </tr>
+                    <tr>
                     </tr>
                     <tr>
                         <td class="label-td" colspan="2">
@@ -142,6 +145,11 @@
                             <!-- ('.$result12->num_rows."/".$nop.') -->
                                 (<span data-value="pregscount"></span>/<span data-value="nop"></span>)</label>
                             <br><br>
+                        </td>
+                        <td class="label-td">
+                            <button class="btn-primary-soft btn button-icon btn-add popup-btn"
+                              popupdata-id="popup4"
+                            >Add Booking</button>
                         </td>
                     </tr>
                     <tr>
@@ -204,6 +212,46 @@
     </div>
 </div>
 
+<div id="popup4" class="overlay popup-closed">
+    <div class="popup">
+        <h2>New Booking</h2>
+        <center>
+            <a class="close popup-closer" href="#">&times;</a>
+            <div class="popup-content">
+                <table width="100%" class="sub-table scrolldown" border="0">
+                    <tbody>
+                        <tr>
+                            <form id="add-session-booking">
+                            <td class="label-td">Patient:</td>
+                        </tr>
+                        <tr>
+                            <td class="input">
+                                <select name="patient" id="patients" class="box" required>
+                                    <option value="" disabled selected hidden>Choose Patient Name from the list</option>
+                                    <?php
+                                    $rows = $patients->fetch_all(MYSQLI_ASSOC);
+                                    foreach ($rows as $row00) {
+                                        $sn = $row00["pname"];
+                                        $id00 = $row00["pid"]; ?>
+                                            <option value="<?=$id00?>"><?=$sn?></option>
+                                    <?php } ?>
+                                </select></form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </center>
+        <div class="popup-footer">
+            <input type="reset" value="Reset"
+                class="login-btn btn-primary-soft btn">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <input type="submit" form="add-session-booking" value="Place this Booking" class="login-btn btn-primary btn"
+                name="bookingsubmit">
+        </div>
+    </div>
+</div>
+
 <div id="popup3" class="overlay popup-closed">
     <div class="popup">
         <center>
@@ -238,6 +286,38 @@
 
             $.ajax({
                 url: "apis/index.php/addSession",
+                method: "POST",
+                data: form_data,
+                contentType: "application/json",
+                success: (response) => {
+                    if (response.success) {
+                        var dialog = $(this).closest('.overlay')
+                        $(dialog).removeClass('popup-open');
+                        $(dialog).addClass('popup-closed');
+                        showSuccessToast([response.message])
+                        utils.pageReload(4500)
+                    }
+                },
+                error: (xhr, textStatus, th) => {
+                    // Handle error response
+                    console.error('Error message: ' + xhr.statusText);
+                    let response = JSON.parse(xhr.responseText);
+                    showErrorToast([response.message]);
+                }
+            })
+        })
+
+        $('form#add-session-booking').on("submit", function (el) {
+            el.preventDefault();
+
+            var form_data = utils.serializeArrayToJSON($(this).serializeArray(), [
+                {'scheduleid': schedule_data.scheduleid},
+                {'scheduledate': schedule_data.scheduledate}
+            ]);
+            // form_data.push({'scheduleid': schedule_data.scheduleid});
+
+            $.ajax({
+                url: "apis/index.php/addSessionBooking",
                 method: "POST",
                 data: form_data,
                 contentType: "application/json",

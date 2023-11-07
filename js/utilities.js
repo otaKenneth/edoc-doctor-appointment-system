@@ -1,14 +1,20 @@
 var utils = {
     data: [],
     operator: "",
-    serializeArrayToJSON: function (serializedArray) {
+    serializeArrayToJSON: function (serializedArray, push = []) {
         var jsonObject = {};
     
         for (var i = 0; i < serializedArray.length; i++) {
             var item = serializedArray[i];
             jsonObject[item.name] = item.value;
         }
+
+        for (var i = 0; i < push.length; i++) {
+            var item = push[i];
+            jsonObject = {...jsonObject, ...item};
+        }
     
+        console.log(jsonObject);
         return JSON.stringify(jsonObject);
     },
     processLoop: function (loop_el) {
